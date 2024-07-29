@@ -14,11 +14,3 @@ public class QueenBug : IBug
 
 	public bool MoveRestrictionsApply => true;
 }
-
-public class QueenBugCreator : BugCreator
-{
-	public override IBug CreateBug()
-	{
-		return new QueenBug();
-	}
-}

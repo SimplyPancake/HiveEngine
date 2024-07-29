@@ -5,20 +5,27 @@ namespace HiveGame;
 public class Piece
 {
 	public Color Color { get; }
-	public int BugType { get; }
-	public Vector3 Position { get; }
-
-	public Piece(Color c, int b)
+	public int BugType
 	{
-		BugType = b;
+		get
+		{
+			return Bug.BugTypeId;
+		}
+	}
+	public Vector3 Position { get; }
+	public IBug Bug { get; }
+
+	public Piece(Color c, IBug bug)
+	{
+		Bug = bug;
 		Color = c;
 		Position = new Vector3(0, 0, 0);
 	}
 
-	public Piece(Color c, int b, Vector3 position)
+	public Piece(Color c, IBug bug, Vector3 position)
 	{
 		Color = c;
-		BugType = b;
+		Bug = bug;
 		Position = position;
 	}
 

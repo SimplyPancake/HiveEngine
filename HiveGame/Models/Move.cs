@@ -22,7 +22,7 @@ public class Move
 	{
 		// Default
 		AttackPosition = Vector3.Zero;
-		Piece = new Piece(Color.Black, (int)BugType.Queen);
+		Piece = new Piece(Color.Black, new QueenBug());
 		MoveType = MoveType.Place;
 	}
 

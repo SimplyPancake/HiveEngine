@@ -1,4 +1,5 @@
 {
   "dotnet.defaultSolution": "HiveGame.sln",
-  "C_Cpp.default.compilerPath": "C:\\Program Files\\Haskell Platform\\8.6.5\\mingw\\bin\\gcc.exe"
+  "C_Cpp.default.compilerPath": "C:\\Program Files\\Haskell Platform\\8.6.5\\mingw\\bin\\gcc.exe",
+  "xd.globalEditor": false
 }

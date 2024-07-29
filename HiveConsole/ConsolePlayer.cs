@@ -10,7 +10,7 @@ public class ConsolePlayer : Player
 
 	public override List<Piece> Pieces { get; }
 
-	public override Board Board { get; set; }
+	public override Board Board { get; }
 
 	public ConsolePlayer(string playername, Color color, List<Piece> pieces)
 	{
@@ -25,12 +25,13 @@ public class ConsolePlayer : Player
 		Playername = playername;
 		Color = color;
 		Pieces = new List<Piece>();
+		Board = new Board();
 
 		// Initialise pieces collection
 		List<IBug> bugs = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
 		foreach (IBug bug in bugs)
 		{
-			Piece p = new Piece(Color, bug.BugTypeId);
+			Piece p = new Piece(Color, bug);
 			for (int i = 0; i < bug.GetAmount; i++)
 			{
 				Pieces.Add(p);
@@ -49,7 +50,9 @@ public class ConsolePlayer : Player
 		Board.PrintBoard();
 		printPlayer("Please make a move.");
 
+		// we just place a queen!
+		IBug queen = new QueenBug();
 
-		return new Move(new Piece(Color.White, (int)BugType.Queen), new Vector3(0, 0, 0), MoveType.Place);
+		return new Move(new Piece(Color.White, queen), new Vector3(0, 0, 0), MoveType.Place);
 	}
 }

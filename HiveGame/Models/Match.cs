@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Headers;
-
-namespace HiveGame;
+﻿namespace HiveGame;
 
 public class Match
 {
@@ -46,6 +44,7 @@ public class Match
 	{
 		while (!Board.HasWinCondition())
 		{
+			// assume move is not valid, then check if they CAN make the move.
 			bool validMove = false;
 			Move toMake = new Move();
 

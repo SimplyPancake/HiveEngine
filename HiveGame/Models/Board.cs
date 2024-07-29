@@ -5,7 +5,14 @@ namespace HiveGame;
 public class Board
 {
 	// Board structure in Cube form
-	public List<Piece> Pieces { get; }
+	public List<Piece> Pieces
+	{
+		get
+		{
+			return _Pieces;
+		}
+
+	}
 	private List<Piece> _Pieces;
 
 	public Board()
@@ -35,7 +42,7 @@ public class Board
 
 		foreach (Piece piece in _Pieces)
 		{
-			Piece newPiece = new Piece(piece.Color, piece.BugType);
+			Piece newPiece = new Piece(piece.Color, piece.Bug);
 			copiesPieces.Add(newPiece);
 		}
 
@@ -129,13 +136,21 @@ public class Board
 		return positions.Where(p => !piecePositions.Contains(p)).ToList();
 	}
 
+	// TODO: This logic needs to be put into the client
 	public void PrintBoard()
 	{
-		// tsja...
+		HexagonService.PrintBoard(Pieces);
 	}
+
+	#region game logic
 
 	public bool AllPiecesConnected()
 	{
+		if (Pieces.Count == 0)
+		{
+			return true;
+		}
+
 		// Check if all pieces are connected using something similar to Dijkstra (without the distance part)
 
 		List<Vector3> visited = new List<Vector3>();
@@ -176,4 +191,5 @@ public class Board
 		}
 	}
 
+	#endregion
 }

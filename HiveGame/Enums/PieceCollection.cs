@@ -13,7 +13,7 @@ public static class PieceCollectionMethods
 	{
 		return new List<IBug>
 		{
-			new QueenBugCreator().CreateBug()
+			new QueenBug()
 		};
 	}
 }
