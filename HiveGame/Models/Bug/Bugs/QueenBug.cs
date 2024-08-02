@@ -1,16 +1,16 @@
 ﻿namespace HiveGame;
 
-public class QueenBug : IBug
+public class QueenBug : Bug
 {
-	public string Name => "Queen";
+	public override string Name => "Queen";
 
-	public string Description => "The queen";
+	public override string Description => "The Queen Bug";
 
-	public int BugTypeId => (int)BugType.Queen;
+	public override int BugTypeId => (int)BugType.Queen;
 
-	public int GetAmount => 1;
+	public override int GetAmount => 1;
 
-	public char ShortRepresentation => 'Q';
+	public override char ShortRepresentation => 'Q';
 
-	public bool MoveRestrictionsApply => true;
+	public override bool MoveRestrictionsApply => true;
 }

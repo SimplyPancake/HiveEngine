@@ -9,9 +9,9 @@ public enum PieceCollection
 public static class PieceCollectionMethods
 {
 
-	public static List<IBug> GetPieceBugs(this PieceCollection c)
+	public static List<Bug> GetPieceBugs(this PieceCollection c)
 	{
-		return new List<IBug>
+		return new List<Bug>
 		{
 			new QueenBug()
 		};

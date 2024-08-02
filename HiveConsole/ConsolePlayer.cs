@@ -28,8 +28,8 @@ public class ConsolePlayer : Player
 		Board = new Board();
 
 		// Initialise pieces collection
-		List<IBug> bugs = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
-		foreach (IBug bug in bugs)
+		List<Bug> bugs = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
+		foreach (Bug bug in bugs)
 		{
 			Piece p = new Piece(Color, bug);
 			for (int i = 0; i < bug.GetAmount; i++)
@@ -51,7 +51,7 @@ public class ConsolePlayer : Player
 		printPlayer("Please make a move.");
 
 		// we just place a queen!
-		IBug queen = new QueenBug();
+		Bug queen = new QueenBug();
 
 		return new Move(new Piece(Color.White, queen), new Vector3(0, 0, 0), MoveType.Place);
 	}

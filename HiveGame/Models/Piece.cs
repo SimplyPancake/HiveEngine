@@ -13,16 +13,16 @@ public class Piece
 		}
 	}
 	public Vector3 Position { get; }
-	public IBug Bug { get; }
+	public Bug Bug { get; }
 
-	public Piece(Color c, IBug bug)
+	public Piece(Color c, Bug bug)
 	{
 		Bug = bug;
 		Color = c;
 		Position = new Vector3(0, 0, 0);
 	}
 
-	public Piece(Color c, IBug bug, Vector3 position)
+	public Piece(Color c, Bug bug, Vector3 position)
 	{
 		Color = c;
 		Bug = bug;

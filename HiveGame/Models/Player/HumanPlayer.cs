@@ -29,8 +29,8 @@ public class HumanPlayer : Player
 		Pieces = new List<Piece>();
 
 		// Initialise pieces collection
-		List<IBug> bugs = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
-		foreach (IBug bug in bugs)
+		List<Bug> bugs = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
+		foreach (Bug bug in bugs)
 		{
 			Piece p = new Piece(Color, bug);
 			for (int i = 0; i < bug.GetAmount; i++)
