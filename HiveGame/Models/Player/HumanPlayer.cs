@@ -1,8 +1,7 @@
-﻿
-using System.Numerics;
-using Hive.Core;
+﻿using System.Numerics;
 
-namespace HiveGame;
+namespace Hive.Core;
+
 
 public class HumanPlayer : Player
 {

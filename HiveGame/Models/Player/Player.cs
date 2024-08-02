@@ -1,6 +1,4 @@
-﻿using Hive.Core;
-
-namespace HiveGame;
+﻿namespace Hive.Core;
 
 public abstract class Player
 {

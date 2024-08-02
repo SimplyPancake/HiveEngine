@@ -1,6 +1,5 @@
-﻿using Hive.Core;
+﻿namespace Hive.Core;
 
-namespace HiveGame;
 
 public class Match
 {

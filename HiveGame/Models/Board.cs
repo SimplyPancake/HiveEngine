@@ -1,7 +1,6 @@
 ﻿using System.Numerics;
-using Hive.Core;
 
-namespace HiveGame;
+namespace Hive.Core;
 
 public class Board
 {

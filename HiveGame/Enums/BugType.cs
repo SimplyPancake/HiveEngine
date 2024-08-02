@@ -1,4 +1,4 @@
-﻿namespace HiveGame;
+﻿namespace Hive.Core;
 
 public enum BugType
 {

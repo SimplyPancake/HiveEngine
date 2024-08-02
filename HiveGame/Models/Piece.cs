@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace HiveGame;
+namespace Hive.Core;
 
 public class Piece
 {
