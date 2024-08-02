@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Hive.Core;
 
 namespace HiveGame;
 
@@ -36,11 +37,13 @@ public class Board
 		_Pieces = new List<Piece>();
 	}
 
-	public Board Copy(Board board)
+	public Board Copy() => Copy(this);
+
+	public static Board Copy(Board board)
 	{
 		List<Piece> copiesPieces = new List<Piece>();
 
-		foreach (Piece piece in _Pieces)
+		foreach (Piece piece in board.Pieces)
 		{
 			Piece newPiece = new Piece(piece.Color, piece.Bug);
 			copiesPieces.Add(newPiece);
@@ -49,13 +52,21 @@ public class Board
 		return new Board(copiesPieces);
 	}
 
+	/// <summary>
+	///	MakeMove makes a move on the board
+	/// </summary>
 	public void MakeMove(Move move)
 	{
 		// A new piece will be put in AttackPosition
 		// TODO; make this method not public, or verify that the move to be made may be made.
 		// (using AllowedToMakeMove)
-		// in Hive, a piece 
+
+		// if space (including height) is already occupied, throw error
+
+		// otherwise check height
 	}
+
+	#region Helpers
 
 	public List<Piece> SurroundingPieces(Vector3 position)
 	{
@@ -105,7 +116,7 @@ public class Board
 		}
 
 		// Simulate move being made
-		Board newBoard = Copy(this);
+		Board newBoard = Copy();
 		newBoard.MakeMove(move);
 
 		// All pieces should be connected
@@ -144,8 +155,6 @@ public class Board
 	{
 		HexagonService.PrintBoard(Pieces);
 	}
-
-	#region game logic
 
 	public bool AllPiecesConnected()
 	{

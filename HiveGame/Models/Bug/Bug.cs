@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace HiveGame;
+﻿namespace HiveGame;
 
 public abstract class Bug
 {
