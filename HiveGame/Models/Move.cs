@@ -7,6 +7,8 @@ public class Move
 {
 	public Vector3 AttackPosition { get; set; }
 
+	public int AttackHeight { get; set; } = 0;
+
 	public Piece Piece { get; set; }
 
 	public MoveType MoveType { get; }
@@ -18,9 +20,17 @@ public class Move
 		MoveType = moveType;
 	}
 
+	public Move(Piece piece, Vector3 attackPosition, int height, MoveType moveType)
+	{
+		AttackPosition = attackPosition;
+		Piece = piece;
+		MoveType = moveType;
+		AttackHeight = height;
+	}
+
 	public Move()
 	{
-		// Default
+		// Default move
 		AttackPosition = Vector3.Zero;
 		Piece = new Piece(Color.Black, new QueenBug());
 		MoveType = MoveType.Place;

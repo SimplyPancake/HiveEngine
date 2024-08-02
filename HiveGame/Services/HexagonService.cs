@@ -21,9 +21,12 @@ public class Piece2D
 
 	public int y;
 
+	public int height = 0;
+
 	public Piece? Piece;
 }
 
+// TODO; add support for pieces on top of each-other
 public static class HexagonService
 {
 	public static void PrintBoard(List<Piece> pieces)
