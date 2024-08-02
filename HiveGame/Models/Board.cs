@@ -51,7 +51,10 @@ public class Board
 
 	public void MakeMove(Move move)
 	{
-		// TODO
+		// A new piece will be put in AttackPosition
+		// TODO; make this method not public, or verify that the move to be made may be made.
+		// (using AllowedToMakeMove)
+		// in Hive, a piece 
 	}
 
 	public List<Piece> SurroundingPieces(Vector3 position)

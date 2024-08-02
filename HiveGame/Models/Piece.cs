@@ -12,7 +12,9 @@ public class Piece
 			return Bug.BugTypeId;
 		}
 	}
-	public Vector3 Position { get; }
+	public Vector3 Position { get; set; }
+
+	public int Height { get; set; } = 0;
 	public IBug Bug { get; }
 
 	public Piece(Color c, IBug bug)
@@ -27,6 +29,15 @@ public class Piece
 		Color = c;
 		Bug = bug;
 		Position = position;
+		// height is default 0.
+	}
+
+	public Piece(Color c, IBug bug, Vector3 position, int height)
+	{
+		Color = c;
+		Bug = bug;
+		Position = position;
+		Height = height;
 	}
 
 	public static List<Vector3> PossibleMoves(Board board)
