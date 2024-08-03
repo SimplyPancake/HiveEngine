@@ -52,20 +52,36 @@ public class Board
 	}
 
 	/// <summary>
-	///	MakeMove makes a move on the board
+	///	MakeMove makes a move on the board. May throw an exception if move is not valid.
 	/// </summary>
+	/// <exception cref="IllegalPlacementException"></exception>
 	public void MakeMove(Move move)
 	{
+		// maybe doupble check AllowedToMakeMove?
 		// A new piece will be put in AttackPosition
 		// TODO; make this method not public, or verify that the move to be made may be made.
+
 		// (using AllowedToMakeMove)
 
 		// if space (including height) is already occupied, throw error
+		if (PositionOccupied(move.Piece.Position, move.Piece.Height))
+		{
+			throw new IllegalPlacementException("There already exists a piece at that location.");
+		}
+
 
 		// otherwise check height
 	}
 
 	#region Helpers
+
+	public bool PositionOccupied(Vector3 position, int height)
+	{
+		return _Pieces.Exists(p => position.X == p.Position.X
+		&& position.Y == p.Position.Y
+		&& position.Z == p.Position.Z
+		&& p.Height == height);
+	}
 
 	public List<Piece> SurroundingPieces(Vector3 position)
 	{
@@ -113,6 +129,11 @@ public class Board
 		{
 			return false;
 		}
+
+		// does the player have enough pieces?
+		// TODO
+
+		// on placing, is the placed piece next to a different colored piece?
 
 		// Simulate move being made
 		Board newBoard = Copy();

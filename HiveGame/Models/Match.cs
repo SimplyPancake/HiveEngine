@@ -59,7 +59,7 @@ public class Match
 					continue;
 				}
 
-				// Todo handle ofzo
+				// TODO; make better Exception
 				throw new Exception("Player is not allowed to make move.");
 			}
 

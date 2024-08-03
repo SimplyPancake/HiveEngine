@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace Hive.Core;
+﻿namespace Hive.Core;
 
 
 public class HumanPlayer : Player
@@ -21,7 +19,7 @@ public class HumanPlayer : Player
 		Board = board;
 	}
 
-	public HumanPlayer(String playername, Color color, Board board)
+	public HumanPlayer(string playername, Color color, Board board)
 	{
 		Playername = playername;
 		Color = color;
