@@ -1,6 +1,5 @@
 ﻿namespace Hive.Core;
 
-public class PlaceMove : Move
+public class PlaceMove(Piece piece) : Move(piece, MoveType.Place)
 {
-	public override MoveType MoveType => MoveType.Place;
 }

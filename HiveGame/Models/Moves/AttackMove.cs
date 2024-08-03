@@ -2,21 +2,9 @@
 
 namespace Hive.Core;
 
-public class AttackMove : Move
+public class AttackMove(Piece attackingPiece, Vector3 attackPosition, int attackHeight) : Move(attackingPiece, MoveType.Activate)
 {
-	public Piece AttackingPiece;
+	public Vector3 AttackPosition { get; set; } = attackPosition;
 
-	public Vector3 AttackPosition { get; set; }
-
-	public int AttackHeight { get; set; } = 0;
-
-	public override MoveType MoveType => MoveType.Activate;
-
-	public AttackMove(Piece attackingPiece, Vector3 attackPosition, int attackHeight)
-	{
-		AttackingPiece = attackingPiece;
-		AttackPosition = attackPosition;
-		AttackHeight = attackHeight;
-	}
-
+	public int AttackHeight { get; set; } = attackHeight;
 }

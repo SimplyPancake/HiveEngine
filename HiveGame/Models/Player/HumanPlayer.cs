@@ -43,6 +43,6 @@ public class HumanPlayer : Player
 	public override Move MakeMove()
 	{
 		// ask the player to make a move, but now we return just this
-		return new Move(new Piece(Color.White, new QueenBug()), new Vector3(0, 0, 0), MoveType.Place);
+		return new PlaceMove(new Piece(Color.White, new QueenBug()));
 	}
 }
