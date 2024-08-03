@@ -44,12 +44,6 @@ public class Piece
 		return Bug.PossibleMoves(this, board);
 	}
 
-	public override bool Equals(object? obj)
-	{
-		if (obj == null) return false;
-		return Equals((Piece)obj);
-	}
-
 	public virtual bool Equals(Piece obj)
 	{
 		if (obj == null) return false;

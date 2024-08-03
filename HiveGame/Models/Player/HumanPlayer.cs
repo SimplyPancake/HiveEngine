@@ -7,11 +7,11 @@ public class HumanPlayer : Player
 
 	public override Color Color { get; }
 
-	public override List<Piece> Pieces { get; }
+	public override List<Bug> Pieces { get; }
 
 	public override Board Board { get; }
 
-	public HumanPlayer(string playername, Color color, List<Piece> pieces, Board board)
+	public HumanPlayer(string playername, Color color, List<Bug> pieces, Board board)
 	{
 		Playername = playername;
 		Color = color;
@@ -24,18 +24,10 @@ public class HumanPlayer : Player
 		Playername = playername;
 		Color = color;
 		Board = board;
-		Pieces = new List<Piece>();
+		Pieces = new List<Bug>();
 
 		// Initialise pieces collection
-		List<Bug> bugs = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
-		foreach (Bug bug in bugs)
-		{
-			Piece p = new Piece(Color, bug);
-			for (int i = 0; i < bug.GetAmount; i++)
-			{
-				Pieces.Add(p);
-			}
-		}
+		Pieces = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
 	}
 
 	public override Move MakeMove()

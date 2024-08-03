@@ -6,7 +6,7 @@ public abstract class Player
 
 	public abstract Color Color { get; }
 
-	public abstract List<Piece> Pieces { get; }
+	public abstract List<Bug> Pieces { get; }
 
 	public abstract Move MakeMove();
 

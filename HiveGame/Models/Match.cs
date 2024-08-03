@@ -47,24 +47,23 @@ public class Match
 		{
 			// assume move is not valid, then check if they CAN make the move.
 			bool validMove = false;
-			Move toMake = new Move();
+			Player toMove = CurrentPlayerTurn();
+			Move toMake = toMove.MakeMove(); ;
 
 			while (!validMove)
 			{
-				Player toMove = CurrentPlayerTurn();
-				toMake = toMove.MakeMove();
 				if (Board.AllowedToMakeMove(toMake, toMove))
 				{
 					validMove = true;
 					continue;
 				}
 
-				// TODO; make better Exception
-				throw new Exception("Player is not allowed to make move.");
+				toMove = CurrentPlayerTurn();
+				toMake = toMove.MakeMove();
 			}
 
 			// Move is valid
-			Board.MakeMove(toMake);
+			Board.MakeMove(toMake, toMove);
 
 			// Print board for now, can make custom client later
 			Board.PrintBoard();

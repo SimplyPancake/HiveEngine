@@ -50,4 +50,18 @@ public abstract class Bug
 
 
 	private abstract protected List<Move> pieceMoves(Piece piece, Board board);
+
+	// Produces stackoverflowexception. TODO
+	public bool Equals(Bug obj)
+	{
+		if (obj == null) return false;
+		if (ReferenceEquals(this, obj)) { return true; }
+
+		return GetHashCode() == obj.GetHashCode();
+	}
+
+	public override int GetHashCode()
+	{
+		return BugTypeId;
+	}
 }

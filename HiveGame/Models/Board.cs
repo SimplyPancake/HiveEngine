@@ -60,10 +60,14 @@ public class Board
 		// Method will throw Exception if not allowed to make move
 		AllowedToMakeMove(move, player);
 
-		// A new piece will be put in AttackPosition
+		// TODO: support attacking
+		if (move.MoveType.Equals(MoveType.Attack))
+		{
+			throw new NotImplementedException();
+		}
 
-
-		// otherwise check height
+		// MoveType is place
+		_Pieces.Add(move.Piece);
 	}
 
 	#region Helpers
@@ -97,7 +101,7 @@ public class Board
 		if (move.MoveType.Equals(MoveType.Place))
 		{
 			// does the player have enough pieces?
-			if (!player.Pieces.Any(p => p.Equals(move.Piece)))
+			if (!player.Pieces.Any(p => p.Equals(move.Piece.Bug)))
 			{
 				throw new IllegalPiecesAmountException($"Player {player.Playername} does not have enough pieces");
 			}
