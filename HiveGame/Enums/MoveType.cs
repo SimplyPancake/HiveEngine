@@ -4,5 +4,5 @@
 public enum MoveType
 {
 	Place,
-	Activate
+	Attack
 }

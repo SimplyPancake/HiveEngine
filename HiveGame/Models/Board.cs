@@ -54,26 +54,74 @@ public class Board
 	/// <summary>
 	///	MakeMove makes a move on the board. May throw an exception if move is not valid.
 	/// </summary>
-	/// <exception cref="IllegalPlacementException"></exception>
-	public void MakeMove(Move move)
+	/// <exception cref="IllegalMoveException"></exception>
+	public void MakeMove(Move move, Player player)
 	{
-		// maybe doupble check AllowedToMakeMove?
+		// Method will throw Exception if not allowed to make move
+		AllowedToMakeMove(move, player);
+
 		// A new piece will be put in AttackPosition
-		// TODO; make this method not public, or verify that the move to be made may be made.
-
-		// (using AllowedToMakeMove)
-
-		// if space (including height) is already occupied, throw error
-		if (PositionOccupied(move.Piece.Position, move.Piece.Height))
-		{
-			throw new IllegalPlacementException("There already exists a piece at that location.");
-		}
 
 
 		// otherwise check height
 	}
 
 	#region Helpers
+
+	/// <summary>
+	/// Checks if a submitted move is allowed to be played.
+	/// Will be used to see if a Player inputs a valid move,
+	/// even though the already possible moves are already generated
+	/// </summary>
+	/// <param name="move">The move that the player made</param>
+	/// <param name="player">The player</param>
+	/// <returns></returns>
+	public bool AllowedToMakeMove(Move move, Player player)
+	{
+		// Since this function should normally return true, as it's expected behavior,
+		// an exception will be thrown.
+
+		// Easy check
+		if (move.Piece.Color != player.Color)
+		{
+			throw new IllegalColorException($"Move color {move.Piece.Color} is not the same as the player's color {player.Color}");
+		}
+
+		// if space (including height) is already occupied, throw error
+		if (PositionOccupied(move.Piece.Position, move.Piece.Height))
+		{
+			throw new IllegalPlacementException("There already exists a piece at that location");
+		}
+
+		// Place moves
+		if (move.MoveType.Equals(MoveType.Place))
+		{
+			// does the player have enough pieces?
+			if (!player.Pieces.Any(p => p.Equals(move.Piece)))
+			{
+				throw new IllegalPiecesAmountException($"Player {player.Playername} does not have enough pieces");
+			}
+
+			// on placing, is the placed piece next to a different colored piece?
+			if (SurroundingPieces(move.Piece.Position).Any(p => p.Color == ColorMethods.GetOtherColor(player.Color)))
+			{
+				throw new IllegalPlacementException("Placed piece must not be placed near a piece of a different color");
+			}
+		}
+
+
+		// Simulate move being made
+		Board newBoard = Copy();
+		newBoard.MakeMove(move, player);
+
+		// All pieces should be connected
+		if (!newBoard.AllPiecesConnected())
+		{
+			throw new IllegalPieceConnectionException("All pieces must be connected");
+		}
+
+		return true;
+	}
 
 	public bool PositionOccupied(Vector3 position, int height)
 	{
@@ -86,9 +134,9 @@ public class Board
 	public List<Piece> SurroundingPieces(Vector3 position)
 	{
 		return _Pieces.Where(p =>
-			Math.Abs(p.Position.X - position.X) == 1 ||
-			Math.Abs(p.Position.Y - position.Y) == 1 ||
-			Math.Abs(p.Position.Z - position.Z) == 1)
+			Math.Abs(p.Position.X - position.X) == 1.0 ||
+			Math.Abs(p.Position.Y - position.Y) == 1.0 ||
+			Math.Abs(p.Position.Z - position.Z) == 1.0)
 		.ToList();
 	}
 
@@ -112,40 +160,6 @@ public class Board
 		// Queen surrounded means wincondition
 		return _Pieces.Where(p => p.BugType == (int)BugType.Queen)
 			.Any(p => SurroundingPieces(p.Position).Count() == 6);
-	}
-
-	/// <summary>
-	/// Checks if a submitted move is allowed to be played.
-	/// Will be used to see if a Player inputs a valid move,
-	/// even though the already possible moves are already generated
-	/// </summary>
-	/// <param name="move">The move that the player made</param>
-	/// <param name="player">The player</param>
-	/// <returns></returns>
-	public bool AllowedToMakeMove(Move move, Player player)
-	{
-		// Easy check
-		if (move.Piece.Color != player.Color)
-		{
-			return false;
-		}
-
-		// does the player have enough pieces?
-		// TODO
-
-		// on placing, is the placed piece next to a different colored piece?
-
-		// Simulate move being made
-		Board newBoard = Copy();
-		newBoard.MakeMove(move);
-
-		// All pieces should be connected
-		if (!newBoard.AllPiecesConnected())
-		{
-			return false;
-		}
-
-		return true;
 	}
 
 	/// <summary>
