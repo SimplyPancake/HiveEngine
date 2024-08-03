@@ -52,14 +52,26 @@ public class Board
 	}
 
 	/// <summary>
-	///	MakeMove makes a move on the board. May throw an exception if move is not valid.
+	///	MakeMove makes a move on the board and checks if the move to be made is valid.
 	/// </summary>
 	/// <exception cref="IllegalMoveException"></exception>
 	public void MakeMove(Move move, Player player)
 	{
+		// Ensures that it is checked if move is allowed to be made
 		// Method will throw Exception if not allowed to make move
 		AllowedToMakeMove(move, player);
 
+		makeMoveNoCheck(move, player);
+	}
+
+	/// <summary>
+	/// Makes a move on the board without checking if the move is valid.
+	/// </summary>
+	/// <param name="move"></param>
+	/// <param name="player"></param>
+	/// <exception cref="NotImplementedException"></exception>
+	private void makeMoveNoCheck(Move move, Player player)
+	{
 		// TODO: support attacking
 		if (move.MoveType.Equals(MoveType.Attack))
 		{
@@ -115,6 +127,7 @@ public class Board
 		else
 		{
 			// atack moves
+			// TODO
 
 			// Check if piece can travel that way
 		}
@@ -122,7 +135,7 @@ public class Board
 
 		// Simulate move being made
 		Board newBoard = Copy();
-		newBoard.MakeMove(move, player);
+		newBoard.makeMoveNoCheck(move, player);
 
 		// All pieces should be connected
 		if (!newBoard.AllPiecesConnected())
@@ -169,7 +182,7 @@ public class Board
 	{
 		// Queen surrounded means wincondition
 		return _Pieces.Where(p => p.BugType == (int)BugType.Queen)
-			.Any(p => SurroundingPieces(p.Position).Count() == 6);
+			.Any(p => SurroundingPieces(p.Position).Count == 6);
 	}
 
 	/// <summary>
@@ -197,6 +210,7 @@ public class Board
 	// TODO: This logic needs to be put into the client
 	public void PrintBoard()
 	{
+		System.Console.WriteLine("Printing board...");
 		HexagonService.PrintBoard(Pieces);
 	}
 

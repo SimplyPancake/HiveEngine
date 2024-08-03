@@ -48,18 +48,27 @@ public class Match
 			// assume move is not valid, then check if they CAN make the move.
 			bool validMove = false;
 			Player toMove = CurrentPlayerTurn();
-			Move toMake = toMove.MakeMove(); ;
+			Move toMake = toMove.MakeMove();
 
 			while (!validMove)
 			{
-				if (Board.AllowedToMakeMove(toMake, toMove))
+				try
 				{
-					validMove = true;
-					continue;
+					if (Board.AllowedToMakeMove(toMake, toMove))
+					{
+						validMove = true;
+						continue;
+					}
 				}
-
-				toMove = CurrentPlayerTurn();
-				toMake = toMove.MakeMove();
+				catch (Exception e)
+				{
+					// nothing lol
+				}
+				finally
+				{
+					toMove = CurrentPlayerTurn();
+					toMake = toMove.MakeMove();
+				}
 			}
 
 			// Move is valid
