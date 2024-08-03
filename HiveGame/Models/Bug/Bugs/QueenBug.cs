@@ -1,4 +1,5 @@
-﻿namespace Hive.Core;
+﻿
+namespace Hive.Core;
 
 public class QueenBug : Bug
 {
@@ -13,4 +14,10 @@ public class QueenBug : Bug
 	public override char ShortRepresentation => 'Q';
 
 	public override bool MoveRestrictionsApply => true;
+
+	private protected override List<Move> pieceMoves(Piece piece, Board board)
+	{
+		// Piece may only move one spot.
+		throw new NotImplementedException();
+	}
 }

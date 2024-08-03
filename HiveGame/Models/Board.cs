@@ -108,6 +108,12 @@ public class Board
 				throw new IllegalPlacementException("Placed piece must not be placed near a piece of a different color");
 			}
 		}
+		else
+		{
+			// atack moves
+
+			// Check if piece can travel that way
+		}
 
 
 		// Simulate move being made

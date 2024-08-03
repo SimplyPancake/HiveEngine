@@ -31,4 +31,23 @@ public abstract class Bug
 	/// If the normal move restrictions apply
 	/// </summary>
 	public abstract bool MoveRestrictionsApply { get; }
+
+	/// <summary>
+	/// Returns all possible moves that a piece of a board could make.
+	/// </summary>
+	/// <param name="piece">Piece in the board</param>
+	/// <param name="board">The game board</param>
+	/// <returns></returns>
+	public List<Move> PossibleMoves(Piece piece, Board board)
+	{
+		if (!board.Pieces.Any(p => p.Equals(piece)))
+		{
+			throw new ArgumentException("piece must be in board");
+		}
+
+		return pieceMoves(piece, board);
+	}
+
+
+	private abstract protected List<Move> pieceMoves(Piece piece, Board board);
 }

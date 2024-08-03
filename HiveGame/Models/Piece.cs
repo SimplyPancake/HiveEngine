@@ -39,8 +39,27 @@ public class Piece
 		Height = height;
 	}
 
-	public static List<Vector3> PossibleMoves(Board board)
+	public List<Move> PossibleMoves(Board board)
 	{
-		return new List<Vector3> { };
+		return Bug.PossibleMoves(this, board);
+	}
+
+	public override bool Equals(object? obj)
+	{
+		if (obj == null) return false;
+		return Equals((Piece)obj);
+	}
+
+	public virtual bool Equals(Piece obj)
+	{
+		if (obj == null) return false;
+		if (ReferenceEquals(this, obj)) { return true; }
+
+		return GetHashCode() == obj.GetHashCode();
+	}
+
+	public override int GetHashCode()
+	{
+		return HashCode.Combine(Color, Bug, Position, Height);
 	}
 }
