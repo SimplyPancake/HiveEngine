@@ -1,39 +1,24 @@
-﻿using System.Numerics;
-
-namespace Hive.Core;
+﻿namespace Hive.Core;
 
 // Move in the game
-public class Move
+public abstract class Move
 {
-	public Vector3 AttackPosition { get; set; }
-
-	public int AttackHeight { get; set; } = 0;
-
 	public Piece Piece { get; set; }
 
-	public MoveType MoveType { get; }
+	public abstract MoveType MoveType { get; }
 
-	public Move(Piece piece, Vector3 attackPosition, MoveType moveType)
+	/// <summary>
+	///	Move constructor takes the piece including position to place
+	/// </summary>
+	public Move(Piece piece)
 	{
-		AttackPosition = attackPosition;
 		Piece = piece;
-		MoveType = moveType;
-	}
-
-	public Move(Piece piece, Vector3 attackPosition, int height, MoveType moveType)
-	{
-		AttackPosition = attackPosition;
-		Piece = piece;
-		MoveType = moveType;
-		AttackHeight = height;
 	}
 
 	public Move()
 	{
 		// Default move
-		AttackPosition = Vector3.Zero;
 		Piece = new Piece(Color.Black, new QueenBug());
-		MoveType = MoveType.Place;
 	}
 
 }
