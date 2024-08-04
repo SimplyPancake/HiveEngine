@@ -156,13 +156,22 @@ public class Board
 		&& p.Height == height);
 	}
 
-	public List<Piece> SurroundingPieces(Cube position)
+	public List<Piece> SurroundingPieces(Cube position) => SurroundingPieces(position, _Pieces);
+
+	public List<Piece> SurroundingPieces(Piece piece, List<Piece> pieces) => SurroundingPieces(piece.Position, pieces);
+
+	public static List<Piece> SurroundingPieces(Cube position, List<Piece> pieces)
 	{
-		return _Pieces.Where(p =>
+		return pieces.Where(p =>
 			Math.Abs(p.Position.Q - position.Q) == 1 ||
 			Math.Abs(p.Position.R - position.R) == 1 ||
 			Math.Abs(p.Position.S - position.S) == 1)
 		.ToList();
+	}
+
+	public static bool IsNextToPiece(Cube position, List<Piece> pieces)
+	{
+		return SurroundingPieces(position, pieces).Any();
 	}
 
 	public static List<Cube> SurroundingPositions(Cube position)

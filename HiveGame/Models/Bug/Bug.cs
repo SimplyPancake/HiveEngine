@@ -31,6 +31,7 @@ public abstract class Bug
 
 	/// <summary>
 	/// If the normal move restrictions apply
+	/// TODO; convert this system into attributes and put attributes on PossibleMoves
 	/// </summary>
 	public abstract bool MoveRestrictionsApply { get; }
 
@@ -47,11 +48,11 @@ public abstract class Bug
 			throw new ArgumentException("piece must be in board");
 		}
 
-		return pieceMoves(piece, board);
+		return PieceMoves(piece, board);
 	}
 
 
-	private abstract protected List<Move> pieceMoves(Piece piece, Board board);
+	private abstract protected List<Move> PieceMoves(Piece piece, Board board);
 
 	// Produces stackoverflowexception. TODO
 	public bool Equals(Bug obj)
