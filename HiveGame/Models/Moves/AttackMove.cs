@@ -1,11 +1,11 @@
-﻿using System.Numerics;
-using Hive.Core.Models;
+﻿using Hive.Core.Models;
+using Hive.Core.Models.Coordinate;
 
 namespace Hive.Core;
 
-public class AttackMove(Piece attackingPiece, Vector3 attackPosition, int attackHeight) : Move(attackingPiece)
+public class AttackMove(Piece attackingPiece, Cube attackPosition, int attackHeight) : Move(attackingPiece)
 {
-	public Vector3 AttackPosition { get; set; } = attackPosition;
+	public Cube AttackPosition { get; set; } = attackPosition;
 
 	public int AttackHeight { get; set; } = attackHeight;
 

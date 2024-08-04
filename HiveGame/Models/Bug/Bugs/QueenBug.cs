@@ -24,10 +24,27 @@ public class QueenBug : Bug
 		// Or; every spot that is next to another bug, which is not itself
 		List<Cube> positions = Board.SurroundingPositions(piece.Position);
 
-		// We get all pieces
+		// We get all pieces that are not the queen itself
 		List<Piece> piecesWithoutSelected = new(board.Pieces);
-		piecesWithoutSelected.Remove(piece);
+		piecesWithoutSelected.Remove(piece); // will this work?
 
-		// for all probable positions, only choose the ones that 
+		// Queen cannot move on top of another bug, so eliminate those bugs from it's moveset
+		foreach (Piece p in Board.SurroundingPieces(piece.Position, piecesWithoutSelected))
+		{
+			positions.Remove(p.Position);
+		}
+
+		// for all probable positions, only choose the ones that are next
+		// to one of the bugs in piecesWithoutSelected
+		positions = positions.Where(p => Board.IsNextToPiece(p, piecesWithoutSelected)).ToList();
+
+		// Then assemble moves from these positions
+		List<Move> moves = [];
+		foreach (Cube pos in positions)
+		{
+			moves.Add(new AttackMove(piece, pos, 0));
+		}
+
+		return moves;
 	}
 }
