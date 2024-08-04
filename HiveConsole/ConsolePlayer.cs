@@ -10,15 +10,15 @@ public class ConsolePlayer : Player
 	public override Color Color { get; }
 
 	public override List<Bug> Pieces { get; }
+	public override Board? Board { get => _Board; set => _Board = value; }
 
-	public override Board Board { get; }
+	private Board? _Board;
 
 	public ConsolePlayer(string playername, Color color, List<Bug> pieces)
 	{
 		Playername = playername;
 		Color = color;
 		Pieces = pieces;
-		Board = new Board();
 	}
 
 	public ConsolePlayer(string playername, Color color)
@@ -26,7 +26,6 @@ public class ConsolePlayer : Player
 		Playername = playername;
 		Color = color;
 		Pieces = new List<Bug>();
-		Board = new Board();
 
 		// Initialise pieces collection
 		Pieces = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
@@ -41,7 +40,7 @@ public class ConsolePlayer : Player
 	{
 		// ask the player to make a move, but now we return just this
 		System.Console.WriteLine("Printing board before making move...");
-		Board.PrintBoard();
+		ConsoleHexPrinter.Print(Board);
 		printPlayer("Please make a move...");
 
 		// we just place a queen!

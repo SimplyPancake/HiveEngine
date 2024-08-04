@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+﻿using Hive.Core.Models.Coordinate;
 
 namespace Hive.Core.Models;
 
@@ -148,36 +148,36 @@ public class Board
 		return true;
 	}
 
-	public bool PositionOccupied(Vector3 position, int height)
+	public bool PositionOccupied(Cube position, int height)
 	{
-		return _Pieces.Exists(p => position.X == p.Position.X
-		&& position.Y == p.Position.Y
-		&& position.Z == p.Position.Z
+		return _Pieces.Exists(p => position.Q == p.Position.Q
+		&& position.R == p.Position.R
+		&& position.S == p.Position.S
 		&& p.Height == height);
 	}
 
-	public List<Piece> SurroundingPieces(Vector3 position)
+	public List<Piece> SurroundingPieces(Cube position)
 	{
 		return _Pieces.Where(p =>
-			Math.Abs(p.Position.X - position.X) == 1.0 ||
-			Math.Abs(p.Position.Y - position.Y) == 1.0 ||
-			Math.Abs(p.Position.Z - position.Z) == 1.0)
+			Math.Abs(p.Position.Q - position.Q) == 1 ||
+			Math.Abs(p.Position.R - position.R) == 1 ||
+			Math.Abs(p.Position.S - position.S) == 1)
 		.ToList();
 	}
 
-	public static List<Vector3> SurroundingPositions(Vector3 position)
+	public static List<Cube> SurroundingPositions(Cube position)
 	{
-		float x = position.X;
-		float y = position.Y;
-		float z = position.Z;
-		return new List<Vector3> {
-			new (x - 1, y, z),
-			new (x + 1, y, z),
-			new (x, y - 1, z),
-			new (x, y + 1, z),
-			new (x, y, z - 1),
-			new (x, y, z + 1)
-		};
+		int q = position.Q;
+		int r = position.R;
+		int s = position.S;
+		return [
+			new(q - 1, r, s),
+			new(q + 1, r, s),
+			new(q, r - 1, s),
+			new(q, r + 1, s),
+			new(q, r, s - 1),
+			new(q, r, s + 1)
+		];
 	}
 
 	public bool HasWinCondition()
@@ -192,9 +192,9 @@ public class Board
 	/// </summary>
 	/// <param name="c">The color</param>
 	/// <returns></returns>
-	public List<Vector3> IllegalPlacePositions(Color c)
+	public List<Cube> IllegalPlacePositions(Color c)
 	{
-		List<Vector3> positions = new List<Vector3>();
+		List<Cube> positions = [];
 
 		// Go along every piece of the other color, and create a list of pieces next to it
 		foreach (var piece in _Pieces.Where(p => p.Color != c))
@@ -203,19 +203,10 @@ public class Board
 		}
 
 		// Then filter out the pieces that are already on a piece
-		List<Vector3> piecePositions = _Pieces.Select(p => p.Position).ToList();
+		List<Cube> piecePositions = _Pieces.Select(p => p.Position).ToList();
 
 		// Then remove all piecePositions from positions
 		return positions.Where(p => !piecePositions.Contains(p)).ToList();
-	}
-
-	[Obsolete("PrintBoard is deprecated and does not support printing well. Not tested.")]
-	public void PrintBoard() => PrintBoard(Pieces);
-
-	[Obsolete("PrintBoard is deprecated and does not support printing well. Not tested.")]
-	public static void PrintBoard(List<Piece> pieces)
-	{
-		HexagonService.PrintBoard(pieces);
 	}
 
 	public bool AllPiecesConnected()
@@ -227,12 +218,12 @@ public class Board
 
 		// Check if all pieces are connected using something similar to Dijkstra (without the distance part)
 
-		List<Vector3> visited = new List<Vector3>();
-		List<Vector3> unvisited = _Pieces.Select(p => p.Position).ToList();
-		List<Vector3> lastVisited = new List<Vector3>();
+		List<Cube> visited = [];
+		List<Cube> unvisited = _Pieces.Select(p => p.Position).ToList();
+		List<Cube> lastVisited = [];
 
 		// Initialise visted and lastvisited to the first piece that we're exploring from
-		Vector3 startPiece = _Pieces.First().Position;
+		Cube startPiece = _Pieces.First().Position;
 		visited.Add(startPiece);
 		lastVisited.Add(startPiece);
 
@@ -244,8 +235,8 @@ public class Board
 			}
 
 			// Get surrounding pieces closest to last visited
-			List<Vector3> closest = new List<Vector3>();
-			foreach (Vector3 lv in lastVisited)
+			List<Cube> closest = [];
+			foreach (Cube lv in lastVisited)
 			{
 				// Get the locations of closest pieces
 				closest.AddRange(SurroundingPieces(lv).Select(p => p.Position));

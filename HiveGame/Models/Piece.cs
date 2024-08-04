@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Hive.Core.Models.Coordinate;
 
 namespace Hive.Core.Models;
 
@@ -12,7 +13,7 @@ public class Piece
 			return Bug.BugTypeId;
 		}
 	}
-	public Vector3 Position { get; set; }
+	public Cube Position { get; set; }
 	public int Height { get; set; } = 0;
 	public Bug Bug { get; }
 
@@ -20,10 +21,10 @@ public class Piece
 	{
 		Bug = bug;
 		Color = c;
-		Position = new Vector3(0, 0, 0);
+		Position = new Cube(0, 0, 0);
 	}
 
-	public Piece(Color c, Bug bug, Vector3 position)
+	public Piece(Color c, Bug bug, Cube position)
 	{
 		Color = c;
 		Bug = bug;
@@ -31,7 +32,7 @@ public class Piece
 		// height is default 0.
 	}
 
-	public Piece(Color c, Bug bug, Vector3 position, int height)
+	public Piece(Color c, Bug bug, Cube position, int height)
 	{
 		Color = c;
 		Bug = bug;

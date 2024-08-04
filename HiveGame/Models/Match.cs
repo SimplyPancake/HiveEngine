@@ -24,6 +24,9 @@ public class Match
 		Player2 = player2;
 		_CurrentTurn = Color.White;
 		Board = new Board();
+
+		Player1.Board = Board;
+		Player2.Board = Board;
 	}
 
 	public void Start()

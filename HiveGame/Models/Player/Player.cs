@@ -8,6 +8,13 @@ public abstract class Player
 
 	public abstract List<Bug> Pieces { get; }
 
+	public abstract Board? Board { get; set; }
+
+	public void SetBoard(Board b)
+	{
+		Board = b;
+	}
+
 	/// <summary>
 	/// Asks the client to make a move.
 	/// </summary>
@@ -22,5 +29,4 @@ public abstract class Player
 	/// <returns></returns>
 	public abstract Move MakeMove(IllegalMoveException illegalMoveException);
 
-	public abstract Board? Board { get; }
 }
