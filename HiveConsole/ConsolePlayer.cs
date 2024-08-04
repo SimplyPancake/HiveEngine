@@ -1,6 +1,6 @@
-﻿using System.Numerics;
-using Hive.Core;
-// using HiveGame;
+﻿using Hive.Core;
+using Hive.Core.Models;
+
 namespace Hive.Console;
 
 public class ConsolePlayer : Player
@@ -46,6 +46,6 @@ public class ConsolePlayer : Player
 		// we just place a queen!
 		Bug queen = new QueenBug();
 
-		return new PlaceMove(new Piece(Color.White, queen));
+		return new PlaceMove(new Piece(Color, queen));
 	}
 }

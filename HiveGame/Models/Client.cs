@@ -1,4 +1,4 @@
-﻿namespace Hive.Core;
+﻿namespace Hive.Core.Models;
 
 /// <summary>
 /// A Client class, which makes sure that a Console player and a Web player can play seperately.

@@ -1,4 +1,6 @@
-﻿namespace Hive.Core;
+﻿using Hive.Core.Models;
+
+namespace Hive.Core;
 
 
 public class HumanPlayer : Player

@@ -1,4 +1,4 @@
-﻿namespace Hive.Core;
+﻿namespace Hive.Core.Models;
 
 
 public class Match
@@ -38,7 +38,7 @@ public class Match
 			}
 		}
 
-		System.Console.WriteLine($"Thanks for playing! The winning player is {CurrentPlayerTurn().Playername}");
+		Console.WriteLine($"Thanks for playing! The winning player is {CurrentPlayerTurn().Playername}");
 	}
 
 	private void play()

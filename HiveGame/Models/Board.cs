@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Hive.Core;
+namespace Hive.Core.Models;
 
 public class Board
 {
@@ -11,8 +11,8 @@ public class Board
 		{
 			return _Pieces;
 		}
-
 	}
+
 	private List<Piece> _Pieces;
 
 	public Board()
@@ -119,7 +119,7 @@ public class Board
 			}
 
 			// on placing, is the placed piece next to a different colored piece?
-			if (SurroundingPieces(move.Piece.Position).Any(p => p.Color == ColorMethods.GetOtherColor(player.Color)))
+			if (SurroundingPieces(move.Piece.Position).Any(p => p.Color == player.Color.GetOtherColor()))
 			{
 				throw new IllegalPlacementException("Placed piece must not be placed near a piece of a different color");
 			}
@@ -210,7 +210,7 @@ public class Board
 	// TODO: This logic needs to be put into the client
 	public void PrintBoard()
 	{
-		System.Console.WriteLine("Printing board...");
+		Console.WriteLine("Printing board...");
 		HexagonService.PrintBoard(Pieces);
 	}
 

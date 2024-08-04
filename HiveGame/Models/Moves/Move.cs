@@ -1,4 +1,6 @@
-﻿namespace Hive.Core;
+﻿using Hive.Core.Models;
+
+namespace Hive.Core;
 
 // Move in the game
 public abstract class Move

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using Hive.Core.Models;
 
 namespace Hive.Core;
 

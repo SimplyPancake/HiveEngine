@@ -1,4 +1,6 @@
 ﻿
+using Hive.Core.Models;
+
 namespace Hive.Core;
 
 public class QueenBug : Bug

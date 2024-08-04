@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace Hive.Core;
+namespace Hive.Core.Models;
 
 public class Piece
 {
