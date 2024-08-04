@@ -55,12 +55,10 @@ public static class ConsoleHexPrinter
 		{
 			piece.Position.Q = piece.Position.Q - minQ;
 			piece.Position.R = piece.Position.R - minR;
+
+			shiftedPieces.Add(piece);
 		}
 
 		return shiftedPieces;
 	}
-
-	// int adjustQ = hexes.getMinQ();
-	// int adjustR = hexes.getMinR();
-	// board.addHex("HX1","-A-", hex.getQ() - adjustQ, hex.getR() - adjust);
 }
