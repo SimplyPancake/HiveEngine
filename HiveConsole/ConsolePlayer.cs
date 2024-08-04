@@ -1,4 +1,5 @@
-﻿using Hive.Core;
+﻿using Hive.Console.Visualiser;
+using Hive.Core;
 using Hive.Core.Models;
 
 namespace Hive.Console;
@@ -10,15 +11,14 @@ public class ConsolePlayer : Player
 	public override Color Color { get; }
 
 	public override List<Bug> Pieces { get; }
-	public override Board? Board { get => _Board; set => _Board = value; }
-
-	private Board? _Board;
+	public override Board Board { get; set; }
 
 	public ConsolePlayer(string playername, Color color, List<Bug> pieces)
 	{
 		Playername = playername;
 		Color = color;
 		Pieces = pieces;
+		Board = new();
 	}
 
 	public ConsolePlayer(string playername, Color color)
@@ -26,6 +26,7 @@ public class ConsolePlayer : Player
 		Playername = playername;
 		Color = color;
 		Pieces = new List<Bug>();
+		Board = new();
 
 		// Initialise pieces collection
 		Pieces = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
@@ -40,10 +41,10 @@ public class ConsolePlayer : Player
 	{
 		// ask the player to make a move, but now we return just this
 		System.Console.WriteLine("Printing board before making move...");
-		ConsoleHexPrinter.Print(Board);
+		ConsoleHexPrinter.Print(Board.Pieces);
 		printPlayer("Please make a move...");
 
-		// we just place a queen!
+		// we just place a queen
 		Bug queen = new QueenBug();
 
 		return new PlaceMove(new Piece(Color, queen));

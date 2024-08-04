@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Hive.Console.Visualiser.Printers;
+using Hive.Core.Models.Coordinate;
 
 namespace Hive.Console.Visualiser;
 
@@ -63,6 +64,17 @@ public class AsciiBoard
 				}
 			}
 		}
+	}
+
+	public void AddHex(GridPiece piece)
+	{
+		// board.AddHex("HX3", "-W-", 'x', 2, 0);
+		Cube cubeCoords = new(piece.Position);
+		string textLine1 = $"{cubeCoords.Q}{cubeCoords.R}{cubeCoords.S}";
+		string textLine2 = $"-{piece.Bug.ShortRepresentation}-";
+		char fillerChar = piece.Color == Core.Color.Black ? '█' : ' ';
+
+		AddHex(textLine1, textLine2, fillerChar, piece.Position.Q, piece.Position.R);
 	}
 
 	/// <summary>

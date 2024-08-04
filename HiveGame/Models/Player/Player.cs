@@ -8,7 +8,9 @@ public abstract class Player
 
 	public abstract List<Bug> Pieces { get; }
 
-	public abstract Board? Board { get; set; }
+	// TODO; find better way to set Board & Match(?)
+	// Match object should be able to set the Board.
+	public abstract Board Board { get; set; }
 
 	public void SetBoard(Board b)
 	{

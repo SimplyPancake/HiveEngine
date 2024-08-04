@@ -1,4 +1,4 @@
-﻿namespace Hive.Console;
+﻿namespace Hive.Console.Visualiser;
 
 public enum HexOrientation
 {
