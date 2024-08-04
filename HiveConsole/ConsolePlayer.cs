@@ -40,12 +40,18 @@ public class ConsolePlayer : Player
 	public override Move MakeMove()
 	{
 		// ask the player to make a move, but now we return just this
+		System.Console.WriteLine("Printing board before making move...");
 		Board.PrintBoard();
-		printPlayer("Please make a move.");
+		printPlayer("Please make a move...");
 
 		// we just place a queen!
 		Bug queen = new QueenBug();
 
 		return new PlaceMove(new Piece(Color, queen));
+	}
+
+	public override Move MakeMove(IllegalMoveException illegalMoveException)
+	{
+		throw new NotImplementedException();
 	}
 }

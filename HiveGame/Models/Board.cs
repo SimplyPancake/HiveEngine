@@ -61,7 +61,7 @@ public class Board
 		// Method will throw Exception if not allowed to make move
 		AllowedToMakeMove(move, player);
 
-		makeMoveNoCheck(move, player);
+		MakeMoveNoCheck(move, player);
 	}
 
 	/// <summary>
@@ -70,7 +70,7 @@ public class Board
 	/// <param name="move"></param>
 	/// <param name="player"></param>
 	/// <exception cref="NotImplementedException"></exception>
-	private void makeMoveNoCheck(Move move, Player player)
+	private void MakeMoveNoCheck(Move move, Player player)
 	{
 		// TODO: support attacking
 		if (move.MoveType.Equals(MoveType.Attack))
@@ -80,6 +80,8 @@ public class Board
 
 		// MoveType is place
 		_Pieces.Add(move.Piece);
+
+		// TODO; remove piece from player
 	}
 
 	#region Helpers
@@ -135,7 +137,7 @@ public class Board
 
 		// Simulate move being made
 		Board newBoard = Copy();
-		newBoard.makeMoveNoCheck(move, player);
+		newBoard.MakeMoveNoCheck(move, player);
 
 		// All pieces should be connected
 		if (!newBoard.AllPiecesConnected())
@@ -207,11 +209,13 @@ public class Board
 		return positions.Where(p => !piecePositions.Contains(p)).ToList();
 	}
 
-	// TODO: This logic needs to be put into the client
-	public void PrintBoard()
+	[Obsolete("PrintBoard is deprecated and does not support printing well. Not tested.")]
+	public void PrintBoard() => PrintBoard(Pieces);
+
+	[Obsolete("PrintBoard is deprecated and does not support printing well. Not tested.")]
+	public static void PrintBoard(List<Piece> pieces)
 	{
-		Console.WriteLine("Printing board...");
-		HexagonService.PrintBoard(Pieces);
+		HexagonService.PrintBoard(pieces);
 	}
 
 	public bool AllPiecesConnected()

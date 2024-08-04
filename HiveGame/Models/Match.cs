@@ -54,28 +54,23 @@ public class Match
 			{
 				try
 				{
-					if (Board.AllowedToMakeMove(toMake, toMove))
-					{
-						validMove = true;
-						continue;
-					}
+					// AlloweToMakeMove throws exception if false, so no if statement is needed
+					Board.AllowedToMakeMove(toMake, toMove);
+					validMove = true;
+					continue;
 				}
-				catch (Exception e)
+				catch (IllegalMoveException e)
 				{
-					// nothing lol
-				}
-				finally
-				{
-					toMove = CurrentPlayerTurn();
+					// Not allowed to make move
+					Console.WriteLine(e.Message);
 					toMake = toMove.MakeMove();
+
+					// TODO handling by client
 				}
 			}
 
 			// Move is valid
 			Board.MakeMove(toMake, toMove);
-
-			// Print board for now, can make custom client later
-			Board.PrintBoard();
 
 			// Next player's turn
 			switchTurns();

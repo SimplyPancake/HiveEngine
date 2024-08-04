@@ -32,6 +32,11 @@ public static class HexagonService
 {
 	public static void PrintBoard(List<Piece> pieces)
 	{
+		if (pieces.Count == 0)
+		{
+			System.Console.WriteLine("Board is empty");
+			return;
+		}
 		List<List<Piece2D>> piece2Ds = Grid2d(pieces);
 
 		for (int i = 0; i < piece2Ds.Count(); i++)
@@ -122,11 +127,11 @@ public static class HexagonService
 		int maxx = Convert.ToInt32(pieces2d.Min(p => p.x));
 		int maxy = Convert.ToInt32(pieces2d.Max(p => p.y));
 
-		for (int y = 0; y < maxy; y++)
+		for (int y = 0; y <= maxy; y++)
 		{
 			List<Piece2D> row = new();
 
-			for (int x = 0; x < maxx; x++)
+			for (int x = 0; x <= maxx; x++)
 			{
 				Piece2D piece = new(x, y);
 
