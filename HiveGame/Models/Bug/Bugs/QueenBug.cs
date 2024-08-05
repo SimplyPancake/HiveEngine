@@ -40,6 +40,9 @@ public class QueenBug : Bug
 			.Where(pos => board.AmountOfSurroundingPieces(pos) == 1)
 			.ToList();
 
+
+		// TODO make working
+
 		// Then assemble moves from these positions
 		List<Move> moves = [];
 		foreach (Cube pos in surroundingQueen)

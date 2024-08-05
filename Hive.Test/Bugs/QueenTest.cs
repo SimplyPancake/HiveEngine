@@ -14,7 +14,7 @@ public class QueenTest
 	public void Setup()
 	{
 		whiteQueen = new(Color.White, new QueenBug(), new Cube(0, 0, 0));
-		Piece blackQueen = new(Color.Black, new QueenBug(), new Cube(1, 0, 0));
+		Piece blackQueen = new(Color.Black, new QueenBug(), new Cube(0, -1, 1));
 
 		List<Piece> pieces = [whiteQueen, blackQueen];
 
@@ -29,5 +29,7 @@ public class QueenTest
 		// TODO; incorporate placing rules
 		// Strictly speaking move-wise, a queen could only move 2 places.
 		Assert.That(moves.Count, Is.EqualTo(2));
+
+		// Assert move positions
 	}
 }
