@@ -10,4 +10,10 @@ public class AttackMove(Piece attackingPiece, Cube attackPosition, int attackHei
 	public int AttackHeight { get; set; } = attackHeight;
 
 	public override MoveType MoveType => MoveType.Attack;
+
+	// ToString for easier debugging
+	public override string ToString()
+	{
+		return AttackPosition.ToString();
+	}
 }

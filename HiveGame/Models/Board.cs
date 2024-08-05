@@ -169,6 +169,13 @@ public class Board
 		.ToList();
 	}
 
+	public int AmountOfSurroundingPieces(Piece piece) => AmountOfSurroundingPieces(piece.Position, _Pieces);
+
+	public static int AmountOfSurroundingPieces(Cube position, List<Piece> pieces)
+	{
+		return SurroundingPieces(position, pieces).Count;
+	}
+
 	public static bool IsNextToPiece(Cube position, List<Piece> pieces)
 	{
 		return SurroundingPieces(position, pieces).Any();

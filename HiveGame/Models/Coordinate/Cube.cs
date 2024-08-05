@@ -21,4 +21,9 @@ public class Cube
 		R = a.R;
 		S = -a.Q - a.R;
 	}
+
+	public override string ToString()
+	{
+		return $"{Q},{R},{S}";
+	}
 }
