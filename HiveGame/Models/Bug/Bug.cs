@@ -1,4 +1,6 @@
-﻿using Hive.Core.Models;
+﻿using System.Reflection.Metadata;
+using Hive.Core.Attributes;
+using Hive.Core.Models;
 
 namespace Hive.Core;
 
@@ -48,7 +50,27 @@ public abstract class Bug
 			throw new ArgumentException("piece must be in board");
 		}
 
-		return PieceMoves(piece, board);
+		List<Move> pieceMoves = PieceMoves(piece, board);
+
+		// Check for Bug attributes, where we will add moves to the bug based on it's attributes
+		ProcessAttributes(GetType().GetCustomAttributes(false));
+
+		return pieceMoves;
+	}
+
+	private void ProcessAttributes(object[] attributes)
+	{
+		List<Move> possibleMovesToAdd = [];
+
+		foreach (var attr in attributes)
+		{
+			switch (attr)
+			{
+				case CanWalk canWalk:
+					Console.WriteLine($"Has can Walk with dist {canWalk.WalkAmount}");
+					break;
+			}
+		}
 	}
 
 

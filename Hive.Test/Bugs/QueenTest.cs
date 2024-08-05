@@ -22,7 +22,7 @@ public class QueenTest
 	}
 
 	[Test]
-	public void SurroundingPositionsTest()
+	public void PossibleMovesTest()
 	{
 		List<Move> moves = new QueenBug().PossibleMoves(whiteQueen, board);
 
