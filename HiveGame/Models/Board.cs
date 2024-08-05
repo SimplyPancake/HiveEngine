@@ -171,6 +171,8 @@ public class Board
 
 	public int AmountOfSurroundingPieces(Piece piece) => AmountOfSurroundingPieces(piece.Position, _Pieces);
 
+	public int AmountOfSurroundingPieces(Cube position) => AmountOfSurroundingPieces(position, _Pieces);
+
 	public static int AmountOfSurroundingPieces(Cube position, List<Piece> pieces)
 	{
 		return SurroundingPieces(position, pieces).Count;
