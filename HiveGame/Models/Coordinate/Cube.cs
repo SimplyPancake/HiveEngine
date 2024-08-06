@@ -8,6 +8,11 @@ public class Cube
 
 	public Cube(int q, int r, int s)
 	{
+		if (q + r + s != 0)
+		{
+			throw new Exception($"q+r+s must be 0, instead it is {q + r + s}");
+		}
+
 		Q = q;
 		R = r;
 		S = s;
@@ -26,4 +31,48 @@ public class Cube
 	{
 		return $"{Q},{R},{S}";
 	}
+
+	public bool IsVector()
+	{
+		return
+			(Q == 1 || Q == -1 || Q == 0) &&
+			(R == 1 || R == -1 || R == 0) &&
+			(S == 1 || S == -1 || S == 0) &&
+			Q + R + S == 0;
+	}
+
+	public static int Distance(Cube a, Cube b)
+	{
+		// (abs(a.q - b.q) + abs(a.r - b.r) + abs(a.s - b.s)) / 2
+		return (Math.Abs(a.Q - b.Q) + Math.Abs(a.R - b.R) + Math.Abs(a.S - b.S)) / 2;
+	}
+
+	#region Overrides
+	public override bool Equals(object? obj)
+	{
+		if (obj == null || GetType() != obj.GetType())
+		{
+			return false;
+		}
+
+		Cube other = (Cube)obj;
+		return Q == other.Q && R == other.R && S == other.S;
+	}
+
+	// Override GetHashCode method
+	public override int GetHashCode()
+	{
+		return HashCode.Combine(Q, R, S);
+	}
+
+	public static Cube operator +(Cube a) => a;
+
+	public static Cube operator +(Cube a, Cube b)
+		=> new(a.Q + b.Q, a.R + b.R, a.S + b.S);
+
+	public static Cube operator -(Cube a) => new(-a.Q, -a.R, -a.S);
+
+	public static Cube operator -(Cube a, Cube b) => a + (-b);
+
+	#endregion
 }

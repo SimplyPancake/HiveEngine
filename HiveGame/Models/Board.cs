@@ -162,11 +162,22 @@ public class Board
 
 	public static List<Piece> SurroundingPieces(Cube position, List<Piece> pieces)
 	{
-		return pieces.Where(p =>
-			Math.Abs(p.Position.Q - position.Q) == 1 ||
-			Math.Abs(p.Position.R - position.R) == 1 ||
-			Math.Abs(p.Position.S - position.S) == 1)
-		.ToList();
+		List<Cube> surroundingPositions = SurroundingPositions(position);
+
+		// Can be optimised, is now n^2
+		return pieces
+			.Where(p => CubeListExtensions.ContainsCube(surroundingPositions, p.Position))
+			.ToList();
+	}
+
+	public static List<Cube> SurroundingCubes(Cube position, List<Cube> pieces)
+	{
+		List<Cube> surroundingPositions = SurroundingPositions(position);
+
+		// Can be optimised, is now n^2
+		return pieces
+			.Where(p => CubeListExtensions.ContainsCube(surroundingPositions, p))
+			.ToList();
 	}
 
 	public int AmountOfSurroundingPieces(Piece piece) => AmountOfSurroundingPieces(piece.Position, _Pieces);
@@ -176,6 +187,11 @@ public class Board
 	public static int AmountOfSurroundingPieces(Cube position, List<Piece> pieces)
 	{
 		return SurroundingPieces(position, pieces).Count;
+	}
+
+	public static int AmountOfSurroundingCubes(Cube position, List<Cube> pieces)
+	{
+		return SurroundingCubes(position, pieces).Count;
 	}
 
 	public static bool IsNextToPiece(Cube position, List<Piece> pieces)
@@ -189,12 +205,12 @@ public class Board
 		int r = position.R;
 		int s = position.S;
 		return [
-			new(q - 1, r, s),
-			new(q + 1, r, s),
-			new(q, r - 1, s),
-			new(q, r + 1, s),
-			new(q, r, s - 1),
-			new(q, r, s + 1)
+			new(q + 1, r - 1, s),   // Move in the +Q direction
+        	new(q + 1, r, s - 1),   // Move in the -S direction
+        	new(q, r + 1, s - 1),   // Move in the +R direction
+        	new(q - 1, r + 1, s),   // Move in the -Q direction
+        	new(q - 1, r, s + 1),   // Move in the +S direction
+        	new(q, r - 1, s + 1)    // Move in the -R direction
 		];
 	}
 

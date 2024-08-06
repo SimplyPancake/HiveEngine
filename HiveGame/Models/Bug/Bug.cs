@@ -58,13 +58,13 @@ public abstract class Bug
 		return pieceMoves;
 	}
 
-	private List<Move> ProcessAttributes(object[] attributes, Piece piece, Board board)
+	private static List<Move> ProcessAttributes(object[] attributes, Piece piece, Board board)
 	{
 		List<Move> possibleMovesToAdd = [];
 
 		foreach (var attr in attributes)
 		{
-			if (attr.GetType() == typeof(BugAttribute))
+			if (attr.GetType().BaseType == typeof(BugAttribute))
 			{
 				BugAttribute bugAttribute = (BugAttribute)attr;
 				possibleMovesToAdd.AddRange(bugAttribute.Moves(board, piece));
