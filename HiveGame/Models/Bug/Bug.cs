@@ -50,27 +50,28 @@ public abstract class Bug
 			throw new ArgumentException("piece must be in board");
 		}
 
-		List<Move> pieceMoves = PieceMoves(piece, board);
-
 		// Check for Bug attributes, where we will add moves to the bug based on it's attributes
-		ProcessAttributes(GetType().GetCustomAttributes(false));
+		List<Move> pieceMoves = ProcessAttributes(GetType().GetCustomAttributes(false), piece, board);
+
+		List<Move> extraMoves = PieceMoves(piece, board);
 
 		return pieceMoves;
 	}
 
-	private void ProcessAttributes(object[] attributes)
+	private List<Move> ProcessAttributes(object[] attributes, Piece piece, Board board)
 	{
 		List<Move> possibleMovesToAdd = [];
 
 		foreach (var attr in attributes)
 		{
-			switch (attr)
+			if (attr.GetType() == typeof(BugAttribute))
 			{
-				case CanWalk canWalk:
-					Console.WriteLine($"Has can Walk with dist {canWalk.WalkAmount}");
-					break;
+				BugAttribute bugAttribute = (BugAttribute)attr;
+				possibleMovesToAdd.AddRange(bugAttribute.Moves(board, piece));
 			}
 		}
+
+		return possibleMovesToAdd;
 	}
 
 
