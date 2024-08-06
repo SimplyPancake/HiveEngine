@@ -1,16 +1,11 @@
-﻿namespace Hive.Core.Models.Coordinate;
+﻿using Hive.Core.Enums;
+
+namespace Hive.Core.Models.Coordinate;
 
 public static class CubeListExtensions
 {
-	public static bool ContainsCube(this List<Cube> list, Cube cube)
+	public static bool ContainsCube<T>(List<Cube> list, T cube)
 	{
-		foreach (var item in list)
-		{
-			if (item.Equals(cube))
-			{
-				return true;
-			}
-		}
-		return false;
+		return list.Any(x => x.Equals(cube));
 	}
 }

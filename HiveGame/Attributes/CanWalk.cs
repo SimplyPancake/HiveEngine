@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Hive.Core.Enums;
 using Hive.Core.Models;
 using Hive.Core.Models.Coordinate;
 
@@ -82,60 +83,60 @@ public class CanWalk : BugAttribute
 			switch (toWalkToVector)
 			{
 				// top left
-				case var _ when toWalkToVector.Equals(topLeft):
+				case var _ when toWalkToVector.Equals(CubeVector.TopLeft):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, topRight) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, left))
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopRight) &&
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopLeft))
 					{
 						isApprovedWalkingPosition = false;
 					}
 					break;
 
 				// top right
-				case var _ when toWalkToVector.Equals(topRight):
+				case var _ when toWalkToVector.Equals(CubeVector.TopRight):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, topLeft) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, right))
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopLeft) &&
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.Right))
 					{
 						isApprovedWalkingPosition = false;
 					}
 					break;
 
 				// right
-				case var _ when toWalkToVector.Equals(right):
+				case var _ when toWalkToVector.Equals(CubeVector.Right):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, topRight) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, bottomRight))
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopRight) &&
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.BottomRight))
 					{
 						isApprovedWalkingPosition = false;
 					}
 					break;
 
 				// bottomRight
-				case var _ when toWalkToVector.Equals(bottomRight):
+				case var _ when toWalkToVector.Equals(CubeVector.BottomRight):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, right) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, bottomLeft))
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.Right) &&
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.BottomLeft))
 					{
 						isApprovedWalkingPosition = false;
 					}
 					break;
 
 				// bottomLeft
-				case var _ when toWalkToVector.Equals(bottomLeft):
+				case var _ when toWalkToVector.Equals(CubeVector.BottomLeft):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, left) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, bottomRight))
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.Left) &&
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.BottomRight))
 					{
 						isApprovedWalkingPosition = false;
 					}
 					break;
 
 				// left
-				case var _ when toWalkToVector.Equals(left):
+				case var _ when toWalkToVector.Equals(CubeVector.Left):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, bottomLeft) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, topLeft))
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopLeft) &&
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.BottomLeft))
 					{
 						isApprovedWalkingPosition = false;
 					}

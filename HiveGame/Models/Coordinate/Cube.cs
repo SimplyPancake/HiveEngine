@@ -1,4 +1,6 @@
-﻿namespace Hive.Core.Models.Coordinate;
+﻿using Hive.Core.Enums;
+
+namespace Hive.Core.Models.Coordinate;
 
 public class Cube
 {
@@ -50,12 +52,23 @@ public class Cube
 	#region Overrides
 	public override bool Equals(object? obj)
 	{
-		if (obj == null || GetType() != obj.GetType())
+
+		if (obj == null || !(obj.GetType() == typeof(Cube) || obj.GetType() == typeof(CubeVector)))
 		{
 			return false;
 		}
 
-		Cube other = (Cube)obj;
+		Cube other;
+
+		if (obj.GetType() == typeof(CubeVector))
+		{
+			other = CubeVectorExtensions.VectorToCube((CubeVector)obj);
+		}
+		else
+		{
+			other = (Cube)obj;
+		}
+
 		return Q == other.Q && R == other.R && S == other.S;
 	}
 

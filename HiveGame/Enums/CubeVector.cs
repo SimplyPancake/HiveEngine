@@ -4,17 +4,43 @@ namespace Hive.Core.Enums;
 
 public enum CubeVector
 {
-	TopLeft,
-	TopRight,
-	Right,
-	BottomRight,
-	BottomLeft,
-	Left,
-	Zero
+	TopLeft = 0,
+	TopRight = 1,
+	Right = 2,
+	BottomRight = 3,
+	BottomLeft = 4,
+	Left = 5,
+	Zero = -1
 }
 
 public static class CubeVectorExtensions
 {
+	public static CubeVector Successor(CubeVector v)
+	{
+		if (v == CubeVector.Zero)
+		{
+			return CubeVector.Zero;
+		}
+
+		int vectorInt = (int)v;
+
+		int nextVector = (vectorInt + 1) % 6;
+		return (CubeVector)nextVector;
+	}
+
+	public static CubeVector Predecessor(CubeVector v)
+	{
+		if (v == CubeVector.Zero)
+		{
+			return CubeVector.Zero;
+		}
+
+		int vectorInt = (int)v;
+
+		int nextVector = (vectorInt - 1) % 6;
+		return (CubeVector)nextVector;
+	}
+
 	public static CubeVector CubeToVector(Cube vector)
 	{
 		Cube topLeft = new(0, -1, 1);
@@ -68,4 +94,15 @@ public static class CubeVectorExtensions
 			_ => new(0, 0, 0),
 		};
 	}
+
+	public static CubeVector Add(CubeVector a) => a;
+
+	public static CubeVector Add(CubeVector a, CubeVector b)
+		=> CubeToVector(VectorToCube(a) + VectorToCube(b));
+
+	public static CubeVector Subtract(CubeVector a)
+		=> CubeToVector(-VectorToCube(a));
+
+	public static CubeVector Subtract(CubeVector a, CubeVector b)
+		=> CubeToVector(VectorToCube(a) - VectorToCube(b));
 }
