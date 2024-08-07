@@ -14,7 +14,7 @@ using Hive.Core.Models;
 
 
 // Create an instance of AsciiBoard with the specified parameters
-AsciiBoard board = new AsciiBoard(0, 2, 0, 1, new SmallFlatAsciiHexPrinter());
+AsciiBoard board = new AsciiBoard(0, 2, 0, 1, new SmallPointyAsciiHexPrinter());
 
 // Add hexagons to the board with specified text, filler character, and coordinates
 board.AddHex("HX1", "-B-", '#', 0, 0);

@@ -1,5 +1,6 @@
 ﻿
 namespace Hive.Console.Visualiser.Printers;
+
 public class SmallFlatAsciiHexPrinter : AsciiHexPrinter
 {
 	private readonly int _width = 9;
@@ -19,9 +20,11 @@ public class SmallFlatAsciiHexPrinter : AsciiHexPrinter
 
 	public override int[] MapHexCoordsToCharCoords(int q, int r)
 	{
-		int[] result = new int[2];
-		result[0] = 7 * q; // q * (width - side)
-		result[1] = 2 * q + 4 * r; // height/2 * q + (height - 1) * r
+		int[] result =
+		[
+			7 * q, // q * (width - side)
+			2 * q + 4 * r, // height/2 * q + (height - 1) * r
+		];
 		return result;
 	}
 
@@ -29,7 +32,7 @@ public class SmallFlatAsciiHexPrinter : AsciiHexPrinter
 	{
 		int widthInChars = hexWidth * (_width - _sideLength) + _sideLength;
 		int heightInChars = (hexWidth - 1) * _height / 2 + hexHeight * _height;
-		return new int[] { widthInChars, heightInChars };
+		return [widthInChars, heightInChars];
 	}
 
 	public override HexOrientation HexOrientation => HexOrientation.Flat;

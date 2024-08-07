@@ -1,5 +1,6 @@
 ﻿using Hive.Core;
 using Hive.Core.Models;
+using Hive.Core.Models.Coordinate;
 
 namespace Hive.Console.Visualiser;
 
@@ -10,20 +11,24 @@ public class GridPiece
 	public int Height { get; set; } = 0;
 	public Bug Bug { get; }
 
-	public GridPiece(Color c, Axial pos, int height, Bug b)
+	public Cube OriginalPosition { get; set; }
+
+	public GridPiece(Color c, Axial pos, int height, Bug b, Cube cube)
 	{
 		Color = c;
 		Position = pos;
 		Height = height;
 		Bug = b;
+		OriginalPosition = cube;
 	}
 
-	public GridPiece(Color c, Axial pos, Bug b)
+	public GridPiece(Color c, Axial pos, Bug b, Cube cube)
 	{
 		Color = c;
 		Position = pos;
 		Height = 0;
 		Bug = b;
+		OriginalPosition = cube;
 	}
 
 	public GridPiece(Piece p)
@@ -32,6 +37,7 @@ public class GridPiece
 		Position = new Axial(p.Position);
 		Height = p.Height;
 		Bug = p.Bug;
+		OriginalPosition = p.Position;
 	}
 
 }

@@ -1,4 +1,6 @@
-﻿using Hive.Core;
+﻿using System.Diagnostics;
+using Hive.Console.Visualiser;
+using Hive.Core;
 using Hive.Core.Enums;
 using Hive.Core.Models;
 using Hive.Core.Models.Coordinate;
@@ -23,15 +25,17 @@ public class QueenTest
 
 		List<Piece> pieces = [
 			whiteQueen,
-			new(Color.Black, new QueenBug(), new Cube(-1, 1, 0)),
 			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
 			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
 			new(Color.Black, new QueenBug(), new Cube(2, -2, 0)),
 			new(Color.Black, new QueenBug(), new Cube(2, -1, -1)),
 			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
+			new(Color.Black, new QueenBug(), new Cube(-1, 1, 0)),
 		];
 
 		board = new(pieces);
+
+		Debug.WriteLine(ConsoleHexPrinter.HexOutput(board.Pieces));
 
 		List<Move> moves = new QueenBug().PossibleMoves(whiteQueen, board);
 

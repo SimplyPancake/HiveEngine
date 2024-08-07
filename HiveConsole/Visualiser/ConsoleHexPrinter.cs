@@ -8,13 +8,13 @@ namespace Hive.Console.Visualiser;
 /// </summary>
 public static class ConsoleHexPrinter
 {
-	public static void Print(List<Piece> pieces)
+	public static string HexOutput(List<Piece> pieces)
 	{
 		if (pieces.Count == 0)
 		{
-			AsciiBoard b = new(0, 2, 0, 2, new SmallFlatAsciiHexPrinter());
+			AsciiBoard b = new(0, 2, 0, 2, new SmallPointyAsciiHexPrinter());
 			System.Console.WriteLine(b.PrettyPrint(true));
-			return;
+			return string.Empty;
 		}
 
 		// Convert coordinates from cube to axial
@@ -29,8 +29,10 @@ public static class ConsoleHexPrinter
 		// get min/max Q and R coords, should already be adjusted
 		int maxQ = gridPieces.Max(p => p.Position.Q);
 		int maxR = gridPieces.Max(p => p.Position.R);
+		int minQ = gridPieces.Min(p => p.Position.Q);
+		int minR = gridPieces.Min(p => p.Position.R);
 
-		AsciiBoard board = new(0, maxQ, 0, maxR, new SmallFlatAsciiHexPrinter());
+		AsciiBoard board = new(minQ, maxQ + 1, minR, maxR + 1, new SmallPointyAsciiHexPrinter());
 
 		// Add grid pieces to the board with specified text, filler character, and coordinates
 		foreach (GridPiece piece in gridPieces)
@@ -38,7 +40,12 @@ public static class ConsoleHexPrinter
 			board.AddHex(piece);
 		}
 
-		System.Console.WriteLine(board.PrettyPrint(true));
+		return board.PrettyPrint(true);
+	}
+
+	public static void Print(List<Piece> pieces)
+	{
+		System.Console.WriteLine(HexOutput(pieces));
 	}
 
 	/// <summary>

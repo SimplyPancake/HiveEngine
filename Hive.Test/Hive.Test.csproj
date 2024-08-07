@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HiveGame\Hive.Core.csproj" />
+    <ProjectReference Include="..\HiveConsole\Hive.Console.csproj" />
   </ItemGroup>
 
 </Project>
