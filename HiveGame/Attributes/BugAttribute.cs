@@ -5,5 +5,5 @@ namespace Hive.Core.Attributes;
 [AttributeUsage(AttributeTargets.Class)]
 public abstract class BugAttribute : Attribute
 {
-	public abstract List<Move> Moves(Board board, Piece piece);
+	public abstract List<AttackMove> Moves(Board board, Piece piece);
 }

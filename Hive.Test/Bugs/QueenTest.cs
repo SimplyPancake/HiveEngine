@@ -1,7 +1,7 @@
 ﻿using Hive.Core;
+using Hive.Core.Enums;
 using Hive.Core.Models;
 using Hive.Core.Models.Coordinate;
-using NUnit.Framework.Constraints;
 
 namespace Hive.Test;
 
@@ -13,23 +13,39 @@ public class QueenTest
 	[SetUp]
 	public void Setup()
 	{
-		whiteQueen = new(Color.White, new QueenBug(), new Cube(0, 0, 0));
-		Piece blackQueen = new(Color.Black, new QueenBug(), new Cube(0, -1, 1));
-
-		List<Piece> pieces = [whiteQueen, blackQueen];
-
-		board = new(pieces);
 	}
 
 	[Test]
 	public void PossibleMovesTest()
 	{
+		// TODO update for use of cycle
+		whiteQueen = new(Color.White, new QueenBug(), new Cube(0, 0, 0));
+
+		List<Piece> pieces = [
+			whiteQueen,
+			new(Color.Black, new QueenBug(), new Cube(-1, 1, 0)),
+			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
+			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
+			new(Color.Black, new QueenBug(), new Cube(2, -2, 0)),
+			new(Color.Black, new QueenBug(), new Cube(2, -1, -1)),
+			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
+		];
+
+		board = new(pieces);
+
 		List<Move> moves = new QueenBug().PossibleMoves(whiteQueen, board);
 
 		// TODO; incorporate placing rules
 		// Strictly speaking move-wise, a queen could only move 2 places.
-		Assert.That(moves.Count, Is.EqualTo(2));
+		Assert.That(moves, Has.Count.EqualTo(3));
 
 		// Assert move positions
+		List<Cube> movePositions = moves.Select(m => ((AttackMove)m).AttackPosition).ToList();
+		Assert.Multiple(() =>
+		{
+			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Cube(CubeVector.TopRight)));
+			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Cube(CubeVector.Right)));
+			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Cube(CubeVector.BottomRight)));
+		});
 	}
 }

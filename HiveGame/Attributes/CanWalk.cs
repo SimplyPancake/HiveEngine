@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Hive.Core.Enums;
+﻿using Hive.Core.Enums;
 using Hive.Core.Models;
 using Hive.Core.Models.Coordinate;
 
@@ -14,15 +13,24 @@ public class CanWalk : BugAttribute
 {
 	public int WalkAmount { get; set; }
 
-	public override List<Move> Moves(Board board, Piece piece)
+	public override List<AttackMove> Moves(Board board, Piece piece)
 	{
 		List<Cube> walkPositions = [];
 		if (WalkAmount == 1)
 		{
-			walkPositions = WalkSingle(piece.Position, board.Pieces.Select(p => piece.Position).ToList());
+			List<Cube> boardCoordinates = board.Pieces.Select(p => p.Position).ToList();
+			walkPositions = WalkSingle(piece.Position, boardCoordinates);
 		}
 
-		throw new NotImplementedException();
+		// From walkPositions to move
+		if (walkPositions.Count == 0)
+		{
+			return new List<AttackMove>();
+		}
+
+		return walkPositions.Select(walkPos =>
+			new AttackMove(piece, walkPos, 0))
+			.ToList();
 	}
 
 	private List<Cube> WalkSingle(Cube piecePosition, List<Cube> piecePositions)
@@ -43,14 +51,15 @@ public class CanWalk : BugAttribute
 				surroundingPosition, positionsWithoutPiece) > 0)
 			.ToList();
 
-		// Then we have get all piecePositions that are around the original piece
-		List<Cube> piecePositionsAroundPiece = piecePositions
-			.Where(sur => Cube.Distance(sur, piecePosition) == 1).ToList();
+		List<Cube> surroundingPieces = piecePositions.Where(piece => Cube.Distance(piece, piecePosition) == 1).ToList();
+
+		// Remove the pieces positions that are already there
+		surroundingWithPieceNextTo.RemoveAll(surroundingPieces.Contains);
 
 		// Then we have to check the passing between pieces rule
-		List<Cube> canWalkThrough = CanWalkThrough(piecePosition, surroundingWithPieceNextTo, surroundingPositions);
+		List<Cube> canWalkThrough = CanWalkThrough(piecePosition, surroundingWithPieceNextTo, surroundingPieces);
 
-		return [];
+		return canWalkThrough;
 	}
 
 	/// <summary>

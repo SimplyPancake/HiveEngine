@@ -20,6 +20,14 @@ public class Cube
 		S = s;
 	}
 
+	public Cube(CubeVector cubeVector)
+	{
+		Cube c = CubeVectorExtensions.VectorToCube(cubeVector);
+		Q = c.Q;
+		R = c.R;
+		S = c.S;
+	}
+
 	public Cube(int q, int r) : this(new Axial(q, r)) { }
 
 	public Cube(Axial a)
