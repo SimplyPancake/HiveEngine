@@ -29,7 +29,7 @@ public class CanWalk : BugAttribute
 		}
 
 		return walkPositions.Select(walkPos =>
-			new AttackMove(piece, walkPos, 0))
+			new AttackMove(piece, walkPos, 0, MoveType.Move))
 			.ToList();
 	}
 

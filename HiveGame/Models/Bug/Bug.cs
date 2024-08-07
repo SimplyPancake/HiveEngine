@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Metadata;
 using Hive.Core.Attributes;
+using Hive.Core.Enums;
 using Hive.Core.Models;
 
 namespace Hive.Core;
@@ -38,6 +39,13 @@ public abstract class Bug
 	public abstract bool MoveRestrictionsApply { get; }
 
 	/// <summary>
+	/// The type of move behavior of the bug;
+	/// On attacking, does it always have to move or not?
+	/// </summary>
+	public abstract MoveBehavior MoveBehavior { get; }
+
+
+	/// <summary>
 	/// Returns all possible moves that a piece of a board could make.
 	/// </summary>
 	/// <param name="piece">Piece in the board</param>
@@ -50,10 +58,28 @@ public abstract class Bug
 			throw new ArgumentException("piece must be in board");
 		}
 
+		// TODO; test pinned hive
+		// Check for pins
+		if (MoveBehavior == MoveBehavior.MustMove && board.IsPinned(piece))
+		{
+			return [];
+		}
+
 		// Check for Bug attributes, where we will add moves to the bug based on it's attributes
 		List<Move> pieceMoves = ProcessAttributes(GetType().GetCustomAttributes(false), piece, board);
 
-		List<Move> extraMoves = PieceMoves(piece, board);
+		pieceMoves.AddRange(PieceMoves(piece, board));
+
+		// Check for pins and cycles (maybe other pieces were moved?)
+		foreach (Move move in pieceMoves)
+		{
+			// Copy board
+			// Simulate move being made
+			// TODO check for 
+			// Do need access to players...
+
+			// Check cyclic
+		}
 
 		return pieceMoves;
 	}
@@ -75,6 +101,12 @@ public abstract class Bug
 	}
 
 
+	/// <summary>
+	/// All extra special moves that a piece has that are not made easily generic
+	/// </summary>
+	/// <param name="piece"></param>
+	/// <param name="board"></param>
+	/// <returns></returns>
 	private abstract protected List<Move> PieceMoves(Piece piece, Board board);
 
 	// Produces stackoverflowexception. TODO

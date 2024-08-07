@@ -1,5 +1,6 @@
 ﻿
 using Hive.Core.Attributes;
+using Hive.Core.Enums;
 using Hive.Core.Models;
 
 namespace Hive.Core;
@@ -19,6 +20,7 @@ public class QueenBug : Bug
 
 	public override bool MoveRestrictionsApply => true;
 
+	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;
 
 	private protected override List<Move> PieceMoves(Piece piece, Board board)
 	{

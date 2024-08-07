@@ -29,10 +29,8 @@ public static class ConsoleHexPrinter
 		// get min/max Q and R coords, should already be adjusted
 		int maxQ = gridPieces.Max(p => p.Position.Q);
 		int maxR = gridPieces.Max(p => p.Position.R);
-		int minQ = gridPieces.Min(p => p.Position.Q);
-		int minR = gridPieces.Min(p => p.Position.R);
 
-		AsciiBoard board = new(minQ, maxQ + 1, minR, maxR + 1, new SmallPointyAsciiHexPrinter());
+		AsciiBoard board = new(0, maxQ + 1, 0, maxR + 1, new SmallPointyAsciiHexPrinter());
 
 		// Add grid pieces to the board with specified text, filler character, and coordinates
 		foreach (GridPiece piece in gridPieces)

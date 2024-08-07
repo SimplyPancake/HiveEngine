@@ -29,7 +29,6 @@ public class Piece
 		Color = c;
 		Bug = bug;
 		Position = position;
-		// height is default 0.
 	}
 
 	public Piece(Color c, Bug bug, Cube position, int height)

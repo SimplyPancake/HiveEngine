@@ -34,7 +34,7 @@ public class Match
 		bool playingGame = true;
 		while (playingGame)
 		{
-			play();
+			Play();
 			if (Board.HasWinCondition())
 			{
 				return;
@@ -44,7 +44,7 @@ public class Match
 		Console.WriteLine($"Thanks for playing! The winning player is {CurrentPlayerTurn().Playername}");
 	}
 
-	private void play()
+	private void Play()
 	{
 		while (!Board.HasWinCondition())
 		{

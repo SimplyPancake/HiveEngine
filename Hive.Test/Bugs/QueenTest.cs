@@ -9,9 +9,6 @@ namespace Hive.Test;
 
 public class QueenTest
 {
-	public Board board;
-	public Piece whiteQueen;
-
 	[SetUp]
 	public void Setup()
 	{
@@ -21,7 +18,7 @@ public class QueenTest
 	public void PossibleMovesTest()
 	{
 		// TODO update for use of cycle
-		whiteQueen = new(Color.White, new QueenBug(), new Cube(0, 0, 0));
+		Piece whiteQueen = new(Color.White, new QueenBug(), new Cube(0, 0, 0));
 
 		List<Piece> pieces = [
 			whiteQueen,
@@ -33,7 +30,7 @@ public class QueenTest
 			new(Color.Black, new QueenBug(), new Cube(-1, 1, 0)),
 		];
 
-		board = new(pieces);
+		Board board = new(pieces);
 
 		Debug.WriteLine(ConsoleHexPrinter.HexOutput(board.Pieces));
 
