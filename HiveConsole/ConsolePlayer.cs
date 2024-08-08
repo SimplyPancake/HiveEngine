@@ -32,7 +32,7 @@ public class ConsolePlayer : Player
 		Pieces = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
 	}
 
-	private void printPlayer(string message)
+	private void PrintPlayer(string message)
 	{
 		System.Console.WriteLine($"{Playername}: {message}");
 	}
@@ -42,7 +42,7 @@ public class ConsolePlayer : Player
 		// ask the player to make a move, but now we return just this
 		System.Console.WriteLine("Printing board before making move...");
 		ConsoleHexPrinter.Print(Board.Pieces);
-		printPlayer("Please make a move...");
+		PrintPlayer("Please make a move...");
 
 		// we just place a queen
 		Bug queen = new QueenBug();

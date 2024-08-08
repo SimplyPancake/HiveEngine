@@ -69,9 +69,13 @@ public class AsciiBoard
 	public void AddHex(GridPiece piece)
 	{
 		// board.AddHex("HX3", "-W-", 'x', 2, 0);
-		Cube cubeCoords = piece.OriginalPosition;
-		string textLine1 = $"{Math.Abs(cubeCoords.Q)}{Math.Abs(cubeCoords.R)}{Math.Abs(cubeCoords.S)}";
-		string textLine2 = $"-{piece.Bug.ShortRepresentation}-";
+		// Cube cubeCoords = piece.OriginalPosition;
+		// string textLine1 = $"{Math.Abs(cubeCoords.Q)}{Math.Abs(cubeCoords.R)}{Math.Abs(cubeCoords.S)}";
+		// string textLine2 = $"-{piece.Bug.ShortRepresentation}-";
+
+		string textLine1 = $"{piece.Bug.ShortRepresentation}";
+		string textLine2 = $"";
+
 		char fillerChar = piece.Color == Core.Color.Black ? '█' : ' ';
 
 		AddHex(textLine1, textLine2, fillerChar, piece.Position.Q, piece.Position.R);

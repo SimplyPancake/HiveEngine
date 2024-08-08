@@ -38,7 +38,7 @@ public static class ConsoleHexPrinter
 			board.AddHex(piece);
 		}
 
-		return board.PrettyPrint(true);
+		return board.PrettyPrint(false);
 	}
 
 	public static void Print(List<Piece> pieces)

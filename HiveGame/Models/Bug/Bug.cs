@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata;
-using Hive.Core.Attributes;
+﻿using Hive.Core.Attributes;
 using Hive.Core.Enums;
 using Hive.Core.Models;
 
@@ -70,18 +69,22 @@ public abstract class Bug
 
 		pieceMoves.AddRange(PieceMoves(piece, board));
 
+		List<Move> toReturn = [];
+
 		// Check for pins and cycles (maybe other pieces were moved?)
 		foreach (Move move in pieceMoves)
 		{
 			// Copy board
 			// Simulate move being made
-			// TODO check for 
-			// Do need access to players...
-
-			// Check cyclic
+			// then check if cyclic
+			Board newBoard = board.SimulateMove(move);
+			if (newBoard.AllPiecesConnected())
+			{
+				toReturn.Add(move);
+			}
 		}
 
-		return pieceMoves;
+		return toReturn;
 	}
 
 	private static List<Move> ProcessAttributes(object[] attributes, Piece piece, Board board)

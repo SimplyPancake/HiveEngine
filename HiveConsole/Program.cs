@@ -7,11 +7,11 @@ using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Coordinate;
 
-Player p1 = new ConsolePlayer("Hans", Color.Black);
-Player p2 = new ConsolePlayer("Frans", Color.White);
+// Player p1 = new ConsolePlayer("Hans", Color.Black);
+// Player p2 = new ConsolePlayer("Frans", Color.White);
 
-Match m = new Match(p1, p2);
-m.Start();
+// Match m = new Match(p1, p2);
+// m.Start();
 
 
 Piece whiteQueen = new(Color.White, new QueenBug(), new Cube(0, 0, 0));
