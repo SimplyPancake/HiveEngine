@@ -10,9 +10,11 @@ public class MustWalk : BugAttribute
 	public override List<AttackMove> Moves(Board board, Piece piece)
 	{
 		// get the CanWalk but filter on moves with a distance of WalkAmount.
-		CanWalk canWalk = new(WalkAmount);
-		List<AttackMove> generatedMoves = canWalk.Moves(board, piece);
+		CanWalk canWalk = new(WalkAmount)
+		{
+			returnOnly = true
+		};
 
-		return generatedMoves.Where(move => Cube.Distance(move.AttackPosition, piece.Position) == WalkAmount).ToList();
+		return canWalk.Moves(board, piece);
 	}
 }

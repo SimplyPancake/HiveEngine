@@ -13,6 +13,8 @@ public class CanWalk : BugAttribute
 {
 	public int WalkAmount { get; set; }
 
+	public bool returnOnly { get; set; } = false;
+
 	public CanWalk(int WalkAmount)
 	{
 		this.WalkAmount = WalkAmount;
@@ -27,29 +29,27 @@ public class CanWalk : BugAttribute
 		// 	walkPositions = WalkSingle(piece.Position, boardCoordinates);
 		// }
 
-		// start with the first piece, and walk from there
-		List<Cube> visited = [piece.Position];
-		List<Cube> toVisit = WalkSingle(piece.Position, boardCoordinates);
-		int walked = 0;
+		// Track visited positions with their step count
+		List<(Cube position, int steps)> visited = [(piece.Position, 0)];
+		// Track positions to visit with their step count
+		List<(Cube position, int steps)> toVisit = WalkSingle(piece.Position, boardCoordinates)
+			.Select(pos => (pos, 1)).ToList();
 
-		// List<Cube> visited = [];
-		// List<Cube> toVisit = [piece.Position];
-		// int walked = 0;
+		int walked = 0;
 
 		bool isDone = false;
 
 		while (!isDone)
 		{
-			List<Cube> walkNextTime = [];
+			List<(Cube position, int steps)> walkNextTime = [];
 
 			// Explore all current positions in 'toVisit'
-			foreach (Cube toExplore in toVisit)
+			foreach (var (toExplore, steps) in toVisit)
 			{
-				// Add the current position to the visited list
-				if (!visited.Any(x => x.Equals(toExplore)))
+				// Add the current position to the visited list if not already visited
+				if (!visited.Any(x => x.position.Equals(toExplore)))
 				{
-					// we've explored it.
-					visited.Add(toExplore);
+					visited.Add((toExplore, steps));
 				}
 
 				// Walk one step from the current position and get new positions to explore
@@ -58,9 +58,9 @@ public class CanWalk : BugAttribute
 				// Add only non-visited positions to the list of positions to explore next
 				foreach (var pos in newPositions)
 				{
-					if (!visited.Any(x => x.Equals(pos)) && !toVisit.Any(x => x.Equals(pos)))
+					if (!visited.Any(x => x.position.Equals(pos)) && !toVisit.Any(x => x.position.Equals(pos)))
 					{
-						walkNextTime.Add(pos);
+						walkNextTime.Add((pos, steps + 1));
 					}
 				}
 			}
@@ -73,11 +73,17 @@ public class CanWalk : BugAttribute
 			isDone = WalkAmount > 0 ? walked == WalkAmount : toVisit.Count == 0 && visited.Count != 0;
 		}
 
-		// then add visited to walkPositions
-		walkPositions.AddRange(visited);
-
-		// we do not care about the original position
-		walkPositions = walkPositions.Where(pos => !pos.Equals(piece.Position)).ToList();
+		// Filter the visited positions based on the 'returnOnly' flag
+		if (returnOnly)
+		{
+			// Only include positions that took exactly WalkAmount steps to reach
+			walkPositions = visited.Where(v => v.steps == WalkAmount).Select(v => v.position).ToList();
+		}
+		else
+		{
+			// Include all visited positions except the starting position
+			walkPositions = visited.Select(v => v.position).Where(pos => !pos.Equals(piece.Position)).ToList();
+		}
 
 		// From walkPositions to move
 		if (walkPositions.Count == 0)

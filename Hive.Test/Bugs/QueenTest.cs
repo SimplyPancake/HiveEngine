@@ -27,7 +27,7 @@ public class QueenTest
 			new(Color.Black, new QueenBug(), new Cube(2, -2, 0)),
 			new(Color.Black, new QueenBug(), new Cube(2, -1, -1)),
 			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
-			new(Color.Black, new QueenBug(), new Cube(0, 0, 0)),
+			new(Color.White, new QueenBug(), new Cube(0, 0, 0)),
 		];
 
 		Board board = new(pieces);
@@ -45,7 +45,7 @@ public class QueenTest
 		Assert.Multiple(() =>
 		{
 			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Cube(CubeVector.BottomRight)));
-			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Cube(CubeVector.BottomLeft)));
+			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Cube(CubeVector.Left)));
 		});
 	}
 }

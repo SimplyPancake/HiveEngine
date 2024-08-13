@@ -18,7 +18,7 @@ public class BoardTest
 	public void SurroundingPositionsTest()
 	{
 		Piece whiteQueen = new(Color.White, new QueenBug(), new Cube(0, 0, 0));
-		Piece blackQueen = new(Color.Black, new QueenBug(), new Cube(1, 0, 0));
+		Piece blackQueen = new(Color.Black, new QueenBug(), new Cube(1, -1, 0));
 
 		List<Piece> pieces = [whiteQueen, blackQueen];
 
