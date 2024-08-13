@@ -1,11 +1,9 @@
-﻿
-using Hive.Core.Attributes;
+﻿using Hive.Core.Attributes;
 using Hive.Core.Enums;
-using Hive.Core.Models;
 
-namespace Hive.Core;
+namespace Hive.Core.Models.Bugs;
 
-[CanWalk(WalkAmount = 1)]
+[CanWalk(1)]
 public class QueenBug : Bug
 {
 	public override string Name => "Queen";
@@ -21,6 +19,11 @@ public class QueenBug : Bug
 	public override bool MoveRestrictionsApply => true;
 
 	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;
+
+	private protected override List<Move> FilterMoves(Piece piece, Board board, List<Move> generatedMoves)
+	{
+		return generatedMoves;
+	}
 
 	private protected override List<Move> PieceMoves(Piece piece, Board board)
 	{

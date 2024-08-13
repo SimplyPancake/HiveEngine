@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Hive.Core.Models.Coordinate;
+using Hive.Core.Models.Bugs;
 
 namespace Hive.Core.Models;
 

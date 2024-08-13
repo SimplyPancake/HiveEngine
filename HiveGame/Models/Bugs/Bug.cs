@@ -1,8 +1,7 @@
 ﻿using Hive.Core.Attributes;
 using Hive.Core.Enums;
-using Hive.Core.Models;
 
-namespace Hive.Core;
+namespace Hive.Core.Models.Bugs;
 
 public abstract class Bug
 {
@@ -69,6 +68,9 @@ public abstract class Bug
 
 		pieceMoves.AddRange(PieceMoves(piece, board));
 
+		// then filter the moves, if that is necessary
+		pieceMoves = FilterMoves(piece, board, pieceMoves);
+
 		List<Move> toReturn = [];
 
 		// Check for pins and cycles (maybe other pieces were moved?)
@@ -111,6 +113,8 @@ public abstract class Bug
 	/// <param name="board"></param>
 	/// <returns></returns>
 	private abstract protected List<Move> PieceMoves(Piece piece, Board board);
+
+	private abstract protected List<Move> FilterMoves(Piece piece, Board board, List<Move> generatedMoves);
 
 	// Produces stackoverflowexception. TODO
 	public bool Equals(Bug obj)

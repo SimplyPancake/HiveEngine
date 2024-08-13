@@ -1,4 +1,5 @@
 ﻿using Hive.Core.Models;
+using Hive.Core.Models.Bugs;
 
 namespace Hive.Core;
 

@@ -13,6 +13,11 @@ public class CanWalk : BugAttribute
 {
 	public int WalkAmount { get; set; }
 
+	public CanWalk(int WalkAmount)
+	{
+		this.WalkAmount = WalkAmount;
+	}
+
 	public override List<AttackMove> Moves(Board board, Piece piece)
 	{
 		List<Cube> walkPositions = [];

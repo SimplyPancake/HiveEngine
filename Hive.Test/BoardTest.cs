@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using Hive.Core;
+﻿using Hive.Core;
 using Hive.Core.Models;
+using Hive.Core.Models.Bugs;
 using Hive.Core.Models.Coordinate;
 
 namespace Hive.Test;

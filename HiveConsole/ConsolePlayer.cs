@@ -1,6 +1,7 @@
 ﻿using Hive.Console.Visualiser;
 using Hive.Core;
 using Hive.Core.Models;
+using Hive.Core.Models.Bugs;
 
 namespace Hive.Console;
 

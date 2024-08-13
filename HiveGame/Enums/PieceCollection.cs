@@ -1,4 +1,6 @@
-﻿namespace Hive.Core;
+﻿using Hive.Core.Models.Bugs;
+
+namespace Hive.Core;
 
 public enum PieceCollection
 {

@@ -1,4 +1,6 @@
-﻿namespace Hive.Core.Models;
+﻿using Hive.Core.Models.Bugs;
+
+namespace Hive.Core.Models;
 
 public abstract class Player
 {

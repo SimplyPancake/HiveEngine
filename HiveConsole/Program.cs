@@ -4,6 +4,7 @@ using Hive.Console;
 using Hive.Console.Visualiser;
 using Hive.Core;
 using Hive.Core.Models;
+using Hive.Core.Models.Bugs;
 using Hive.Core.Models.Coordinate;
 
 // Player p1 = new ConsolePlayer("Hans", Color.Black);
