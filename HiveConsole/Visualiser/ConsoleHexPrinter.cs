@@ -1,5 +1,4 @@
-﻿using Hive.Console.Visualiser.Printers;
-using Hive.Core.Models;
+﻿using Hive.Core.Models;
 
 namespace Hive.Console.Visualiser;
 
@@ -8,62 +7,44 @@ namespace Hive.Console.Visualiser;
 /// </summary>
 public static class ConsoleHexPrinter
 {
-	public static string HexOutput(List<Piece> pieces)
+	const int MIN_BOARD_SIZE = 2;
+
+	public static void Print(Board board)
 	{
-		if (pieces.Count == 0)
-		{
-			AsciiBoard b = new(0, 2, 0, 2, new SmallPointyAsciiHexPrinter());
-			System.Console.WriteLine(b.PrettyPrint(true));
-			return string.Empty;
-		}
+		List<GridPiece> pieces = board.Pieces.Select(p => new GridPiece(p)).ToList();
 
-		// Convert coordinates from cube to axial
-		List<GridPiece> gridPieces = pieces.Select(p => new GridPiece(p)).ToList();
-
-		// TODO; support showing that a piece is on top of another!
-		// TODO; support for piece jumping on another piece
-
-		// Remove negatives from coordinates
-		gridPieces = ShiftedPieces(gridPieces);
-
-		// get min/max Q and R coords, should already be adjusted
-		int maxQ = gridPieces.Max(p => p.Position.Q);
-		int maxR = gridPieces.Max(p => p.Position.R);
-
-		AsciiBoard board = new(0, maxQ + 1, 0, maxR + 1, new SmallPointyAsciiHexPrinter());
-
-		// Add grid pieces to the board with specified text, filler character, and coordinates
-		foreach (GridPiece piece in gridPieces)
-		{
-			board.AddHex(piece);
-		}
-
-		return board.PrettyPrint(false);
-	}
-
-	public static void Print(List<Piece> pieces)
-	{
-		System.Console.WriteLine(HexOutput(pieces));
-	}
-
-	/// <summary>
-	/// Shifts the GridPieces such that the coordinates are not negative
-	/// </summary>
-	/// <returns></returns>
-	private static List<GridPiece> ShiftedPieces(List<GridPiece> pieces)
-	{
 		int minQ = pieces.Min(p => p.Position.Q);
+		int maxQ = pieces.Max(p => p.Position.Q);
 		int minR = pieces.Min(p => p.Position.R);
+		int maxR = pieces.Max(p => p.Position.R);
 
-		List<GridPiece> shiftedPieces = [];
-		foreach (GridPiece piece in pieces)
+		// shift all by 1/2 so they end up in the middle
+		int shiftQ = (minQ + maxQ) / 2;
+		int shiftR = (minR + maxR) / 2;
+
+		// All pieces shifted
+		foreach (var piece in pieces)
 		{
-			piece.Position.Q = piece.Position.Q - minQ;
-			piece.Position.R = piece.Position.R - minR;
-
-			shiftedPieces.Add(piece);
+			piece.Position.Q -= shiftQ;
+			piece.Position.R -= shiftR;
 		}
 
-		return shiftedPieces;
+		// determine size of hexagon
+		int size = (maxQ - minQ) > (maxR - minR) ? (maxQ - minQ) : (maxR - minR);
+		size = size < MIN_BOARD_SIZE ? MIN_BOARD_SIZE : size; // min size is 2
+		size = 2 * size + 1; // always uneven number
+
+		// sort pieces on Q and then R
+		// pieces = pieces.OrderByDescending(p => p.Position.Q).ThenBy(p => p.Position.R).ToList();
+		int maxCharRowSize = size * 3 + size - 1; // each piece has 3 chars & 1 char in between every
+
+		for (int line = 1; line <= size; line++)
+		{
+			// amount of dots to draw given the line and max size
+			int horizontalPositions = size - Math.Abs(((line + 1) / 2) - line);
+
+		}
+
+
 	}
 }

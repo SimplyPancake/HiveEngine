@@ -39,5 +39,4 @@ public class GridPiece
 		Bug = p.Bug;
 		OriginalPosition = p.Position;
 	}
-
 }
