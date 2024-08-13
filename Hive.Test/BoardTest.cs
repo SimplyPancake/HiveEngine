@@ -1,4 +1,5 @@
-﻿using Hive.Core;
+﻿using System.Diagnostics;
+using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Coordinate;
 
@@ -22,11 +23,5 @@ public class BoardTest
 		Board b = new(pieces);
 
 		Assert.That(b.SurroundingPieces(whiteQueen.Position), Does.Contain(blackQueen));
-	}
-
-	[Test]
-	public void PrintBoard()
-	{
-
 	}
 }

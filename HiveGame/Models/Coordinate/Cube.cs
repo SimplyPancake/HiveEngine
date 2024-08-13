@@ -1,4 +1,5 @@
-﻿using Hive.Core.Enums;
+﻿using System.Diagnostics.CodeAnalysis;
+using Hive.Core.Enums;
 
 namespace Hive.Core.Models.Coordinate;
 
@@ -96,4 +97,27 @@ public class Cube
 	public static Cube operator -(Cube a, Cube b) => a + (-b);
 
 	#endregion
+}
+
+public class CubeComparer : IEqualityComparer<Cube>
+{
+	public bool Equals(Cube? x, Cube? y)
+	{
+		if (x == null && y == null)
+		{
+			return true;
+		}
+
+		if (x == null)
+		{
+			return false;
+		}
+
+		return x.Equals(y);
+	}
+
+	public int GetHashCode([DisallowNull] Cube obj)
+	{
+		return obj.GetHashCode();
+	}
 }

@@ -16,16 +16,60 @@ public class CanWalk : BugAttribute
 	public override List<AttackMove> Moves(Board board, Piece piece)
 	{
 		List<Cube> walkPositions = [];
-		if (WalkAmount == 1)
+		List<Cube> boardCoordinates = board.Pieces.Select(p => p.Position).ToList();
+		// if (WalkAmount == 1)
+		// {
+		// 	walkPositions = WalkSingle(piece.Position, boardCoordinates);
+		// }
+
+		// start with the first piece, and walk from there
+		List<Cube> visited = [];
+		List<Cube> toVisit = [piece.Position];
+		int walked = 0;
+
+		bool isDone = false;
+
+		while (!isDone)
 		{
-			List<Cube> boardCoordinates = board.Pieces.Select(p => p.Position).ToList();
-			walkPositions = WalkSingle(piece.Position, boardCoordinates);
+			List<Cube> singleWalked = [];
+
+			// Explore all current positions in 'toVisit'
+			foreach (Cube toExplore in toVisit)
+			{
+				// Add the current position to the visited list
+				if (!visited.Any(x => x.Equals(toExplore)))
+				{
+					visited.Add(toExplore);
+				}
+
+				// Walk one step from the current position and get new positions to explore
+				List<Cube> newPositions = WalkSingle(toExplore, boardCoordinates);
+
+				// Add only non-visited positions to the list of positions to explore next
+				foreach (var pos in newPositions)
+				{
+					if (!visited.Any(x => x.Equals(pos)) && !toVisit.Any(x => x.Equals(pos)))
+					{
+						singleWalked.Add(pos);
+					}
+				}
+			}
+
+			// Prepare for the next iteration: update 'toVisit' and increment 'walked'
+			toVisit = singleWalked;
+			walked++;
+
+			// Stop the loop when the walk amount is reached or there are no more positions to explore
+			isDone = WalkAmount > 0 ? walked == WalkAmount : toVisit.Count == 0 && visited.Count != 0;
 		}
+
+		// then add visited to walkPositions
+		walkPositions.AddRange(visited);
 
 		// From walkPositions to move
 		if (walkPositions.Count == 0)
 		{
-			return new List<AttackMove>();
+			return [];
 		}
 
 		return walkPositions.Select(walkPos =>
