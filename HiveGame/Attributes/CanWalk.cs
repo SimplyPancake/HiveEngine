@@ -23,7 +23,7 @@ public class CanWalk : BugAttribute
 	public override List<AttackMove> Moves(Board board, Piece piece)
 	{
 		List<Cube> walkPositions = [];
-		List<Cube> boardCoordinates = board.Pieces.Select(p => p.Position).ToList();
+		List<Cube> boardCoordinates = board.Pieces.Where(p => !p.Equals(piece)).Select(p => p.Position).ToList();
 		// if (WalkAmount == 1)
 		// {
 		// 	walkPositions = WalkSingle(piece.Position, boardCoordinates);
@@ -58,7 +58,14 @@ public class CanWalk : BugAttribute
 				// Add only non-visited positions to the list of positions to explore next
 				foreach (var pos in newPositions)
 				{
+					// piece was removed, we will not go there
+					if (pos.Equals(piece.Position))
+					{
+						continue;
+					}
+					// Should this not be OR?
 					if (!visited.Any(x => x.position.Equals(pos)) && !toVisit.Any(x => x.position.Equals(pos)))
+					// if (visited.Any(x => x.position.Equals(pos) || toVisit.Any(x => x.position.Equals(pos))))
 					{
 						walkNextTime.Add((pos, steps + 1));
 					}
@@ -101,6 +108,7 @@ public class CanWalk : BugAttribute
 		// Can walk to a surrounding position if
 		// - it is next to (at least one) piece, that is not the original position
 		// - does not pass between two pieces
+		// NEW constraint: the new move must be neighbouring one of the old neighbours of the piece
 		// This algorithm is very slow; n^2, can be optimised
 
 		List<Cube> surroundingPositions = Board.SurroundingPositions(piecePosition);
@@ -109,9 +117,14 @@ public class CanWalk : BugAttribute
 		positionsWithoutPiece.Remove(piecePosition);
 
 		// get all surroundingPositions that have at least one piece next to them
+		// List<Cube> surroundingWithPieceNextTo = surroundingPositions
+		// 	.Where(surroundingPosition => Board.AmountOfSurroundingCubes(
+		// 		surroundingPosition, positionsWithoutPiece) > 0)
+		// 	.ToList();
+
 		List<Cube> surroundingWithPieceNextTo = surroundingPositions
 			.Where(surroundingPosition => Board.AmountOfSurroundingCubes(
-				surroundingPosition, positionsWithoutPiece) > 0)
+				surroundingPosition, surroundingPositions) > 0)
 			.ToList();
 
 		List<Cube> surroundingPieces = piecePositions.Where(piece => Cube.Distance(piece, piecePosition) == 1).ToList();
