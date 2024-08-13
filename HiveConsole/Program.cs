@@ -2,7 +2,6 @@
 
 using Hive.Console;
 using Hive.Console.Visualiser;
-using Hive.Console.Visualiser.Printers;
 using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Coordinate;
@@ -28,4 +27,4 @@ List<Piece> pieces = [
 
 Board board = new(pieces);
 
-Console.WriteLine(ConsoleHexPrinter.HexOutput(board.Pieces));
+Console.WriteLine(ConsoleHexPrinter.BoardString(board));

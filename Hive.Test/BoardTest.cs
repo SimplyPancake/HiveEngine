@@ -23,4 +23,10 @@ public class BoardTest
 
 		Assert.That(b.SurroundingPieces(whiteQueen.Position), Does.Contain(blackQueen));
 	}
+
+	[Test]
+	public void PrintBoard()
+	{
+
+	}
 }

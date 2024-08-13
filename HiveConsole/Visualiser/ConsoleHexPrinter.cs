@@ -1,4 +1,5 @@
-﻿using Hive.Core.Models;
+﻿using Hive.Core;
+using Hive.Core.Models;
 
 namespace Hive.Console.Visualiser;
 
@@ -9,7 +10,7 @@ public static class ConsoleHexPrinter
 {
 	const int MIN_BOARD_SIZE = 2;
 
-	public static void Print(Board board)
+	public static string BoardString(Board board)
 	{
 		List<GridPiece> pieces = board.Pieces.Select(p => new GridPiece(p)).ToList();
 
@@ -36,15 +37,46 @@ public static class ConsoleHexPrinter
 
 		// sort pieces on Q and then R
 		// pieces = pieces.OrderByDescending(p => p.Position.Q).ThenBy(p => p.Position.R).ToList();
-		int maxCharRowSize = size * 3 + size - 1; // each piece has 3 chars & 1 char in between every
+		int maxCharRowSize = 4 * size - 1; // each piece has 3 chars & 1 char in between every
+										   // size * 3 + size - 1
+
+		string outPut = string.Empty;
 
 		for (int line = 1; line <= size; line++)
 		{
 			// amount of dots to draw given the line and max size
-			int horizontalPositions = size - Math.Abs(((line + 1) / 2) - line);
+			int horizontalPositions = size - Math.Abs(((size + 1) / 2) - line);
 
+			// fist build the horizontal row
+			// then, add the padding
+			int skippedPositions = size - horizontalPositions;
+			string rowString = new(' ', skippedPositions * 2);
+
+			int differenceWithMiddle = line - (size + 1) / 2; // -2, -1, 0 (on middle), 1, 2
+
+			for (int i = 0; i < horizontalPositions; i++)
+			{
+				// Get the coordinates
+				int q = -((size - 1) / 2) + i;
+				if (differenceWithMiddle < 0) q -= differenceWithMiddle; // -2 - -2 = 0
+				int r = differenceWithMiddle;
+
+				if (i != 0) rowString += ' ';
+
+				// does this position have a piece?
+				if (pieces.Any(p => p.Position.Equals(new Axial(q, r))))
+				{
+					GridPiece toDraw = pieces.First(p => p.Position.Equals(new Axial(q, r)));
+					rowString += $"{(toDraw.Color == Color.Black ? 'b' : 'w')}{toDraw.Bug.ShortRepresentation}{toDraw.Height}";
+				}
+				else
+				{
+					rowString += " . ";
+				}
+			}
+			outPut += rowString + "\n";
 		}
 
-
+		return outPut;
 	}
 }

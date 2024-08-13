@@ -32,7 +32,7 @@ public class QueenTest
 
 		Board board = new(pieces);
 
-		Debug.WriteLine(ConsoleHexPrinter.HexOutput(board.Pieces));
+		Debug.WriteLine(ConsoleHexPrinter.BoardString(board));
 
 		List<Move> moves = new QueenBug().PossibleMoves(whiteQueen, board);
 
