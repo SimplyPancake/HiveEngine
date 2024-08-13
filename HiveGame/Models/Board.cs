@@ -41,13 +41,7 @@ public class Board
 
 	public static Board Copy(Board board)
 	{
-		List<Piece> copiesPieces = [];
-
-		foreach (Piece piece in board.Pieces)
-		{
-			Piece newPiece = new(piece.Color, piece.Bug);
-			copiesPieces.Add(newPiece);
-		}
+		List<Piece> copiesPieces = new List<Piece>(board.Pieces);
 
 		return new Board(copiesPieces);
 	}
@@ -71,13 +65,25 @@ public class Board
 	/// Makes a move on the board without checking if the move is valid.
 	/// </summary>
 	/// <param name="move"></param>
-	/// <exception cref="NotImplementedException"></exception>
 	private void MakeMoveNoCheck(Move move)
 	{
-		// TODO: support attacking
+		if (move.MoveType == MoveType.Activate)
+		{
+			throw new NotImplementedException("Need to implement activating a piece");
+		}
 
-		// MoveType is place
-		_Pieces.Add(move.Piece);
+		if (move.MoveType == MoveType.Place)
+		{
+			// MoveType is place
+			_Pieces.Add(move.Piece);
+			return;
+		}
+
+		AttackMove attackMove = (AttackMove)move;
+
+		// Get the original piece and update it's location
+		Piece toMove = _Pieces.First(p => p.Equals(attackMove.Piece));
+		toMove.Position = attackMove.AttackPosition;
 	}
 
 	#region Helpers

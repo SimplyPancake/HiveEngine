@@ -59,8 +59,38 @@ public class BoardTest
 
 		board = new(pieces);
 
-		Debug.WriteLine(ConsoleHexPrinter.BoardString(board));
+		Debug.WriteLine(board);
 
 		Assert.That(!board.AllPiecesConnected());
+	}
+
+	[Test]
+	public void SimulateMoveTest()
+	{
+		// Tests if the baord is correctly simulating various sorts of moves
+		Piece attackingPiece = new(Color.White, new QueenBug(), new Cube(-1, 1, 0));
+
+		List<Piece> pieces = [
+			attackingPiece,
+			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
+			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
+			new(Color.Black, new QueenBug(), new Cube(2, -2, 0)),
+			new(Color.Black, new QueenBug(), new Cube(2, -1, -1)),
+			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
+			new(Color.Black, new QueenBug(), new Cube(0, 0, 0)),
+		];
+
+		Board board = new(pieces);
+
+		Debug.WriteLine(ConsoleHexPrinter.BoardString(board));
+
+		Cube attackPosition = new(0, 1, -1);
+		AttackMove toMake = new(attackingPiece, attackPosition, 0, MoveType.Move);
+		Board simulatedBoard = board.SimulateMove(toMake);
+		Assert.Multiple(() =>
+		{
+			Assert.That(simulatedBoard.Pieces.Any(p => p.Position.Equals(attackPosition)));
+			Assert.That(!simulatedBoard.Pieces.Any(p => p.Position.Equals(new Cube(-1, 1, 0))));
+		});
 	}
 }

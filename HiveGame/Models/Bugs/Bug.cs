@@ -1,5 +1,7 @@
-﻿using Hive.Core.Attributes;
+﻿using System.Diagnostics;
+using Hive.Core.Attributes;
 using Hive.Core.Enums;
+using Hive.Core.Services;
 
 namespace Hive.Core.Models.Bugs;
 
@@ -80,6 +82,10 @@ public abstract class Bug
 			// Simulate move being made
 			// then check if cyclic
 			Board newBoard = board.SimulateMove(move);
+
+#if DEBUG
+			Debug.WriteLine(ConsoleHexPrinter.BoardString(newBoard.Copy()));
+#endif
 
 			if (newBoard.AllPiecesConnected())
 			{
