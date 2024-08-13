@@ -80,6 +80,7 @@ public abstract class Bug
 			// Simulate move being made
 			// then check if cyclic
 			Board newBoard = board.SimulateMove(move);
+
 			if (newBoard.AllPiecesConnected())
 			{
 				toReturn.Add(move);

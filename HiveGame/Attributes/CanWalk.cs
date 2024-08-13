@@ -28,15 +28,19 @@ public class CanWalk : BugAttribute
 		// }
 
 		// start with the first piece, and walk from there
-		List<Cube> visited = [];
-		List<Cube> toVisit = [piece.Position];
+		List<Cube> visited = [piece.Position];
+		List<Cube> toVisit = WalkSingle(piece.Position, boardCoordinates);
 		int walked = 0;
+
+		// List<Cube> visited = [];
+		// List<Cube> toVisit = [piece.Position];
+		// int walked = 0;
 
 		bool isDone = false;
 
 		while (!isDone)
 		{
-			List<Cube> singleWalked = [];
+			List<Cube> walkNextTime = [];
 
 			// Explore all current positions in 'toVisit'
 			foreach (Cube toExplore in toVisit)
@@ -44,6 +48,7 @@ public class CanWalk : BugAttribute
 				// Add the current position to the visited list
 				if (!visited.Any(x => x.Equals(toExplore)))
 				{
+					// we've explored it.
 					visited.Add(toExplore);
 				}
 
@@ -55,13 +60,13 @@ public class CanWalk : BugAttribute
 				{
 					if (!visited.Any(x => x.Equals(pos)) && !toVisit.Any(x => x.Equals(pos)))
 					{
-						singleWalked.Add(pos);
+						walkNextTime.Add(pos);
 					}
 				}
 			}
 
 			// Prepare for the next iteration: update 'toVisit' and increment 'walked'
-			toVisit = singleWalked;
+			toVisit = walkNextTime;
 			walked++;
 
 			// Stop the loop when the walk amount is reached or there are no more positions to explore
@@ -70,6 +75,9 @@ public class CanWalk : BugAttribute
 
 		// then add visited to walkPositions
 		walkPositions.AddRange(visited);
+
+		// we do not care about the original position
+		walkPositions = walkPositions.Where(pos => !pos.Equals(piece.Position)).ToList();
 
 		// From walkPositions to move
 		if (walkPositions.Count == 0)

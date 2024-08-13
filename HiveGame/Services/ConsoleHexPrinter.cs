@@ -1,7 +1,7 @@
 ﻿using Hive.Core;
 using Hive.Core.Models;
 
-namespace Hive.Console.Visualiser;
+namespace Hive.Core.Services;
 
 /// <summary>
 /// The class that creates an ASCII Hex Grid, but it takes in a List of Pieces.
@@ -31,7 +31,7 @@ public static class ConsoleHexPrinter
 		}
 
 		// determine size of hexagon
-		int size = (maxQ - minQ) > (maxR - minR) ? (maxQ - minQ) : (maxR - minR);
+		int size = maxQ - minQ > maxR - minR ? maxQ - minQ : maxR - minR;
 		size = size < MIN_BOARD_SIZE ? MIN_BOARD_SIZE : size; // min size is 2
 		size = 2 * size + 1; // always uneven number
 
@@ -45,7 +45,7 @@ public static class ConsoleHexPrinter
 		for (int line = 1; line <= size; line++)
 		{
 			// amount of dots to draw given the line and max size
-			int horizontalPositions = size - Math.Abs(((size + 1) / 2) - line);
+			int horizontalPositions = size - Math.Abs((size + 1) / 2 - line);
 
 			// fist build the horizontal row
 			// then, add the padding

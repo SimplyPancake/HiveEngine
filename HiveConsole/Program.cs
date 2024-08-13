@@ -1,11 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using Hive.Console;
-using Hive.Console.Visualiser;
 using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Bugs;
 using Hive.Core.Models.Coordinate;
+using Hive.Core.Services;
 
 // Player p1 = new ConsolePlayer("Hans", Color.Black);
 // Player p2 = new ConsolePlayer("Frans", Color.White);

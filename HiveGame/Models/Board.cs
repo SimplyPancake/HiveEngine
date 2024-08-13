@@ -1,4 +1,5 @@
 ﻿using Hive.Core.Models.Coordinate;
+using Hive.Core.Services;
 
 namespace Hive.Core.Models;
 
@@ -247,6 +248,10 @@ public class Board
 		{
 			return true;
 		}
+		else if (Pieces.Count == 2 && Cube.Distance(_Pieces[0].Position, _Pieces[1].Position) == 1)
+		{
+			return true;
+		}
 
 		// Check if all pieces are connected using something similar to Dijkstra (without the distance part)
 
@@ -254,38 +259,49 @@ public class Board
 		List<Cube> unvisited = _Pieces.Select(p => p.Position).ToList();
 		List<Cube> lastVisited = [];
 
-		// Initialise visted and lastvisited to the first piece that we're exploring from
+		// Initialize visited and lastVisited to the first piece that we're exploring from
 		Cube startPiece = _Pieces.First().Position;
 		visited.Add(startPiece);
 		lastVisited.Add(startPiece);
 
-		while (true)
-		{
-			if (lastVisited.Count == 0)
-			{
-				return visited.Count == _Pieces.Count;
-			}
+		// Remove startPiece from unvisited
+		unvisited.Remove(startPiece);
 
-			// Get surrounding pieces closest to last visited
+		while (lastVisited.Count > 0)
+		{
 			List<Cube> closest = [];
+
+			// Explore each cube in lastVisited
 			foreach (Cube lv in lastVisited)
 			{
-				// Get the locations of closest pieces
-				closest.AddRange(SurroundingPieces(lv).Select(p => p.Position));
+				// Get surrounding pieces' positions that are unvisited
+				List<Cube> surrounding = SurroundingPieces(lv)
+										  .Select(p => p.Position)
+										  .Where(unvisited.Contains)
+										  .ToList();
+
+				// Add these surrounding positions to closest
+				closest.AddRange(surrounding);
 			}
 
-			// that are unvisited
-			closest = closest.Where(unvisited.Contains).ToList();
+			if (closest.Count == 0)
+			{
+				// If no new positions are found, break the loop
+				break;
+			}
 
-			// Then visit them
+			// Visit the closest cubes
 			visited.AddRange(closest);
 
-			// set lastVisited
+			// Set lastVisited to closest for the next iteration
 			lastVisited = closest;
 
-			// remove from unvisited
-			unvisited = unvisited.Where(u => !closest.Contains(u)).ToList();
+			// Remove visited cubes from unvisited
+			unvisited = unvisited.Except(closest).ToList();
 		}
+
+		// If all pieces have been visited, the board is connected
+		return visited.Count == _Pieces.Count;
 	}
 
 	public bool IsPinned(Piece piece)
@@ -303,6 +319,11 @@ public class Board
 		// If possibleDisconnectedBoard is disconnected, 
 		// then that means that the removed piece is pinned
 		return !possibleDisconnectedBoard.AllPiecesConnected();
+	}
+
+	public override string ToString()
+	{
+		return ConsoleHexPrinter.BoardString(Copy());
 	}
 
 	#endregion

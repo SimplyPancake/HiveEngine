@@ -1,7 +1,9 @@
-﻿using Hive.Core;
+﻿using System.Diagnostics;
+using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Bugs;
 using Hive.Core.Models.Coordinate;
+using Hive.Core.Services;
 
 namespace Hive.Test;
 
@@ -23,5 +25,42 @@ public class BoardTest
 		Board b = new(pieces);
 
 		Assert.That(b.SurroundingPieces(whiteQueen.Position), Does.Contain(blackQueen));
+	}
+
+	[Test]
+	public void AllPiecesConnectedTest()
+	{
+		List<Piece> pieces = [
+			new(Color.White, new QueenBug(), new Cube(-1, 1, 0)),
+			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
+			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
+			new(Color.Black, new QueenBug(), new Cube(2, -2, 0)),
+			new(Color.Black, new QueenBug(), new Cube(2, -1, -1)),
+			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
+			new(Color.Black, new QueenBug(), new Cube(0, 0, 0)),
+		];
+
+		Board board = new(pieces);
+
+		Debug.WriteLine(ConsoleHexPrinter.BoardString(board));
+
+		Assert.That(board.AllPiecesConnected());
+
+		// Now disconnect a piece
+		pieces = [
+			new(Color.White, new QueenBug(), new Cube(-1, 1, 0)),
+			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
+			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
+			new(Color.Black, new QueenBug(), new Cube(2, -2, 0)),
+			// new(Color.Black, new QueenBug(), new Cube(2, -1, -1)),
+			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
+			new(Color.Black, new QueenBug(), new Cube(0, 0, 0)),
+		];
+
+		board = new(pieces);
+
+		Debug.WriteLine(ConsoleHexPrinter.BoardString(board));
+
+		Assert.That(!board.AllPiecesConnected());
 	}
 }
