@@ -142,11 +142,6 @@ public class CanWalk : BugAttribute
 	/// <returns></returns>
 	private List<Cube> CanWalkThrough(Cube position, List<Cube> positionsToWalk, List<Cube> surroundingPiecePositions)
 	{
-		if (positionsToWalk.Any(pos => pos.Equals(new Axial(1, -1))))
-		{
-			Debug.WriteLine("Nope! Not good eh");
-		}
-
 		List<Cube> surroundingPieceVectors = surroundingPiecePositions.Select(c => c - position).ToList();
 		List<Cube> approvedWalkPositions = [];
 
@@ -168,7 +163,7 @@ public class CanWalk : BugAttribute
 				case var _ when toWalkToVector.Equals(CubeVector.TopLeft):
 					if (
 						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopRight) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopLeft))
+						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.Left))
 					{
 						isApprovedWalkingPosition = false;
 					}

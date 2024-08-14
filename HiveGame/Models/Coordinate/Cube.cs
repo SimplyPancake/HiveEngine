@@ -62,7 +62,7 @@ public class Cube
 	public override bool Equals(object? obj)
 	{
 
-		if (obj == null || !(obj.GetType() == typeof(Cube) || obj.GetType() == typeof(CubeVector)))
+		if (obj == null || !(obj.GetType() == typeof(Cube) || obj.GetType() == typeof(CubeVector) || obj.GetType() == typeof(Axial)))
 		{
 			return false;
 		}
@@ -72,6 +72,10 @@ public class Cube
 		if (obj.GetType() == typeof(CubeVector))
 		{
 			other = CubeVectorExtensions.VectorToCube((CubeVector)obj);
+		}
+		else if (obj.GetType() == typeof(Axial))
+		{
+			other = new Cube((Axial)obj);
 		}
 		else
 		{
