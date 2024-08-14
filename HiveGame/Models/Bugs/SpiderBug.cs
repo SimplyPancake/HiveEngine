@@ -20,9 +20,9 @@ public class SpiderBug : Bug
 
 	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;
 
-	private protected override List<Move> FilterMoves(Piece piece, Board board, List<Move> generatedMoves)
+	private protected override Func<Move, bool> MoveFilter()
 	{
-		return generatedMoves;
+		return move => true;
 	}
 
 	private protected override List<Move> PieceMoves(Piece piece, Board board)

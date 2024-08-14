@@ -116,24 +116,27 @@ public class CanWalk : BugAttribute
 		List<Cube> positionsWithoutPiece = new(piecePositions);
 		positionsWithoutPiece.Remove(piecePosition);
 
+		List<Cube> neighborPiecePositions = piecePositions.Where(pos => Cube.Distance(pos, piecePosition) == 1).ToList();
+
 		// get all surroundingPositions that have at least one piece next to them
 		// List<Cube> surroundingWithPieceNextTo = surroundingPositions
 		// 	.Where(surroundingPosition => Board.AmountOfSurroundingCubes(
 		// 		surroundingPosition, positionsWithoutPiece) > 0)
 		// 	.ToList();
 
-		List<Cube> surroundingWithPieceNextTo = surroundingPositions
-			.Where(surroundingPosition => Board.AmountOfSurroundingCubes(
-				surroundingPosition, surroundingPositions) > 0)
-			.ToList();
-
-		List<Cube> surroundingPieces = piecePositions.Where(piece => Cube.Distance(piece, piecePosition) == 1).ToList();
-
-		// Remove the pieces positions that are already there
-		surroundingWithPieceNextTo.RemoveAll(surroundingPieces.Contains);
+		// Can walk is a piece in surrounding positions,
+		// which one of those pieces is not already a piece,
+		// which borders a neihbor of piece
+		List<Cube> canMoveTo = surroundingPositions
+		.Where(pos =>
+			!neighborPiecePositions.Any(neighbor => neighbor.Equals(pos)) // surrounding which is not a neighbor
+		)
+		.Where(pos =>
+			neighborPiecePositions.Any(neighbor => Cube.Distance(neighbor, pos) == 1)) // which also borders a neighbor
+		.ToList();
 
 		// Then we have to check the passing between pieces rule
-		List<Cube> canWalkThrough = CanWalkThrough(piecePosition, surroundingWithPieceNextTo, surroundingPieces);
+		List<Cube> canWalkThrough = CanWalkThrough(piecePosition, canMoveTo, neighborPiecePositions);
 
 		return canWalkThrough;
 	}

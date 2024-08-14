@@ -71,7 +71,7 @@ public abstract class Bug
 		pieceMoves.AddRange(PieceMoves(piece, board));
 
 		// then filter the moves, if that is necessary
-		pieceMoves = FilterMoves(piece, board, pieceMoves);
+		pieceMoves = pieceMoves.Where(MoveFilter()).ToList();
 
 		List<Move> toReturn = [];
 
@@ -121,7 +121,7 @@ public abstract class Bug
 	/// <returns></returns>
 	private abstract protected List<Move> PieceMoves(Piece piece, Board board);
 
-	private abstract protected List<Move> FilterMoves(Piece piece, Board board, List<Move> generatedMoves);
+	private abstract protected Func<Move, bool> MoveFilter();
 
 	// Produces stackoverflowexception. TODO
 	public bool Equals(Bug obj)
