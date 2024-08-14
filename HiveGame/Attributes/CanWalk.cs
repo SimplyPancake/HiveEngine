@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Hive.Core.Enums;
+﻿using Hive.Core.Enums;
 using Hive.Core.Models;
 using Hive.Core.Models.Coordinate;
 
@@ -14,7 +13,11 @@ public class CanWalk : BugAttribute
 {
 	public int WalkAmount { get; set; }
 
-	public bool returnOnly { get; set; } = false;
+	/// <summary>
+	/// Flag can be set to true when the attribute should only return
+	/// moves with a precise walk amount of WalkAmount
+	/// </summary>
+	public bool ReturnOnly { get; set; } = false;
 
 	public CanWalk(int WalkAmount)
 	{
@@ -25,10 +28,6 @@ public class CanWalk : BugAttribute
 	{
 		List<Cube> walkPositions = [];
 		List<Cube> boardCoordinates = board.Pieces.Where(p => !p.Equals(piece)).Select(p => p.Position).ToList();
-		// if (WalkAmount == 1)
-		// {
-		// 	walkPositions = WalkSingle(piece.Position, boardCoordinates);
-		// }
 
 		// Track visited positions with their step count
 		List<(Cube position, int steps)> visited = [(piece.Position, 0)];
@@ -82,7 +81,7 @@ public class CanWalk : BugAttribute
 		}
 
 		// Filter the visited positions based on the 'returnOnly' flag
-		if (returnOnly)
+		if (ReturnOnly)
 		{
 			// Only include positions that took exactly WalkAmount steps to reach
 			walkPositions = visited.Where(v => v.steps == WalkAmount).Select(v => v.position).ToList();

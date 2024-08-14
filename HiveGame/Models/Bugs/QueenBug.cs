@@ -16,8 +16,6 @@ public class QueenBug : Bug
 
 	public override char ShortRepresentation => 'Q';
 
-	public override bool MoveRestrictionsApply => true;
-
 	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;
 
 	private protected override Func<Move, bool> MoveFilter()

@@ -33,12 +33,6 @@ public abstract class Bug
 	public abstract char ShortRepresentation { get; }
 
 	/// <summary>
-	/// If the normal move restrictions apply
-	/// TODO; convert this system into attributes and put attributes on PossibleMoves
-	/// </summary>
-	public abstract bool MoveRestrictionsApply { get; }
-
-	/// <summary>
 	/// The type of move behavior of the bug;
 	/// On attacking, does it always have to move or not?
 	/// </summary>

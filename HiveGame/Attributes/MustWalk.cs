@@ -1,9 +1,8 @@
 using Hive.Core.Models;
-using Hive.Core.Models.Coordinate;
 
 namespace Hive.Core.Attributes;
 
-public class MustWalk : BugAttribute
+public class ExactWalk : BugAttribute
 {
 	public int WalkAmount { get; set; }
 
@@ -12,7 +11,7 @@ public class MustWalk : BugAttribute
 		// get the CanWalk but filter on moves with a distance of WalkAmount.
 		CanWalk canWalk = new(WalkAmount)
 		{
-			returnOnly = true
+			ReturnOnly = true
 		};
 
 		return canWalk.Moves(board, piece);

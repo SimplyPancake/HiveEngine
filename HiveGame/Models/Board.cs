@@ -259,51 +259,29 @@ public class Board
 			return true;
 		}
 
-		// Check if all pieces are connected using something similar to Dijkstra (without the distance part)
+		// Use a queue for BFS and a HashSet to track visited pieces
+		Queue<Cube> queue = new();
+		HashSet<Cube> visited = [];
 
-		List<Cube> visited = [];
-		List<Cube> unvisited = _Pieces.Select(p => p.Position).ToList();
-		List<Cube> lastVisited = [];
-
-		// Initialize visited and lastVisited to the first piece that we're exploring from
+		// Start BFS from the first piece
 		Cube startPiece = _Pieces.First().Position;
+		queue.Enqueue(startPiece);
 		visited.Add(startPiece);
-		lastVisited.Add(startPiece);
 
-		// Remove startPiece from unvisited
-		unvisited.Remove(startPiece);
-
-		while (lastVisited.Count > 0)
+		// BFS Loop
+		while (queue.Count > 0)
 		{
-			List<Cube> closest = [];
+			Cube current = queue.Dequeue();
 
-			// Explore each cube in lastVisited
-			foreach (Cube lv in lastVisited)
+			// Explore neighbors (surrounding pieces)
+			foreach (var neighbor in SurroundingPieces(current).Select(p => p.Position))
 			{
-				// Get surrounding pieces' positions that are unvisited
-				List<Cube> surrounding = SurroundingPieces(lv)
-										  .Select(p => p.Position)
-										  .Where(unvisited.Contains)
-										  .ToList();
-
-				// Add these surrounding positions to closest
-				closest.AddRange(surrounding);
+				if (!visited.Any(p => p.Equals(neighbor)))
+				{
+					visited.Add(neighbor);
+					queue.Enqueue(neighbor);
+				}
 			}
-
-			if (closest.Count == 0)
-			{
-				// If no new positions are found, break the loop
-				break;
-			}
-
-			// Visit the closest cubes
-			visited.AddRange(closest);
-
-			// Set lastVisited to closest for the next iteration
-			lastVisited = closest;
-
-			// Remove visited cubes from unvisited
-			unvisited = unvisited.Except(closest).ToList();
 		}
 
 		// If all pieces have been visited, the board is connected
@@ -317,7 +295,7 @@ public class Board
 			throw new Exception("piece must be in board");
 		}
 
-		List<Piece> pieceCopiesWithoutPiece = _Pieces.Where(p => p.Equals(piece))
+		List<Piece> pieceCopiesWithoutPiece = _Pieces.Where(p => !p.Equals(piece))
 			.ToList();
 
 		Board possibleDisconnectedBoard = new(pieceCopiesWithoutPiece);

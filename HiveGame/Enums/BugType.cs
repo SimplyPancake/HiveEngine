@@ -4,5 +4,6 @@ public enum BugType
 {
 	Queen = 0,
 	Spider = 1,
+	Ant = 2,
 
 }

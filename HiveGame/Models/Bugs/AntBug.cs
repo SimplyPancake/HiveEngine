@@ -3,18 +3,18 @@ using Hive.Core.Enums;
 
 namespace Hive.Core.Models.Bugs;
 
-[ExactWalk(WalkAmount = 3)]
-public class SpiderBug : Bug
+[CanWalk(0)]
+public class AntBug : Bug
 {
-	public override string Name => "Spider";
+	public override string Name => "Ant";
 
-	public override string Description => "A spider that can walk 3 spaces";
+	public override string Description => "The ant, moves very well";
 
-	public override int BugTypeId => (int)BugType.Spider;
+	public override int BugTypeId => (int)BugType.Ant;
 
 	public override int GetAmount => 3;
 
-	public override char ShortRepresentation => 'S';
+	public override char ShortRepresentation => 'A';
 
 	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;
 

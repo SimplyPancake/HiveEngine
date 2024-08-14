@@ -62,6 +62,21 @@ public class BoardTest
 		Debug.WriteLine(board);
 
 		Assert.That(!board.AllPiecesConnected());
+
+		// Now we create a cycle, can the board handle cycles?
+		pieces = [
+			new(Color.White, new QueenBug(), new Cube(1, 0, -1)),
+			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
+			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
+			new(Color.Black, new QueenBug(), new Cube(2, -2, 0)),
+			new(Color.Black, new QueenBug(), new Cube(2, -1, -1)),
+			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
+			new(Color.Black, new QueenBug(), new Cube(0, 0, 0)),
+		];
+
+		board = new(pieces);
+		Debug.WriteLine(board);
+		Assert.That(board.AllPiecesConnected());
 	}
 
 	[Test]
