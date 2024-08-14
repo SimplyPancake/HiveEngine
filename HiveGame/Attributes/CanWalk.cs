@@ -1,4 +1,5 @@
-﻿using Hive.Core.Enums;
+﻿using System.Diagnostics;
+using Hive.Core.Enums;
 using Hive.Core.Models;
 using Hive.Core.Models.Coordinate;
 
@@ -105,24 +106,12 @@ public class CanWalk : BugAttribute
 
 	private List<Cube> WalkSingle(Cube piecePosition, List<Cube> piecePositions)
 	{
-		// Can walk to a surrounding position if
-		// - it is next to (at least one) piece, that is not the original position
-		// - does not pass between two pieces
-		// NEW constraint: the new move must be neighbouring one of the old neighbours of the piece
-		// This algorithm is very slow; n^2, can be optimised
-
 		List<Cube> surroundingPositions = Board.SurroundingPositions(piecePosition);
 
 		List<Cube> positionsWithoutPiece = new(piecePositions);
 		positionsWithoutPiece.Remove(piecePosition);
 
 		List<Cube> neighborPiecePositions = piecePositions.Where(pos => Cube.Distance(pos, piecePosition) == 1).ToList();
-
-		// get all surroundingPositions that have at least one piece next to them
-		// List<Cube> surroundingWithPieceNextTo = surroundingPositions
-		// 	.Where(surroundingPosition => Board.AmountOfSurroundingCubes(
-		// 		surroundingPosition, positionsWithoutPiece) > 0)
-		// 	.ToList();
 
 		// Can walk is a piece in surrounding positions,
 		// which one of those pieces is not already a piece,
@@ -153,6 +142,11 @@ public class CanWalk : BugAttribute
 	/// <returns></returns>
 	private List<Cube> CanWalkThrough(Cube position, List<Cube> positionsToWalk, List<Cube> surroundingPiecePositions)
 	{
+		if (positionsToWalk.Any(pos => pos.Equals(new Axial(1, -1))))
+		{
+			Debug.WriteLine("Nope! Not good eh");
+		}
+
 		List<Cube> surroundingPieceVectors = surroundingPiecePositions.Select(c => c - position).ToList();
 		List<Cube> approvedWalkPositions = [];
 

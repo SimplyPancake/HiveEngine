@@ -84,7 +84,8 @@ public abstract class Bug
 			Board newBoard = board.SimulateMove(move);
 
 #if DEBUG
-			Debug.WriteLine(ConsoleHexPrinter.BoardString(newBoard.Copy()));
+			Debug.WriteLine($"{GetType().Name}: Showing possible move");
+			Debug.WriteLine(newBoard);
 #endif
 
 			if (newBoard.AllPiecesConnected())
