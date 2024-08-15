@@ -24,8 +24,16 @@ public class CanWalk : BugAttribute
 		this.WalkAmount = WalkAmount;
 	}
 
+	/// <summary>
+	/// TODO
+	/// CanWalk only walks for height = 0
+	/// </summary>
+	/// <param name="board"></param>
+	/// <param name="piece"></param>
+	/// <returns></returns>
 	public override List<AttackMove> Moves(Board board, Piece piece)
 	{
+		board = board.LowestPiecesBoard(); // Only handle pieces with height = 0.
 		List<Cube> walkPositions = [];
 		List<Cube> boardCoordinates = board.Pieces.Where(p => !p.Equals(piece)).Select(p => p.Position).ToList();
 

@@ -6,4 +6,5 @@ public enum BugType
 	Spider = 1,
 	Ant = 2,
 	Grasshopper = 3,
+	Beetle = 4,
 }

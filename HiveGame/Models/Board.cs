@@ -183,7 +183,7 @@ public class Board
 
 		// Can be optimised, is now n^2
 		return pieces
-			.Where(p => surroundingPositions.Contains(p))
+			.Where(surroundingPositions.Contains)
 			.ToList();
 	}
 
@@ -216,6 +216,32 @@ public class Board
 		);
 	}
 
+	public Piece HighestPiece(Cube position) => HighestPiece(position, _Pieces);
+
+	public static Piece HighestPiece(Cube position, List<Piece> pieces)
+	{
+		Piece highestPiece = pieces.First(p => p.Height == 0 && p.Position.Equals(position));
+		int maxPieceHeight = pieces.Max(p => p.Height);
+
+		for (int i = 1; i <= maxPieceHeight + 1; i++)
+		{
+			if (HasHigherPiece(highestPiece, pieces))
+			{
+				highestPiece = pieces.First(p =>
+					p.Position.Equals(highestPiece.Position) &&
+					p.Height == i
+				);
+				continue;
+			}
+			else
+			{
+				return highestPiece;
+			}
+		}
+
+		return highestPiece;
+	}
+
 	/// <summary>
 	/// Gets the top-most pieces, so the highest pieces possible of each position
 	/// </summary>
@@ -229,34 +255,23 @@ public class Board
 	/// <returns>All the highest pieces</returns>
 	public static List<Piece> HighestPieces(List<Piece> pieces)
 	{
-		int maxPieceHeight = pieces.Max(p => p.Height);
 		List<Piece> highestPieces = [];
 		List<Piece> lowestPieces = pieces.Where(p => p.Height == 0).ToList();
 
 		// For each piece that has a piece on top of it
 		foreach (Piece piece in lowestPieces)
 		{
-			Piece highestPiece = piece;
-
-			for (int i = 1; i <= maxPieceHeight + 1; i++)
-			{
-				if (HasHigherPiece(highestPiece, pieces))
-				{
-					highestPiece = pieces.First(p =>
-						p.Position.Equals(piece.Position) &&
-						p.Height == i
-					);
-					continue;
-				}
-				else
-				{
-					highestPieces.Add(highestPiece);
-					break;
-				}
-			}
+			highestPieces.Add(HighestPiece(piece.Position, pieces));
 		}
 
 		return highestPieces;
+	}
+
+	public Board LowestPiecesBoard() => LowestPiecesBoard(this);
+
+	public static Board LowestPiecesBoard(Board board)
+	{
+		return new Board(board.Pieces.Where(p => p.Height == 0).ToList());
 	}
 
 	public static List<Cube> SurroundingPositions(Cube position)
@@ -303,6 +318,7 @@ public class Board
 		return positions.Where(p => !piecePositions.Contains(p)).ToList();
 	}
 
+	// TODO; check for height
 	public bool AllPiecesConnected()
 	{
 		if (Pieces.Count < 2)
@@ -340,7 +356,13 @@ public class Board
 		}
 
 		// If all pieces have been visited, the board is connected
-		return visited.Count == _Pieces.Count;
+		if (visited.Count != _Pieces.Count)
+		{
+			return false;
+		}
+
+		return true;
+		// TODO implement check for height
 	}
 
 	public bool IsPinned(Piece piece)
