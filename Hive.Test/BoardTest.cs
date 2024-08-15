@@ -109,4 +109,24 @@ public class BoardTest
 			Assert.That(!simulatedBoard.Pieces.Any(p => p.Position.Equals(new Cube(-1, 1, 0))));
 		});
 	}
+
+	[Test]
+	public void HigherPiecesTest()
+	{
+		Piece middle = new(Color.White, new QueenBug(), new Cube(0, 0, 0));
+		List<Piece> pieces = [
+			new(Color.Black, new QueenBug(), new Cube(3, -2, -1)),
+			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
+			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
+			new(Color.Black, new QueenBug(), new Cube(2, -2, 0)),
+			new(Color.Black, new QueenBug(), new Cube(2, -1, -1)),
+			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
+			middle,
+			new(Color.White, new QueenBug(), new Cube(0, 0, 0), 1)
+		];
+
+		Board board = new(pieces);
+
+		Assert.That(board.HasHigherPiece(middle), Is.True);
+	}
 }
