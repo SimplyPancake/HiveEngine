@@ -1,4 +1,4 @@
-
+using System;
 using System.Diagnostics;
 using Hive.Core;
 using Hive.Core.Models;
@@ -7,15 +7,16 @@ using Hive.Core.Models.Coordinate;
 
 namespace Hive.Test.Bugs;
 
-public class AntTest
+public class GrasshopperTest
 {
 	[Test]
 	public void PossibleMovesTest()
 	{
-		Piece ant = new(Color.White, new AntBug(), new Cube(-1, 1, 0));
+		Piece hopper = new(Color.White, new GrasshopperBug(), new Cube(3, -3));
 
 		List<Piece> pieces = [
-			ant,
+			hopper,
+			new(Color.Black, new QueenBug(), new Cube(3, -2, -1)),
 			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
 			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
 			new(Color.Black, new QueenBug(), new Cube(2, -2, 0)),
@@ -28,32 +29,16 @@ public class AntTest
 
 		Debug.WriteLine(board);
 
-		List<Move> moves = ant.PossibleMoves(board);
+		List<Move> moves = hopper.PossibleMoves(board);
 
-		Assert.That(moves, Has.Count.EqualTo(13));
+		Assert.That(moves, Has.Count.EqualTo(2));
 
 		// Assert move positions
 		List<Cube> movePositions = moves.Select(m => ((AttackMove)m).AttackPosition).ToList();
-		List<Axial> rightMovePositions = new([
-			new Axial(0, 1),
-			new Axial(1, 0),
-			new Axial(1, 1),
-			new Axial(2, 1),
-			new Axial(3, 0),
-			new Axial(3, -1),
-			new Axial(3, -2),
-			new Axial(3, -3),
-			new Axial(2, -3),
-			new Axial(1, -3),
-			new Axial(0, -2),
-			new Axial(-1, -1),
-			new Axial(-1, 0),
-		]);
-
-
-		foreach (var pos in rightMovePositions)
+		Assert.Multiple(() =>
 		{
-			Assert.That(CubeListExtensions.ContainsCube(movePositions, pos));
-		}
+			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Axial(3, -1)));
+			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Axial(1, -1)));
+		});
 	}
 }

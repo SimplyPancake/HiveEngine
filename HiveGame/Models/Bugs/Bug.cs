@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using Hive.Core.Attributes;
 using Hive.Core.Enums;
-using Hive.Core.Services;
 
 namespace Hive.Core.Models.Bugs;
 
@@ -52,7 +51,6 @@ public abstract class Bug
 			throw new ArgumentException("piece must be in board");
 		}
 
-		// TODO; test pinned hive
 		// Check for pins
 		if (MoveBehavior == MoveBehavior.MustMove && board.IsPinned(piece))
 		{

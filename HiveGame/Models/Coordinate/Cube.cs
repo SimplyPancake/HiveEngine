@@ -100,6 +100,10 @@ public class Cube
 
 	public static Cube operator -(Cube a, Cube b) => a + (-b);
 
+	public static Cube operator *(Cube a, int b) => new(b * a.Q, b * a.R, b * a.S);
+
+	public static Cube operator *(int b, Cube a) => new(b * a.Q, b * a.R, b * a.S);
+
 	#endregion
 }
 
