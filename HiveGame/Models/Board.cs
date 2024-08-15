@@ -211,19 +211,23 @@ public class Board
 	public static bool HasHigherPiece(Piece piece, List<Piece> pieces)
 	{
 		return pieces.Any(p =>
-			piece.Height > piece.Height &&
-			piece.Position.Equals(p.Position)
+			piece.Position.Equals(p.Position) &&
+			p.Height > piece.Height
 		);
 	}
 
-	public List<Piece> TopPieces() => TopPieces(_Pieces);
+	/// <summary>
+	/// Gets the top-most pieces, so the highest pieces possible of each position
+	/// </summary>
+	/// <returns>All the highest pieces</returns>
+	public List<Piece> HighestPieces() => HighestPieces(_Pieces);
 
 	/// <summary>
 	/// Gets the top-most pieces, so the highest pieces possible of each position
 	/// </summary>
 	/// <param name="pieces">Pieces of the board</param>
 	/// <returns>All the highest pieces</returns>
-	public static List<Piece> TopPieces(List<Piece> pieces)
+	public static List<Piece> HighestPieces(List<Piece> pieces)
 	{
 		int maxPieceHeight = pieces.Max(p => p.Height);
 		List<Piece> highestPieces = [];
@@ -234,7 +238,7 @@ public class Board
 		{
 			Piece highestPiece = piece;
 
-			for (int i = 1; i < maxPieceHeight; i++)
+			for (int i = 1; i <= maxPieceHeight + 1; i++)
 			{
 				if (HasHigherPiece(highestPiece, pieces))
 				{
@@ -242,10 +246,12 @@ public class Board
 						p.Position.Equals(piece.Position) &&
 						p.Height == i
 					);
+					continue;
 				}
 				else
 				{
 					highestPieces.Add(highestPiece);
+					break;
 				}
 			}
 		}
