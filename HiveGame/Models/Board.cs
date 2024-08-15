@@ -19,7 +19,7 @@ public class Board
 	public Board()
 	{
 		// Always work from the middle	
-		_Pieces = new List<Piece>();
+		_Pieces = [];
 	}
 
 	public Board(List<Piece> pieces)
@@ -34,14 +34,14 @@ public class Board
 
 	public void Reset()
 	{
-		_Pieces = new List<Piece>();
+		_Pieces = [];
 	}
 
 	public Board Copy() => Copy(this);
 
 	public static Board Copy(Board board)
 	{
-		List<Piece> copiesPieces = new List<Piece>(board.Pieces);
+		List<Piece> copiesPieces = new(board.Pieces);
 
 		return new Board(copiesPieces);
 	}
@@ -58,6 +58,7 @@ public class Board
 
 		MakeMoveNoCheck(move);
 
+		player.Pieces.Remove(move.Piece.Bug);
 		// TODO; remove piece from player
 	}
 
@@ -124,7 +125,7 @@ public class Board
 		if (move.MoveType.Equals(MoveType.Place))
 		{
 			// does the player have enough pieces?
-			if (!player.Pieces.Any(p => p.Equals(move.Piece.Bug)))
+			if (!player.Pieces.Contains(move.Piece.Bug))
 			{
 				throw new IllegalPiecesAmountException($"Player {player.Playername} does not have enough pieces");
 			}
@@ -138,6 +139,7 @@ public class Board
 		else
 		{
 			// Problem for later; attacking
+			throw new NotImplementedException("Can't attack yet!");
 		}
 
 
@@ -171,7 +173,7 @@ public class Board
 
 		// Can be optimised, is now n^2
 		return pieces
-			.Where(p => CubeListExtensions.ContainsCube(surroundingPositions, p.Position))
+			.Where(p => surroundingPositions.Contains(p.Position))
 			.ToList();
 	}
 
@@ -181,7 +183,7 @@ public class Board
 
 		// Can be optimised, is now n^2
 		return pieces
-			.Where(p => CubeListExtensions.ContainsCube(surroundingPositions, p))
+			.Where(p => surroundingPositions.Contains(p))
 			.ToList();
 	}
 
@@ -201,7 +203,54 @@ public class Board
 
 	public static bool IsNextToPiece(Cube position, List<Piece> pieces)
 	{
-		return SurroundingPieces(position, pieces).Any();
+		return SurroundingPieces(position, pieces).Count != 0;
+	}
+
+	public bool HasHigherPiece(Piece piece) => HasHigherPiece(piece, _Pieces);
+
+	public static bool HasHigherPiece(Piece piece, List<Piece> pieces)
+	{
+		return pieces.Any(p =>
+			piece.Height > piece.Height &&
+			piece.Position.Equals(p.Position)
+		);
+	}
+
+	public List<Piece> TopPieces() => TopPieces(_Pieces);
+
+	/// <summary>
+	/// Gets the top-most pieces, so the highest pieces possible of each position
+	/// </summary>
+	/// <param name="pieces">Pieces of the board</param>
+	/// <returns>All the highest pieces</returns>
+	public static List<Piece> TopPieces(List<Piece> pieces)
+	{
+		int maxPieceHeight = pieces.Max(p => p.Height);
+		List<Piece> highestPieces = [];
+		List<Piece> lowestPieces = pieces.Where(p => p.Height == 0).ToList();
+
+		// For each piece that has a piece on top of it
+		foreach (Piece piece in lowestPieces)
+		{
+			Piece highestPiece = piece;
+
+			for (int i = 1; i < maxPieceHeight; i++)
+			{
+				if (HasHigherPiece(highestPiece, pieces))
+				{
+					highestPiece = pieces.First(p =>
+						p.Position.Equals(piece.Position) &&
+						p.Height == i
+					);
+				}
+				else
+				{
+					highestPieces.Add(highestPiece);
+				}
+			}
+		}
+
+		return highestPieces;
 	}
 
 	public static List<Cube> SurroundingPositions(Cube position)

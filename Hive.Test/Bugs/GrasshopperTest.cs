@@ -37,8 +37,8 @@ public class GrasshopperTest
 		List<Cube> movePositions = moves.Select(m => ((AttackMove)m).AttackPosition).ToList();
 		Assert.Multiple(() =>
 		{
-			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Axial(3, -1)));
-			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Axial(1, -1)));
+			Assert.That(movePositions, Does.Contain(new Cube(3, -1, -2)));
+			Assert.That(movePositions, Does.Contain(new Cube(1, -1, 0)));
 		});
 	}
 }

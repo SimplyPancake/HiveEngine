@@ -44,8 +44,9 @@ public class QueenTest
 		List<Cube> movePositions = moves.Select(m => ((AttackMove)m).AttackPosition).ToList();
 		Assert.Multiple(() =>
 		{
-			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Cube(CubeVector.BottomRight)));
-			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Cube(CubeVector.Left)));
+			Assert.That(movePositions, Does.Contain(new Cube(CubeVector.Left)));
+			Assert.That(movePositions, Does.Contain(new Cube(CubeVector.BottomRight)));
+
 		});
 	}
 }

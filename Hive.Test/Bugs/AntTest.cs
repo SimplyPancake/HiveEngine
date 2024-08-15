@@ -50,10 +50,9 @@ public class AntTest
 			new Axial(-1, 0),
 		]);
 
-
 		foreach (var pos in rightMovePositions)
 		{
-			Assert.That(CubeListExtensions.ContainsCube(movePositions, pos));
+			Assert.That(movePositions, Does.Contain(new Cube(pos)));
 		}
 	}
 }

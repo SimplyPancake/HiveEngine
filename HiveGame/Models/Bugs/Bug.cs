@@ -4,7 +4,7 @@ using Hive.Core.Enums;
 
 namespace Hive.Core.Models.Bugs;
 
-public abstract class Bug
+public abstract class Bug : IEquatable<Bug>
 {
 	/// <summary>
 	/// The name of the bug type
@@ -46,7 +46,8 @@ public abstract class Bug
 	/// <returns></returns>
 	public List<Move> PossibleMoves(Piece piece, Board board)
 	{
-		if (!board.Pieces.Any(p => p.Equals(piece)))
+		// if (!board.Pieces.Any(p => p.Equals(piece)))
+		if (!board.Pieces.Contains(piece))
 		{
 			throw new ArgumentException("piece must be in board");
 		}
@@ -117,7 +118,7 @@ public abstract class Bug
 	private abstract protected Func<Move, bool> MoveFilter();
 
 	// Produces stackoverflowexception. TODO
-	public bool Equals(Bug obj)
+	public bool Equals(Bug? obj)
 	{
 		if (obj == null) return false;
 		if (ReferenceEquals(this, obj)) { return true; }
@@ -125,8 +126,14 @@ public abstract class Bug
 		return GetHashCode() == obj.GetHashCode();
 	}
 
+	public override bool Equals(object? obj)
+	{
+		return Equals(obj as Bug);
+	}
+
 	public override int GetHashCode()
 	{
 		return BugTypeId;
 	}
+
 }

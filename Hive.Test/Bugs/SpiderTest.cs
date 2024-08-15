@@ -37,8 +37,9 @@ public class SpiderTest
 		List<Cube> movePositions = moves.Select(m => ((AttackMove)m).AttackPosition).ToList();
 		Assert.Multiple(() =>
 		{
-			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Axial(0, -2)));
-			Assert.That(CubeListExtensions.ContainsCube(movePositions, new Axial(1, 1)));
+			Assert.That(movePositions, Does.Contain(new Cube(0, -2, 2)));
+			Assert.That(movePositions, Does.Contain(new Cube(1, 1, -2)));
+
 		});
 	}
 }

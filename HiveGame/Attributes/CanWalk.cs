@@ -47,7 +47,7 @@ public class CanWalk : BugAttribute
 			foreach (var (toExplore, steps) in toVisit)
 			{
 				// Add the current position to the visited list if not already visited
-				if (!visited.Any(x => x.position.Equals(toExplore)))
+				if (!visited.Select(p => p.position).Contains(toExplore))
 				{
 					visited.Add((toExplore, steps));
 				}
@@ -64,8 +64,7 @@ public class CanWalk : BugAttribute
 						continue;
 					}
 					// Should this not be OR?
-					if (!visited.Any(x => x.position.Equals(pos)) && !toVisit.Any(x => x.position.Equals(pos)))
-					// if (visited.Any(x => x.position.Equals(pos) || toVisit.Any(x => x.position.Equals(pos))))
+					if (!visited.Select(p => p.position).Contains(pos) && !toVisit.Select(p => p.position).Contains(pos))
 					{
 						walkNextTime.Add((pos, steps + 1));
 					}
@@ -117,7 +116,7 @@ public class CanWalk : BugAttribute
 		// which borders a neihbor of piece
 		List<Cube> canMoveTo = surroundingPositions
 		.Where(pos =>
-			!neighborPiecePositions.Any(neighbor => neighbor.Equals(pos)) // surrounding which is not a neighbor
+			!neighborPiecePositions.Contains(pos) // surrounding which is not a neighbor
 		)
 		.Where(pos =>
 			neighborPiecePositions.Any(neighbor => Cube.Distance(neighbor, pos) == 1)) // which also borders a neighbor
@@ -161,8 +160,8 @@ public class CanWalk : BugAttribute
 				// top left
 				case var _ when toWalkToVector.Equals(CubeVector.TopLeft):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopRight) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.Left))
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.TopRight)) &&
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.Left)))
 					{
 						isApprovedWalkingPosition = false;
 					}
@@ -171,8 +170,8 @@ public class CanWalk : BugAttribute
 				// top right
 				case var _ when toWalkToVector.Equals(CubeVector.TopRight):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopLeft) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.Right))
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.TopLeft)) &&
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.Right)))
 					{
 						isApprovedWalkingPosition = false;
 					}
@@ -181,8 +180,8 @@ public class CanWalk : BugAttribute
 				// right
 				case var _ when toWalkToVector.Equals(CubeVector.Right):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopRight) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.BottomRight))
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.TopRight)) &&
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.BottomRight)))
 					{
 						isApprovedWalkingPosition = false;
 					}
@@ -191,8 +190,8 @@ public class CanWalk : BugAttribute
 				// bottomRight
 				case var _ when toWalkToVector.Equals(CubeVector.BottomRight):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.Right) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.BottomLeft))
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.Right)) &&
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.BottomLeft)))
 					{
 						isApprovedWalkingPosition = false;
 					}
@@ -201,8 +200,8 @@ public class CanWalk : BugAttribute
 				// bottomLeft
 				case var _ when toWalkToVector.Equals(CubeVector.BottomLeft):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.Left) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.BottomRight))
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.Left)) &&
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.BottomRight)))
 					{
 						isApprovedWalkingPosition = false;
 					}
@@ -211,8 +210,8 @@ public class CanWalk : BugAttribute
 				// left
 				case var _ when toWalkToVector.Equals(CubeVector.Left):
 					if (
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.TopLeft) &&
-						CubeListExtensions.ContainsCube(surroundingPieceVectors, CubeVector.BottomLeft))
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.TopLeft)) &&
+						surroundingPieceVectors.Any(c => c.Equals(CubeVector.BottomLeft)))
 					{
 						isApprovedWalkingPosition = false;
 					}

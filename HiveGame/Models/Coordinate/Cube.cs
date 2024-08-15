@@ -3,7 +3,7 @@ using Hive.Core.Enums;
 
 namespace Hive.Core.Models.Coordinate;
 
-public class Cube
+public class Cube : IEquatable<Cube>, IEquatable<Axial>, IEquatable<CubeVector>
 {
 	public int Q;
 	public int R;
@@ -89,6 +89,35 @@ public class Cube
 	public override int GetHashCode()
 	{
 		return HashCode.Combine(Q, R, S);
+	}
+
+	public bool Equals(Cube? other)
+	{
+		if (other == null)
+		{
+			return false;
+		}
+
+		return other.Q == Q && other.R == R && S == other.S;
+	}
+
+	public bool Equals(Axial? other)
+	{
+		if (other == null)
+		{
+			return false;
+		}
+
+		Cube cube = new(other);
+
+		return cube.Q == Q && cube.R == R && S == cube.S;
+	}
+
+	public bool Equals(CubeVector other)
+	{
+		Cube cube = CubeVectorExtensions.VectorToCube(other);
+
+		return cube.Q == Q && cube.R == R && S == cube.S;
 	}
 
 	public static Cube operator +(Cube a) => a;

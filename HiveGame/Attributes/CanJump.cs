@@ -33,7 +33,8 @@ public class CanJump : BugAttribute
 		{
 			// to jump, multiply the jump vector by jumpLength
 			Cube toCheck = from + (i * jumpDirectionVector);
-			if (!pieces.Any(p => p.Equals(toCheck)))
+			// if (!pieces.Any(p => p.Equals(toCheck)))
+			if (!pieces.Contains(toCheck))
 			{
 				// i is the jump length 
 				return toCheck;

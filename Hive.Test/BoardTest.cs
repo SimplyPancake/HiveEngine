@@ -105,6 +105,7 @@ public class BoardTest
 		Assert.Multiple(() =>
 		{
 			Assert.That(simulatedBoard.Pieces.Any(p => p.Position.Equals(attackPosition)));
+			Assert.That(simulatedBoard.Pieces.Select(p => p.Position).Contains(attackPosition));
 			Assert.That(!simulatedBoard.Pieces.Any(p => p.Position.Equals(new Cube(-1, 1, 0))));
 		});
 	}

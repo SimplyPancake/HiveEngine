@@ -4,7 +4,7 @@ using Hive.Core.Models.Bugs;
 
 namespace Hive.Core.Models;
 
-public class Piece
+public class Piece : IEquatable<Piece>
 {
 	public Color Color { get; }
 	public int BugType
@@ -45,10 +45,23 @@ public class Piece
 		return Bug.PossibleMoves(this, board);
 	}
 
-	public virtual bool Equals(Piece obj)
+	// override object.Equals
+	public override bool Equals(object? obj)
 	{
-		if (obj == null) return false;
-		if (ReferenceEquals(this, obj)) { return true; }
+		if (obj == null || GetType() != obj.GetType())
+		{
+			return false;
+		}
+
+		return GetHashCode() == obj.GetHashCode();
+	}
+
+	public bool Equals(Piece? obj)
+	{
+		if (obj == null || GetType() != obj.GetType())
+		{
+			return false;
+		}
 
 		return GetHashCode() == obj.GetHashCode();
 	}
@@ -57,4 +70,5 @@ public class Piece
 	{
 		return HashCode.Combine(Color, Bug, Position, Height);
 	}
+
 }
