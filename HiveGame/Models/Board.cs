@@ -216,6 +216,17 @@ public class Board
 		);
 	}
 
+	public bool HasLowerPiece(Piece piece) => HasLowerPiece(piece, _Pieces);
+
+
+	public static bool HasLowerPiece(Piece piece, List<Piece> pieces)
+	{
+		return pieces.Any(p =>
+			piece.Position.Equals(p.Position) &&
+			p.Height < piece.Height
+		);
+	}
+
 	public Piece HighestPiece(Cube position) => HighestPiece(position, _Pieces);
 
 	public static Piece HighestPiece(Cube position, List<Piece> pieces)
@@ -370,6 +381,11 @@ public class Board
 		if (!_Pieces.Contains(piece))
 		{
 			throw new Exception("piece must be in board");
+		}
+
+		if (HasHigherPiece(piece))
+		{
+			return true;
 		}
 
 		List<Piece> pieceCopiesWithoutPiece = _Pieces.Where(p => !p.Equals(piece))

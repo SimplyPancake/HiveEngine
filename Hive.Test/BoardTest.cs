@@ -162,4 +162,30 @@ public class BoardTest
 		Assert.That(highestPieces, Does.Not.Contain(test1));
 		Assert.That(highestPieces, Does.Not.Contain(test0));
 	}
+
+	[Test]
+	public void BoardPrintTest()
+	{
+		Piece middle = new(Color.White, new QueenBug(), new Cube(0, 0, 0));
+		Piece test0 = new(Color.Black, new SpiderBug(), new Cube(2, -2, 0));
+		Piece test1 = new(Color.Black, new QueenBug(), new Cube(2, -2, 0), 1);
+		Piece test2 = new(Color.Black, new QueenBug(), new Cube(2, -2, 0), 2);
+
+		List<Piece> pieces = [
+			new(Color.Black, new QueenBug(), new Cube(3, -2, -1)),
+			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
+			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
+			test0,
+			test1,
+			test2,
+			new(Color.Black, new SpiderBug(), new Cube(2, -1, -1)),
+			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
+			middle,
+			new(Color.Black, new SpiderBug(), new Cube(0, 0, 0), 1)
+		];
+
+		Board board = new(pieces);
+
+		Debug.WriteLine(ConsoleHexPrinter.BoardStringWithHeight(board));
+	}
 }

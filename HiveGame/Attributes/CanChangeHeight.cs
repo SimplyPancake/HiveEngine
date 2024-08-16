@@ -10,22 +10,26 @@ public class CanChangeHeight : BugAttribute
 		// Only focus on jumping on and off of pieces
 		// slide rule applies
 		List<Piece> neighbors = board.SurroundingPieces(piece.Position).Where(p => p.Height == piece.Height).ToList();
+		List<Cube> piecePositions = neighbors.Select(p => p.Position).ToList();
 		List<(Cube position, int height)> movePositions = [];
 
-		#region Jump on piece
+		#region Jump on/off a piece
 		// if jump on a piece, check it's max height.
-		foreach (Piece neighbor in neighbors)
+		foreach (Cube position in Board.SurroundingCubes(piece.Position, piecePositions))
 		{
-			// get max height of stack to jump on
-			int heighestOnStack = board.HighestPiece(neighbor.Position).Height;
-
-			// jump on top of it
-			movePositions.Add((neighbor.Position, heighestOnStack + 1));
+			// get max height of stack to jump on/off on different heights only
+			if (board.Pieces.Any(p => p.Position == position))
+			{
+				int heighestOnStack = board.HighestPiece(position).Height;
+				// jump on top of it
+				movePositions.Add((position, heighestOnStack + 1));
+			}
+			// Can only jump on empty position if we're off the ground
+			else if (board.HighestPiece(position).Height != 0)
+			{
+				movePositions.Add((position, 0));
+			}
 		}
-		#endregion
-
-		#region Jump off of piece
-
 		#endregion
 
 		throw new NotImplementedException();
