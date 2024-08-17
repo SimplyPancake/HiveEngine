@@ -12,8 +12,6 @@ public class GrasshopperBug : Bug
 
 	public override int BugTypeId => (int)BugType.Grasshopper;
 
-	public override int GetAmount => 3;
-
 	public override char ShortRepresentation => 'G';
 
 	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;

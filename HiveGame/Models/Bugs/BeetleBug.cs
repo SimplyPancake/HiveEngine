@@ -13,8 +13,6 @@ public class BeetleBug : Bug
 
 	public override int BugTypeId => (int)BugType.Beetle;
 
-	public override int GetAmount => 2;
-
 	public override char ShortRepresentation => 'B';
 
 	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;

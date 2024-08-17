@@ -12,8 +12,6 @@ public class QueenBug : Bug
 
 	public override int BugTypeId => (int)BugType.Queen;
 
-	public override int GetAmount => 1;
-
 	public override char ShortRepresentation => 'Q';
 
 	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;

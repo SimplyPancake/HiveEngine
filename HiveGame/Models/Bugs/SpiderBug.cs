@@ -12,8 +12,6 @@ public class SpiderBug : Bug
 
 	public override int BugTypeId => (int)BugType.Spider;
 
-	public override int GetAmount => 3;
-
 	public override char ShortRepresentation => 'S';
 
 	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;

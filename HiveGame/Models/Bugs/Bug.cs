@@ -22,11 +22,6 @@ public abstract class Bug : IEquatable<Bug>
 	public abstract int BugTypeId { get; }
 
 	/// <summary>
-	/// The amount of pieces that a player should get of this class
-	/// </summary>
-	public abstract int GetAmount { get; }
-
-	/// <summary>
 	/// Short representation of a Bug, like 'Q' for the Queen.
 	/// </summary>
 	public abstract char ShortRepresentation { get; }

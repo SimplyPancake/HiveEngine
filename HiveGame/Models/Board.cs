@@ -1,4 +1,5 @@
-﻿using Hive.Core.Models.Coordinate;
+﻿using Hive.Core.Models.Bugs;
+using Hive.Core.Models.Coordinate;
 using Hive.Core.Services;
 
 namespace Hive.Core.Models;
@@ -59,7 +60,6 @@ public class Board
 		MakeMoveNoCheck(move);
 
 		player.Pieces.Remove(move.Piece.Bug);
-		// TODO; remove piece from player
 	}
 
 	/// <summary>
@@ -142,7 +142,6 @@ public class Board
 			// Problem for later; attacking
 			throw new NotImplementedException("Can't attack yet!");
 		}
-
 
 		// Simulate move being made
 		Board simulatedMove = SimulateMove(move);
@@ -329,7 +328,6 @@ public class Board
 		return positions.Where(p => !piecePositions.Contains(p)).ToList();
 	}
 
-	// TODO; check for height
 	public bool AllPiecesConnected()
 	{
 		if (Pieces.Count < 2)
@@ -401,6 +399,78 @@ public class Board
 		// If possibleDisconnectedBoard is disconnected, 
 		// then that means that the removed piece is pinned
 		return !possibleDisconnectedBoard.AllPiecesConnected();
+	}
+
+	public List<Cube> PlacePositions(Color pieceToPlace) => PlacePositions(pieceToPlace, _Pieces);
+
+	/// <summary>
+	/// Returns all the places where a pieces of a certain color can be placed
+	/// </summary>
+	/// <param name="pieceToPlace">The color of the piece that is to be placed</param>
+	/// <param name="pieces">The pie</param>
+	/// <returns></returns>
+	public static List<Cube> PlacePositions(Color pieceToPlace, List<Piece> pieces)
+	{
+		List<Cube> positionsNextToPiece = [];
+
+		// only go past the pieces where we could place a piece
+		List<Piece> couldBePlacedNextTo = HighestPieces(pieces)
+			.Where(p => p.Color == pieceToPlace)
+			.ToList();
+
+		List<Piece> otherColorPieces = pieces
+			.Where(p => p.Color == ColorMethods.GetOtherColor(pieceToPlace))
+			.ToList();
+
+		// Then get every Cube position next to one of the couldBePlacedNextTo
+		foreach (Piece placeNextTo in couldBePlacedNextTo)
+		{
+			List<Cube> surroundingPositions = SurroundingPositions(placeNextTo.Position);
+			foreach (Cube surrounding in surroundingPositions)
+			{
+				if (pieces.Any(p => p.Position.Equals(surrounding)))
+				{
+					// Not a viable spot
+					continue;
+				}
+
+				// Only empty spots, now check if there are any pieces with other color
+				if (otherColorPieces.Any(p => Cube.Distance(p.Position, surrounding) == 1))
+				{
+					// not a viable spot
+					continue;
+				}
+
+				// This spot is viable
+				positionsNextToPiece.Add(surrounding);
+			}
+		}
+
+		return positionsNextToPiece.Distinct().ToList();
+	}
+
+	/// <summary>
+	/// Returns the possible moves that a given player can make
+	/// </summary>
+	/// <param name="player"></param>
+	/// <param name="pieces"></param>
+	/// <returns></returns>
+	public static List<Move> PossibleMoves(Player player, List<Piece> pieces)
+	{
+		if (pieces.Where(p => p.Color == player.Color).Count() == 3 &&
+			pieces.Any(p => p.Bug.GetType() == typeof(QueenBug)))
+		{
+			// The player MUST place a QueenBug.
+			List<Cube> possiblePlaceLocations = PlacePositions(player.Color, pieces);
+
+			return possiblePlaceLocations.Select(l =>
+				new PlaceMove(new Piece(player.Color, new QueenBug(), l))
+			).ToList();
+		}
+		// In the first four moves, a Queen MUST be placed
+		// Non-place moves can only be done when a player has placed their queen
+
+		return [];
 	}
 
 	public override string ToString()

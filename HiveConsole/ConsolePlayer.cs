@@ -26,7 +26,7 @@ public class ConsolePlayer : Player
 	{
 		Playername = playername;
 		Color = color;
-		Pieces = new List<Bug>();
+		Pieces = [];
 		Board = new();
 
 		// Initialise pieces collection

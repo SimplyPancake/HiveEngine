@@ -12,8 +12,6 @@ public class AntBug : Bug
 
 	public override int BugTypeId => (int)BugType.Ant;
 
-	public override int GetAmount => 3;
-
 	public override char ShortRepresentation => 'A';
 
 	public override MoveBehavior MoveBehavior => MoveBehavior.MustMove;
