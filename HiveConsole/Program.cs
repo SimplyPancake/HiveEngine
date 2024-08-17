@@ -28,4 +28,4 @@ List<Piece> pieces = [
 
 Board board = new(pieces);
 
-Console.WriteLine(ConsoleHexPrinter.BoardString(board));
+Console.WriteLine(board);

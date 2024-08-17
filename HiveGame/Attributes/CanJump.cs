@@ -9,7 +9,7 @@ public class CanJump : BugAttribute
 	{
 		List<Cube> boardCoordinates = board.Pieces.Where(p => !p.Equals(piece)).Select(p => p.Position).ToList();
 
-		List<Cube> neighborPositions = board.SurroundingPieces(piece.Position).Select(p => p.Position).ToList();
+		List<Cube> neighborPositions = board.SurroundingPieces(piece).Select(p => p.Position).ToList();
 
 		List<Cube> possibleMoves = [];
 

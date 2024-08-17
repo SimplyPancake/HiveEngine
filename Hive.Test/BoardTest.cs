@@ -24,7 +24,7 @@ public class BoardTest
 
 		Board b = new(pieces);
 
-		Assert.That(b.SurroundingPieces(whiteQueen.Position), Does.Contain(blackQueen));
+		Assert.That(b.SurroundingPieces(whiteQueen), Does.Contain(blackQueen));
 	}
 
 	[Test]
@@ -42,7 +42,7 @@ public class BoardTest
 
 		Board board = new(pieces);
 
-		Debug.WriteLine(ConsoleHexPrinter.BoardString(board));
+		Debug.WriteLine(board);
 
 		Assert.That(board.AllPiecesConnected());
 
@@ -97,7 +97,7 @@ public class BoardTest
 
 		Board board = new(pieces);
 
-		Debug.WriteLine(ConsoleHexPrinter.BoardString(board));
+		Debug.WriteLine(board);
 
 		Cube attackPosition = new(0, 1, -1);
 		AttackMove toMake = new(attackingPiece, attackPosition, 0, MoveType.Move);

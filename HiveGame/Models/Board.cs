@@ -131,7 +131,7 @@ public class Board
 			}
 
 			// on placing, is the placed piece next to a different colored piece?
-			if (SurroundingPieces(move.Piece.Position).Any(p => p.Color == player.Color.GetOtherColor()))
+			if (HighestPieces().Where(hp => SurroundingPositions(move.Piece.Position).Contains(hp.Position)).Any(p => p.Color == player.Color.GetOtherColor()))
 			{
 				throw new IllegalPlacementException("Placed piece must not be placed near a piece of a different color");
 			}
@@ -163,45 +163,44 @@ public class Board
 		&& p.Height == height);
 	}
 
-	public List<Piece> SurroundingPieces(Cube position) => SurroundingPieces(position, _Pieces);
 
-	public static List<Piece> SurroundingPieces(Piece piece, List<Piece> pieces) => SurroundingPieces(piece.Position, pieces);
+	// public static List<Piece> SurroundingPieces(Piece piece, List<Piece> pieces) => SurroundingPieces(piece.Position, pieces);
+	public List<Piece> SurroundingPieces(Piece position) => SurroundingPieces(position, _Pieces);
 
-	public static List<Piece> SurroundingPieces(Cube position, List<Piece> pieces)
+	public static List<Piece> SurroundingPieces(Piece position, List<Piece> pieces) => SurroundingPieces(position, pieces, false);
+
+	public static List<Piece> SurroundingPieces(Piece position, List<Piece> pieces, bool includeHeight)
 	{
-		List<Cube> surroundingPositions = SurroundingPositions(position);
+		List<Cube> surroundingPositions = SurroundingPositions(position.Position);
 
 		// Can be optimised, is now n^2
-		return pieces
-			.Where(p => surroundingPositions.Contains(p.Position))
-			.ToList();
+		pieces = pieces.Where(p => surroundingPositions.Contains(p.Position)).ToList();
+		if (includeHeight)
+		{
+			pieces = pieces.Where(p => p.Height == position.Height).ToList();
+		}
+
+		return pieces;
 	}
 
-	public static List<Cube> SurroundingCubes(Cube position, List<Cube> pieces)
+	public static List<Cube> SurroundingCubes(Piece position, List<Piece> pieces)
 	{
-		List<Cube> surroundingPositions = SurroundingPositions(position);
-
-		// Can be optimised, is now n^2
-		return pieces
-			.Where(surroundingPositions.Contains)
-			.ToList();
+		return SurroundingPieces(position, pieces).Select(p => p.Position).ToList();
 	}
 
-	public int AmountOfSurroundingPieces(Piece piece) => AmountOfSurroundingPieces(piece.Position, _Pieces);
+	public int AmountOfSurroundingPieces(Piece piece) => AmountOfSurroundingPieces(piece, _Pieces);
 
-	public int AmountOfSurroundingPieces(Cube position) => AmountOfSurroundingPieces(position, _Pieces);
-
-	public static int AmountOfSurroundingPieces(Cube position, List<Piece> pieces)
+	public static int AmountOfSurroundingPieces(Piece position, List<Piece> pieces)
 	{
 		return SurroundingPieces(position, pieces).Count;
 	}
 
-	public static int AmountOfSurroundingCubes(Cube position, List<Cube> pieces)
+	public static int AmountOfSurroundingCubes(Piece position, List<Piece> pieces)
 	{
 		return SurroundingCubes(position, pieces).Count;
 	}
 
-	public static bool IsNextToPiece(Cube position, List<Piece> pieces)
+	public static bool IsNextToPiece(Piece position, List<Piece> pieces)
 	{
 		return SurroundingPieces(position, pieces).Count != 0;
 	}
@@ -304,7 +303,7 @@ public class Board
 	{
 		// Queen surrounded means wincondition
 		return _Pieces.Where(p => p.BugType == (int)BugType.Queen)
-			.Any(p => SurroundingPieces(p.Position).Count == 6);
+			.Any(p => SurroundingPieces(p).Count == 6);
 	}
 
 	/// <summary>
@@ -336,27 +335,33 @@ public class Board
 		{
 			return true;
 		}
-		else if (Pieces.Count == 2 && Cube.Distance(_Pieces[0].Position, _Pieces[1].Position) == 1)
-		{
-			return true;
-		}
 
 		// Use a queue for BFS and a HashSet to track visited pieces
-		Queue<Cube> queue = new();
-		HashSet<Cube> visited = [];
+		Queue<Piece> queue = new();
+		HashSet<Piece> visited = [];
 
 		// Start BFS from the first piece
-		Cube startPiece = _Pieces.First().Position;
+		Piece startPiece = _Pieces.Where(p => p.Height == 0).First(); // begin from bottom and travel through top
 		queue.Enqueue(startPiece);
 		visited.Add(startPiece);
 
 		// BFS Loop
 		while (queue.Count > 0)
 		{
-			Cube current = queue.Dequeue();
+			Piece current = queue.Dequeue();
 
 			// Explore neighbors (surrounding pieces)
-			foreach (var neighbor in SurroundingPieces(current).Select(p => p.Position))
+			List<Piece> surroundingPieces = SurroundingPieces(current);
+
+			// Check if piece is higher, and add it
+			if (HasHigherPiece(current))
+			{
+				surroundingPieces.Add(Pieces.First(
+					p => p.Position.Equals(current.Position) &&
+					p.Height == current.Height + 1));
+			}
+
+			foreach (var neighbor in SurroundingPieces(current))
 			{
 				if (!visited.Any(p => p.Equals(neighbor)))
 				{
@@ -373,7 +378,6 @@ public class Board
 		}
 
 		return true;
-		// TODO implement check for height
 	}
 
 	public bool IsPinned(Piece piece)
@@ -400,7 +404,7 @@ public class Board
 
 	public override string ToString()
 	{
-		return ConsoleHexPrinter.BoardString(Copy());
+		return ConsoleHexPrinter.BoardStringWithHeight(Copy());
 	}
 
 	#endregion

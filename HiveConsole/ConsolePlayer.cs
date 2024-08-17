@@ -42,7 +42,7 @@ public class ConsolePlayer : Player
 	{
 		// ask the player to make a move, but now we return just this
 		System.Console.WriteLine("Printing board before making move...");
-		System.Console.WriteLine(ConsoleHexPrinter.BoardString(Board));
+		System.Console.WriteLine(Board);
 		PrintPlayer("Please make a move...");
 
 		// we just place a queen

@@ -28,12 +28,12 @@ public class BeetleTest
 
 		Board board = new(pieces);
 
-		Debug.WriteLine(ConsoleHexPrinter.BoardString(board));
+		Debug.WriteLine(board);
 
 		List<Move> moves = beetle.PossibleMoves(board);
 
 		// TODO; incorporate placing rules
 		// Strictly speaking move-wise, a queen could only move 2 places.
-		Assert.That(moves, Has.Count.EqualTo(2));
+		Assert.That(moves, Has.Count.EqualTo(3));
 	}
 }
