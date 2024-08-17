@@ -28,6 +28,11 @@ public static class CubeVectorExtensions
 		return (CubeVector)nextVector;
 	}
 
+	public static Cube SuccessorCube(CubeVector v)
+	{
+		return VectorToCube(Successor(v));
+	}
+
 	public static CubeVector Predecessor(CubeVector v)
 	{
 		if (v == CubeVector.Zero)
@@ -39,6 +44,11 @@ public static class CubeVectorExtensions
 
 		int nextVector = (vectorInt - 1) % 6;
 		return (CubeVector)nextVector;
+	}
+
+	public static Cube PredecessorCube(CubeVector v)
+	{
+		return VectorToCube(Predecessor(v));
 	}
 
 	public static CubeVector CubeToVector(Cube vector)

@@ -9,7 +9,7 @@ namespace Hive.Test.Bugs;
 public class BeetleTest
 {
 	[Test]
-	public void PossibleMovesTest()
+	public void JumpGroundMoveTest()
 	{
 		Piece beetle = new(Color.White, new BeetleBug(), new Cube(-1, 1, 0));
 
@@ -42,11 +42,73 @@ public class BeetleTest
 		{
 			Assert.That(attackMoves.Any(m => m.AttackPosition.Equals(position) && m.AttackHeight == height));
 		}
+	}
 
+	[Test]
+	public void JumpFtmBLockedTest()
+	{
+		Piece beetle = new(Color.White, new BeetleBug(), new Cube(0, 1, -1)); // B
+
+		List<Piece> pieces = [
+			new(Color.White, new SpiderBug(), new Cube(0, 0, 0)), // D
+			new(Color.White, new SpiderBug(), new Cube(0, 0, 0), 1), // D
+			new(Color.White, new QueenBug(), new Cube(-1, 1, 0)), // A
+			new(Color.White, new QueenBug(), new Cube(-1, 2, -1)), // C
+			new(Color.White, new QueenBug(), new Cube(-1, 2, -1), 1), // C
+			beetle, // B
+		];
+
+		Board board = new(pieces);
+
+		Debug.WriteLine(board);
+
+		List<Move> moves = beetle.PossibleMoves(board);
+
+		Assert.That(moves, Has.Count.EqualTo(4));
+
+		List<AttackMove> attackMoves = moves.Select(move => (AttackMove)move).ToList();
+		Assert.That(!attackMoves.Any(m =>
+			m.AttackPosition.Equals(new Axial(-1, 1))
+		)); // The beetle may NOT jump on top of A due to the "fence" by C and D
+	}
+
+	[Test]
+	public void JumpFtmAllowedTest()
+	{
+		Piece beetle = new(Color.White, new BeetleBug(), new Cube(0, 1, -1)); // B
+
+		List<Piece> pieces = [
+			new(Color.White, new SpiderBug(), new Cube(0, 0, 0)), // D
+			new(Color.White, new SpiderBug(), new Cube(0, 0, 0), 1), // D
+			new(Color.White, new QueenBug(), new Cube(-1, 1, 0)), // A
+			new(Color.White, new QueenBug(), new Cube(-1, 1, 0), 1), // A
+			new(Color.White, new QueenBug(), new Cube(-1, 1, 0), 2), // A
+			new(Color.White, new QueenBug(), new Cube(-1, 2, -1)), // C
+			new(Color.White, new QueenBug(), new Cube(-1, 2, -1), 1), // C
+			beetle, // B
+		];
+
+		Board board = new(pieces);
+
+		Debug.WriteLine(board);
+
+		List<Move> moves = beetle.PossibleMoves(board);
+
+		Assert.That(moves, Has.Count.EqualTo(5));
+
+		List<AttackMove> attackMoves = moves.Select(move => (AttackMove)move).ToList();
+		Assert.That(attackMoves.Any(m =>
+			m.AttackPosition.Equals(new Axial(-1, 1))
+		)); // The beetle may jump on top of A due to A being higher than the "fence" by C and D
+	}
+
+	[Test]
+	public void JumpOffAndSlideTest()
+	{
 		// test on-top movement
-		beetle = new(Color.White, new BeetleBug(), new Cube(0, 0, 0), 1);
+		Piece beetle = new(Color.White, new BeetleBug(), new Cube(0, 0, 0), 1);
 
-		pieces = [
+		List<Piece> pieces = [
 			beetle,
 			new(Color.Black, new QueenBug(), new Cube(0, -1, 1)),
 			new(Color.Black, new QueenBug(), new Cube(1, -2, 1)),
@@ -56,12 +118,12 @@ public class BeetleTest
 			new(Color.White, new QueenBug(), new Cube(0, 0, 0)),
 		];
 
-		Debug.WriteLine(board);
+		Board board = new(pieces);
 
-		moves = beetle.PossibleMoves(board);
+		Debug.WriteLine("Testing on-top movement\n" + board);
+
+		List<Move> moves = beetle.PossibleMoves(board);
 
 		Assert.That(moves, Has.Count.EqualTo(6));
-
-		// test sliding rule
 	}
 }

@@ -19,8 +19,6 @@ public class CanWalk : BugAttribute
 	/// </summary>
 	public bool ReturnOnly { get; set; } = false;
 
-	public bool OnlyWithPieceBelow { get; set; } = false;
-
 	public CanWalk(int WalkAmount)
 	{
 		this.WalkAmount = WalkAmount;
@@ -28,14 +26,10 @@ public class CanWalk : BugAttribute
 
 	public override List<AttackMove> Moves(Board board, Piece piece)
 	{
-		List<Piece> filteredPieces = board.Pieces.Where(p => p.Height == piece.Height).ToList();
-		if (OnlyWithPieceBelow && piece.Height > 0)
-		{
-			// all pieces that have one below them
-			filteredPieces = filteredPieces.Where(p => board.HasLowerPiece(p)).ToList();
-		}
 
-		board = new(board.Pieces.Where(p => p.Height == piece.Height).ToList()); // Only handle pieces the same height
+		List<Piece> filteredPieces = board.Pieces.Where(p => p.Height == piece.Height).ToList();
+
+		board = new(filteredPieces);
 		List<Cube> walkPositions = [];
 		List<Cube> boardCoordinates = board.Pieces.Where(p => !p.Equals(piece)).Select(p => p.Position).ToList();
 

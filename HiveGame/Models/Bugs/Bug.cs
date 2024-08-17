@@ -83,7 +83,16 @@ public abstract class Bug : IEquatable<Bug>
 
 			if (newBoard.AllPiecesConnected())
 			{
+#if DEBUG
+				Debug.WriteLine($"{GetType().Name}: Possible moves is approved for placement");
+#endif
 				toReturn.Add(move);
+			}
+			else
+			{
+#if DEBUG
+				Debug.WriteLine($"{GetType().Name}: Possible moves is not approved for placement");
+#endif
 			}
 		}
 
