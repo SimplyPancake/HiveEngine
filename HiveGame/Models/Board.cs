@@ -85,6 +85,7 @@ public class Board
 		// Get the original piece and update it's location
 		Piece toMove = _Pieces.First(p => p.Equals(attackMove.Piece));
 		toMove.Position = attackMove.AttackPosition;
+		toMove.Height = attackMove.AttackHeight;
 	}
 
 	#region Helpers

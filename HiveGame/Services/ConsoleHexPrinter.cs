@@ -142,6 +142,8 @@ public static class ConsoleHexPrinter
 
 					// then draw that line
 					rowString += new string(' ', skippedPositions * 2) + DrawLine(piecesOnThatHeight, size, differenceWithMiddle, horizontalPositions, false);
+
+					piecesToDrawOnLine.RemoveAll(piecesOnThatHeight.Contains);
 				}
 			}
 			// draw normal line with dots
