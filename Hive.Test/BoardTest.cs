@@ -209,4 +209,21 @@ public class BoardTest
 
 		Assert.That(canPlace, Has.Count.EqualTo(5));
 	}
+
+	[Test]
+	public void PieceMovesTest()
+	{
+		// TODO
+		List<Piece> pieces = [
+		];
+
+		Board board = new(pieces);
+
+		Debug.WriteLine(board);
+
+		List<Move> moves = board.PossibleMoves(Color.Black);
+
+		List<string> moveStrings = moves.Select(m => m.MoveString(pieces)).ToList();
+		// Assert.That(canPlace, Has.Count.EqualTo(5));
+	}
 }

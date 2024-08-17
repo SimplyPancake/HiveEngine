@@ -207,6 +207,15 @@ public class Board
 
 	public bool HasHigherPiece(Piece piece) => HasHigherPiece(piece, _Pieces);
 
+	public static bool HasHigherGridPiece(GridPiece piece, List<GridPiece> pieces)
+	{
+		return pieces.Any(p =>
+			piece.OriginalPosition.Equals(p.OriginalPosition) &&
+			p.Height > piece.Height
+		);
+	}
+
+
 	public static bool HasHigherPiece(Piece piece, List<Piece> pieces)
 	{
 		return pieces.Any(p =>
@@ -227,6 +236,30 @@ public class Board
 	}
 
 	public Piece HighestPiece(Cube position) => HighestPiece(position, _Pieces);
+
+	public static GridPiece HighestGridPiece(Cube position, List<GridPiece> pieces)
+	{
+		GridPiece highestPiece = pieces.First(p => p.Height == 0 && p.OriginalPosition.Equals(position));
+		int maxPieceHeight = pieces.Max(p => p.Height);
+
+		for (int i = 1; i <= maxPieceHeight + 1; i++)
+		{
+			if (HasHigherGridPiece(highestPiece, pieces))
+			{
+				highestPiece = pieces.First(p =>
+					p.Position.Equals(highestPiece.Position) &&
+					p.Height == i
+				);
+				continue;
+			}
+			else
+			{
+				return highestPiece;
+			}
+		}
+
+		return highestPiece;
+	}
 
 	public static Piece HighestPiece(Cube position, List<Piece> pieces)
 	{
@@ -257,6 +290,20 @@ public class Board
 	/// </summary>
 	/// <returns>All the highest pieces</returns>
 	public List<Piece> HighestPieces() => HighestPieces(_Pieces);
+
+	public static List<GridPiece> HighestGridPieces(List<GridPiece> pieces)
+	{
+		List<GridPiece> highestPieces = [];
+		List<GridPiece> lowestPieces = pieces.Where(p => p.Height == 0).ToList();
+
+		// For each piece that has a piece on top of it
+		foreach (GridPiece piece in lowestPieces)
+		{
+			highestPieces.Add(HighestGridPiece(piece.OriginalPosition, pieces));
+		}
+
+		return highestPieces;
+	}
 
 	/// <summary>
 	/// Gets the top-most pieces, so the highest pieces possible of each position
@@ -449,26 +496,46 @@ public class Board
 		return positionsNextToPiece.Distinct().ToList();
 	}
 
+	public List<Move> PossibleMoves(Color playerColor) => PossibleMoves(playerColor, this);
+
 	/// <summary>
 	/// Returns the possible moves that a given player can make
 	/// </summary>
-	/// <param name="player"></param>
-	/// <param name="pieces"></param>
+	/// <param name="playerColor"></param>
+	/// <param name="board">the board</param>
 	/// <returns></returns>
-	public static List<Move> PossibleMoves(Player player, List<Piece> pieces)
+	public static List<Move> PossibleMoves(Color playerColor, Board board)
 	{
-		if (pieces.Where(p => p.Color == player.Color).Count() == 3 &&
-			pieces.Any(p => p.Bug.GetType() == typeof(QueenBug)))
+		// In the first four moves, a Queen MUST be placed
+		List<Piece> pieces = board.Pieces;
+
+		List<Piece> playerPieces = pieces.Where(p => p.Color == playerColor).ToList();
+		bool hasPlacedQueen = pieces.Any(p => p.Bug.GetType() == typeof(QueenBug));
+		if (playerPieces.Count == 3 && !hasPlacedQueen)
 		{
 			// The player MUST place a QueenBug.
-			List<Cube> possiblePlaceLocations = PlacePositions(player.Color, pieces);
+			List<Cube> possiblePlaceLocations = PlacePositions(playerColor, pieces);
 
-			return possiblePlaceLocations.Select(l =>
-				new PlaceMove(new Piece(player.Color, new QueenBug(), l))
+			List<PlaceMove> place = possiblePlaceLocations.Select(l =>
+				new PlaceMove(new Piece(playerColor, new QueenBug(), l))
 			).ToList();
+
+			return place.Select(move => (Move)move).ToList();
 		}
-		// In the first four moves, a Queen MUST be placed
+
 		// Non-place moves can only be done when a player has placed their queen
+		if (hasPlacedQueen)
+		{
+			// foreach piece, generate possible moves
+			List<Move> possibleAttacks = [];
+			foreach (Piece piece in playerPieces)
+			{
+				List<Move> pieceMoves = piece.Bug.PossibleMoves(piece, board);
+				possibleAttacks.AddRange(pieceMoves);
+			}
+
+			return possibleAttacks;
+		}
 
 		return [];
 	}

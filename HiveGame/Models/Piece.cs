@@ -71,4 +71,8 @@ public class Piece : IEquatable<Piece>
 		return HashCode.Combine(Color, Bug, Position, Height);
 	}
 
+	public override string ToString()
+	{
+		return $"{(Color == Color.Black ? 'b' : 'w')}{Bug.ShortRepresentation}{Height}";
+	}
 }

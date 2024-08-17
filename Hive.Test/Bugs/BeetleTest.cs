@@ -124,6 +124,11 @@ public class BeetleTest
 
 		List<Move> moves = beetle.PossibleMoves(board);
 
+		foreach (var move in moves)
+		{
+			Debug.WriteLine(move.MoveString(pieces));
+		}
+
 		Assert.That(moves, Has.Count.EqualTo(6));
 	}
 }

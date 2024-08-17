@@ -13,7 +13,7 @@ public static class ConsoleHexPrinter
 	[Obsolete("Use BoardStringWithHeight() instead")]
 	public static string BoardString(Board board)
 	{
-		List<GridPiece> pieces = board.Pieces.Select(p => new GridPiece(p)).ToList();
+		List<GridPiece> pieces = GridPiece.GridPieces(board.Pieces);
 
 		int minQ = pieces.Min(p => p.Position.Q);
 		int maxQ = pieces.Max(p => p.Position.Q);
@@ -68,7 +68,7 @@ public static class ConsoleHexPrinter
 				if (pieces.Any(p => p.Position.Equals(new Axial(q, r))))
 				{
 					GridPiece toDraw = pieces.First(p => p.Position.Equals(new Axial(q, r)));
-					rowString += $"{(toDraw.Color == Color.Black ? 'b' : 'w')}{toDraw.Bug.ShortRepresentation}{toDraw.Height}";
+					rowString += toDraw;
 				}
 				else
 				{
@@ -83,7 +83,7 @@ public static class ConsoleHexPrinter
 
 	public static string BoardStringWithHeight(Board board)
 	{
-		List<GridPiece> pieces = board.Pieces.Select(p => new GridPiece(p)).ToList();
+		List<GridPiece> pieces = GridPiece.GridPieces(board.Pieces);
 
 		int minQ = pieces.Min(p => p.Position.Q);
 		int maxQ = pieces.Max(p => p.Position.Q);
@@ -172,7 +172,7 @@ public static class ConsoleHexPrinter
 			if (toDraw.Any(p => p.Position.Equals(new Axial(q, r))))
 			{
 				GridPiece pieceToDraw = toDraw.First(p => p.Position.Equals(new Axial(q, r)));
-				toReturn += $"{(pieceToDraw.Color == Color.Black ? 'b' : 'w')}{pieceToDraw.Bug.ShortRepresentation}{pieceToDraw.Height}";
+				toReturn += pieceToDraw;
 			}
 			else
 			{
