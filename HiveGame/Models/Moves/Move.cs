@@ -60,4 +60,11 @@ public abstract class Move
 
 		return movePieceString;
 	}
+
+	public static Move MoveFromAttackString(string attackString)
+	{
+		// (b|w)([A-Z])(\d)* ([\\\-\/])?(b|w)([A-Z])(\d)*([\\\-\/])?
+
+		throw new NotImplementedException();
+	}
 }

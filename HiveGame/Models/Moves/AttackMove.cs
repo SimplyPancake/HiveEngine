@@ -1,5 +1,6 @@
 ﻿using Hive.Core.Enums;
 using Hive.Core.Models;
+using Hive.Core.Models.Bugs;
 using Hive.Core.Models.Coordinate;
 
 namespace Hive.Core;
@@ -34,6 +35,14 @@ public class AttackMove(Piece attackingPiece, Cube attackPosition, int attackHei
 
 		// pick piece next to endUpPiece
 		GridPiece nextToEndupPiece = highestPieces.First(p => Cube.Distance(p.OriginalPosition, AttackPosition) == 1);
+
+		// If a beetle climbs/slides atop another bug, the reference bug is needed, but no direction is needed.
+		if (AttackHeight != 0) // jump
+		{
+			// jumping on piece, if jump on ground, then normal rules
+			nextToEndupPiece = highestPieces.First(p => p.OriginalPosition.Equals(AttackPosition) &&
+				Math.Abs(AttackHeight - p.Height) == 1);
+		}
 
 		return MovedPieceString(gotMovedTo, nextToEndupPiece);
 	}

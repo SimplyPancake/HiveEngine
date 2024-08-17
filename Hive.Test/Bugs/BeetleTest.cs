@@ -106,7 +106,7 @@ public class BeetleTest
 	public void JumpOffAndSlideTest()
 	{
 		// test on-top movement
-		Piece beetle = new(Color.White, new BeetleBug(), new Cube(0, 0, 0), 1);
+		Piece beetle = new(Color.White, new BeetleBug(), new Cube(0, 0, 0), 2);
 
 		List<Piece> pieces = [
 			beetle,
@@ -116,6 +116,7 @@ public class BeetleTest
 			new(Color.Black, new QueenBug(), new Cube(2, -1, -1)),
 			new(Color.Black, new QueenBug(), new Cube(2, 0, -2)),
 			new(Color.White, new QueenBug(), new Cube(0, 0, 0)),
+			new(Color.White, new QueenBug(), new Cube(0, 0, 0), 1),
 		];
 
 		Board board = new(pieces);
