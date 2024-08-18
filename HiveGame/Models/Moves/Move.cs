@@ -1,6 +1,9 @@
-﻿using Hive.Core.Enums;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
+using Hive.Core.Enums;
 using Hive.Core.Models;
 using Hive.Core.Models.Bugs;
+using Hive.Core.Models.Coordinate;
 
 namespace Hive.Core;
 
@@ -61,10 +64,75 @@ public abstract class Move
 		return movePieceString;
 	}
 
-	public static Move MoveFromAttackString(string attackString)
+	public static Move MoveFromAttackString(string attackString, Board board)
 	{
-		// (b|w)([A-Z])(\d)* ([\\\-\/])?(b|w)([A-Z])(\d)*([\\\-\/])?
+		Regex r = new(@"(b|w)([A-Z])(\d)* ([\\\-\/])?(b|w)([A-Z])(\d)*([\\\-\/])?");
 
-		throw new NotImplementedException();
+		System.Text.RegularExpressions.Match m = r.Match(attackString);
+		Dictionary<int, string> matchResults = [];
+
+		while (m.Success)
+		{
+			for (int i = 1; i <= 8; i++)
+			{
+				Group g = m.Groups[i];
+				matchResults.Add(i, g.Value);
+			}
+			m = m.NextMatch();
+		}
+
+		// First we find the related piece
+		List<GridPiece> gridPieces = GridPiece.GridPieces(board.Pieces);
+		string nextToPieceString = matchResults[5] + matchResults[6] + matchResults[7];
+
+		if (!gridPieces.Any(gp => gp.ToString() == nextToPieceString))
+		{
+			throw new Exception($"{nextToPieceString} is not in board.");
+		}
+
+		// we found a piece!
+		GridPiece nextToPiece = gridPieces.First(gp => gp.ToString() == nextToPieceString);
+
+		CubeVector toPlacePieceNext = CubeVector.Zero;
+
+		// left of nextToPiece
+		toPlacePieceNext = matchResults[4] switch
+		{
+			@"\" => CubeVector.TopLeft,
+			@"-" => CubeVector.Left,
+			@"/" => CubeVector.BottomLeft,
+			_ => CubeVector.Zero,
+		};
+
+		toPlacePieceNext = matchResults[8] switch
+		{
+			@"\" => CubeVector.TopLeft,
+			@"-" => CubeVector.Left,
+			@"/" => CubeVector.BottomLeft,
+			_ => CubeVector.Zero,
+		};
+
+		Cube placedOn = nextToPiece.OriginalPosition + toPlacePieceNext;
+		int placedOnHeight = nextToPiece.Height;
+
+		if (toPlacePieceNext.Equals(CubeVector.Zero))
+		{
+			// original was placed on top
+
+			placedOnHeight = nextToPiece.Height + 1;
+		}
+
+		// Determine if AttackMove or PlaceMove
+		if (board.Pieces.Any(p => p.Position.Equals(placedOn) && p.Height == placedOnHeight))
+		{
+			// AttackMove
+
+		}
+		else
+		{
+			// PlaceMove
+
+		}
+
 	}
 }

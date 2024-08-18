@@ -9,7 +9,7 @@ public class GridPiece
 	public Color Color { get; }
 	public Axial Position { get; set; }
 	public int Height { get; set; } = 0;
-	public Bug Bug { get; }
+	public Bug Bug { get; set; }
 	public Cube OriginalPosition { get; set; }
 
 	/// <summary>
@@ -61,16 +61,27 @@ public class GridPiece
 			gridPieces.Add(new GridPiece(piece, bugAmount));
 		}
 
+		// if only 1 per bug, then make piecenum 0
+		List<Bug> singleBugs = bugAmounts.Keys.Where(key => bugAmounts[key] == 1).ToList();
+		foreach (var gridPiece in gridPieces)
+		{
+			if (singleBugs.Any(b => b.Equals(gridPiece.Bug)))
+			{
+				// modify GridPiece
+				gridPiece.PieceNum = 0;
+			}
+		}
+
 		return gridPieces;
 	}
 
 	public override string ToString()
 	{
-		return $"{(Color == Color.Black ? 'b' : 'w')}{Bug.ShortRepresentation}{PieceNum}";
+		return $"{(Color == Color.Black ? 'b' : 'w')}{Bug.ShortRepresentation}{(PieceNum == 0 ? "" : PieceNum.ToString())}";
 	}
 
 	// override object.Equals
-	public override bool Equals(object obj)
+	public override bool Equals(object? obj)
 	{
 		//
 		// See the full list of guidelines at

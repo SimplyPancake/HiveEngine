@@ -125,6 +125,9 @@ public class Cube : IEquatable<Cube>, IEquatable<Axial>, IEquatable<CubeVector>
 	public static Cube operator +(Cube a, Cube b)
 		=> new(a.Q + b.Q, a.R + b.R, a.S + b.S);
 
+	public static Cube operator +(Cube a, CubeVector b)
+	=> a + CubeVectorExtensions.VectorToCube(b);
+
 	public static Cube operator -(Cube a) => new(-a.Q, -a.R, -a.S);
 
 	public static Cube operator -(Cube a, Cube b) => a + (-b);
