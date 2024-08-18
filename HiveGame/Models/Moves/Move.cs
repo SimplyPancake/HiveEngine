@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Hive.Core.Enums;
 using Hive.Core.Exceptions;
 using Hive.Core.Models;
