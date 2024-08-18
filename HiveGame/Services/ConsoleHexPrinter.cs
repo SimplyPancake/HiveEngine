@@ -83,6 +83,7 @@ public static class ConsoleHexPrinter
 
 	public static string BoardStringWithHeight(Board board)
 	{
+		if (board.Pieces.Count == 0) return "<empty board>";
 		List<GridPiece> pieces = GridPiece.GridPieces(board.Pieces);
 
 		int minQ = pieces.Min(p => p.Position.Q);

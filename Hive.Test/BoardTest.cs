@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Hive.Console;
 using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Bugs;
@@ -211,17 +212,18 @@ public class BoardTest
 	}
 
 	[Test]
-	public void PieceMovesTest()
+	public void PossibleMovesTest()
 	{
-		// TODO
-		List<Piece> pieces = [
-		];
+		Player p1 = new ConsolePlayer("Hans", Color.Black);
+		Player p2 = new ConsolePlayer("Frans", Color.White);
 
-		Board board = new(pieces);
+		Match m = new(p1, p2);
+
+		Board board = m.Board;
 
 		Debug.WriteLine(board);
 
-		List<Move> moves = board.PossibleMoves(Color.Black);
+		List<Move> moves = board.PossibleMoves();
 
 		List<string> moveStrings = moves.Select(m => m.MoveString(pieces)).ToList();
 		// Assert.That(canPlace, Has.Count.EqualTo(5));

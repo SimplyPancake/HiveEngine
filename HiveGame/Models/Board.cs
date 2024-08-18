@@ -134,23 +134,46 @@ public class Board
 			// on placing, is the placed piece next to a different colored piece?
 			if (HighestPieces().Where(hp => SurroundingPositions(move.Piece.Position).Contains(hp.Position)).Any(p => p.Color == player.Color.GetOtherColor()))
 			{
-				throw new IllegalPlacementException("Placed piece must not be placed near a piece of a different color");
+				// May place next to piece only on the second turn
+				if (_Pieces.Count != 1)
+				{
+					throw new IllegalPlacementException("Placed piece must not be placed near a piece of a different color");
+				}
 			}
 		}
-		else
+
+		// Move must be in allowedMoves
+		List<Move> allowedMoves = PossibleMoves(player);
+		bool isInAllowedMoves = false;
+
+		foreach (Move m in allowedMoves)
 		{
-			// Problem for later; attacking
-			throw new NotImplementedException("Can't attack yet!");
+			if (m.MoveType.Equals(MoveType.Place) && move.MoveType.Equals(m.MoveType))
+			{
+				// both are placeMove
+				isInAllowedMoves = ((PlaceMove)m).Equals((PlaceMove)move);
+			}
+			else if (m.MoveType.Equals(MoveType.Activate) && move.MoveType.Equals(m.MoveType))
+			{
+				isInAllowedMoves = ((AttackMove)m).Equals((AttackMove)move);
+			}
+
+			if (isInAllowedMoves) break;
 		}
 
-		// Simulate move being made
-		Board simulatedMove = SimulateMove(move);
-
-		// All pieces should be connected
-		if (!simulatedMove.AllPiecesConnected())
+		if (!isInAllowedMoves)
 		{
-			throw new IllegalPieceConnectionException("All pieces must be connected");
+			throw new IllegalMoveException("The move made is not in the list of allowed moves.");
 		}
+
+		// // Simulate move being made
+		// Board simulatedMove = SimulateMove(move);
+
+		// // All pieces should be connected
+		// if (!simulatedMove.AllPiecesConnected())
+		// {
+		// 	throw new IllegalPieceConnectionException("All pieces must be connected");
+		// }
 
 		return true;
 	}
@@ -496,48 +519,67 @@ public class Board
 		return positionsNextToPiece.Distinct().ToList();
 	}
 
-	public List<Move> PossibleMoves(Color playerColor) => PossibleMoves(playerColor, this);
+	public List<Move> PossibleMoves(Player player) => PossibleMoves(player, this);
 
 	/// <summary>
 	/// Returns the possible moves that a given player can make
 	/// </summary>
 	/// <param name="playerColor"></param>
 	/// <param name="board">the board</param>
-	/// <returns></returns>
-	public static List<Move> PossibleMoves(Color playerColor, Board board)
+	/// <returns></returns>\
+	// TODO: Incorporate place moves
+	public static List<Move> PossibleMoves(Player player, Board board)
 	{
 		// In the first four moves, a Queen MUST be placed
 		List<Piece> pieces = board.Pieces;
 
-		List<Piece> playerPieces = pieces.Where(p => p.Color == playerColor).ToList();
+		List<Piece> playerPieces = pieces.Where(p => p.Color == player.Color).ToList();
 		bool hasPlacedQueen = pieces.Any(p => p.Bug.GetType() == typeof(QueenBug));
+		List<Cube> possiblePlaceLocations = PlacePositions(player.Color, pieces);
+
 		if (playerPieces.Count == 3 && !hasPlacedQueen)
 		{
 			// The player MUST place a QueenBug.
-			List<Cube> possiblePlaceLocations = PlacePositions(playerColor, pieces);
-
 			List<PlaceMove> place = possiblePlaceLocations.Select(l =>
-				new PlaceMove(new Piece(playerColor, new QueenBug(), l))
+				new PlaceMove(new Piece(player.Color, new QueenBug(), l))
 			).ToList();
 
 			return place.Select(move => (Move)move).ToList();
+		}
+
+		List<Move> possibleAttacks = [];
+
+		// Add all possible place moves
+		foreach (Bug playerBug in player.Pieces.Distinct())
+		{
+			if (pieces.Count < 2)
+			{
+				PlaceMove bugPlaceMove = new(new Piece(player.Color, playerBug, new Cube(0, 0, 0)));
+
+				possibleAttacks.Add(bugPlaceMove);
+			}
+			else
+			{
+				List<PlaceMove> bugPlaceMoves = possiblePlaceLocations.Select(
+					loc => new PlaceMove(new Piece(player.Color, playerBug, loc))
+					).ToList();
+
+				possibleAttacks.AddRange(bugPlaceMoves);
+			}
 		}
 
 		// Non-place moves can only be done when a player has placed their queen
 		if (hasPlacedQueen)
 		{
 			// foreach piece, generate possible moves
-			List<Move> possibleAttacks = [];
 			foreach (Piece piece in playerPieces)
 			{
 				List<Move> pieceMoves = piece.Bug.PossibleMoves(piece, board);
 				possibleAttacks.AddRange(pieceMoves);
 			}
-
-			return possibleAttacks;
 		}
 
-		return [];
+		return possibleAttacks;
 	}
 
 	public override string ToString()

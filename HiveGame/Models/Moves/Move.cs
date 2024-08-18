@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Hive.Core.Enums;
+using Hive.Core.Exceptions;
 using Hive.Core.Models;
 using Hive.Core.Models.Bugs;
 using Hive.Core.Models.Coordinate;
@@ -64,8 +65,35 @@ public abstract class Move
 		return movePieceString;
 	}
 
-	public static Move MoveFromAttackString(string attackString, Board board)
+	public static Move MoveFromAttackString(string attackString, Board board, Player player)
 	{
+		List<GridPiece> gridPieces = GridPiece.GridPieces(board.Pieces);
+
+		// easiest is to first generate all the possible attackStrings and choose on of them
+		// won't deal with placeMove, because there are too many
+		List<Move> possibleMoves = board.PossibleMoves(player);
+		// if (possibleMoves.Any(pm => pm.MoveString(gridPieces) == attackString))
+		// {
+		// 	return possibleMoves.First(pm => pm.MoveString(gridPieces) == attackString);
+		// }
+
+		// first piece played
+		if (board.Pieces.Count == 0)
+		{
+			// PlaceMove
+			Color toPlace = player.Color;
+			// Could throw error when player is trying to place a piece thats not their color?
+
+			// Get all bugs
+			List<Bug> playerBugs = player.Pieces;
+			Bug placedBug = playerBugs.FirstOrDefault(b => b.ShortRepresentation == attackString[1]) ??
+				throw new MoveStringProcessingException($"Bug type {attackString[1]} could not be found");
+
+			Piece toPlacePiece = new(toPlace, placedBug, new Cube(0, 0, 0), 0);
+			PlaceMove placeMove = new(toPlacePiece);
+			return placeMove;
+		}
+
 		Regex r = new(@"(b|w)([A-Z])(\d)* ([\\\-\/])?(b|w)([A-Z])(\d)*([\\\-\/])?");
 
 		System.Text.RegularExpressions.Match m = r.Match(attackString);
@@ -82,12 +110,11 @@ public abstract class Move
 		}
 
 		// First we find the related piece
-		List<GridPiece> gridPieces = GridPiece.GridPieces(board.Pieces);
 		string nextToPieceString = matchResults[5] + matchResults[6] + matchResults[7];
 
 		if (!gridPieces.Any(gp => gp.ToString() == nextToPieceString))
 		{
-			throw new Exception($"{nextToPieceString} is not in board.");
+			throw new MoveStringProcessingException($"{nextToPieceString} is not in board.");
 		}
 
 		// we found a piece!
@@ -104,13 +131,16 @@ public abstract class Move
 			_ => CubeVector.Zero,
 		};
 
-		toPlacePieceNext = matchResults[8] switch
+		if (toPlacePieceNext.Equals(CubeVector.Zero))
 		{
-			@"\" => CubeVector.TopLeft,
-			@"-" => CubeVector.Left,
-			@"/" => CubeVector.BottomLeft,
-			_ => CubeVector.Zero,
-		};
+			toPlacePieceNext = matchResults[8] switch
+			{
+				@"\" => CubeVector.TopLeft,
+				@"-" => CubeVector.Left,
+				@"/" => CubeVector.BottomLeft,
+				_ => CubeVector.Zero,
+			};
+		}
 
 		Cube placedOn = nextToPiece.OriginalPosition + toPlacePieceNext;
 		int placedOnHeight = nextToPiece.Height;
@@ -118,21 +148,72 @@ public abstract class Move
 		if (toPlacePieceNext.Equals(CubeVector.Zero))
 		{
 			// original was placed on top
-
 			placedOnHeight = nextToPiece.Height + 1;
 		}
 
 		// Determine if AttackMove or PlaceMove
-		if (board.Pieces.Any(p => p.Position.Equals(placedOn) && p.Height == placedOnHeight))
+		// Does the piece to be placed already exist?
+		string placedPieceString = matchResults[1] + matchResults[2] + matchResults[3];
+		Move madeMove;
+
+		// if (board.Pieces.Any(p => p.Position.Equals(placedOn) && p.Height == placedOnHeight))
+		if (gridPieces.Any(gp => gp.ToString() == placedPieceString))
 		{
 			// AttackMove
+			// now get the piece that is attacking
+			GridPiece attackingPiece = gridPieces.First(gp => gp.ToString() == placedPieceString);
+			Piece boardPiece = board.Pieces.First(p =>
+				p.Position.Equals(attackingPiece.OriginalPosition) &&
+				p.Height == attackingPiece.Height);
 
+			AttackMove move = new(boardPiece, placedOn, placedOnHeight, MoveType.Activate);
+			madeMove = move;
 		}
 		else
 		{
 			// PlaceMove
+			Color toPlace = player.Color;
+			// Could throw error when player is trying to place a piece thats not their color?
 
+			// Get all bugs
+			// Maybe rework how bugs are gotten when adding mod support?
+			List<Bug> playerBugs = player.Pieces;
+			Bug placedBug = playerBugs.FirstOrDefault(b => b.ShortRepresentation == matchResults[2][0]) ??
+				throw new MoveStringProcessingException($"Bug type {matchResults[2][0]} could not be found");
+
+			Piece toPlacePiece = new(toPlace, placedBug, placedOn, placedOnHeight);
+			PlaceMove placeMove = new(toPlacePiece);
+			madeMove = placeMove;
 		}
 
+		return madeMove;
 	}
+
+	// override object.Equals
+	public override bool Equals(object? obj)
+	{
+		//
+		// See the full list of guidelines at
+		//   http://go.microsoft.com/fwlink/?LinkID=85237
+		// and also the guidance for operator== at
+		//   http://go.microsoft.com/fwlink/?LinkId=85238
+		//
+
+		if (obj == null || obj.GetType().BaseType != typeof(Move))
+		{
+			return false;
+		}
+
+		Move move = (Move)obj;
+
+		if (move.MoveType == MoveType.Activate)
+		{
+			return ((AttackMove)move).GetHashCode() == GetHashCode();
+		}
+
+		return move.GetHashCode() == GetHashCode();
+	}
+
+	// override object.GetHashCode
+	public abstract new int GetHashCode();
 }

@@ -121,23 +121,29 @@ public abstract class Bug : IEquatable<Bug>
 
 	private abstract protected Func<Move, bool> MoveFilter();
 
-	// Produces stackoverflowexception. TODO
+	// override object.Equals
 	public bool Equals(Bug? obj)
 	{
-		if (obj == null) return false;
-		if (ReferenceEquals(this, obj)) { return true; }
+		if (obj == null || GetType() != obj.GetType())
+		{
+			return false;
+		}
 
-		return GetHashCode() == obj.GetHashCode();
+		return obj.GetHashCode() == GetHashCode();
 	}
 
-	public override bool Equals(object? obj)
-	{
-		return Equals(obj as Bug);
-	}
-
+	// override object.GetHashCode
 	public override int GetHashCode()
 	{
-		return BugTypeId;
+		return HashCode.Combine(BugTypeId);
 	}
 
+	public override bool Equals(object? other)
+	{
+		if (other == null)
+		{
+			return false;
+		}
+		return Equals((Bug)other);
+	}
 }

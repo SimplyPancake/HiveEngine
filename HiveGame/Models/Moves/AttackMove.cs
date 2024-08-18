@@ -52,4 +52,35 @@ public class AttackMove(Piece attackingPiece, Cube attackPosition, int attackHei
 	{
 		return AttackPosition.ToString();
 	}
+
+	// override object.Equals
+	public override bool Equals(object? obj)
+	{
+		//
+		// See the full list of guidelines at
+		//   http://go.microsoft.com/fwlink/?LinkID=85237
+		// and also the guidance for operator== at
+		//   http://go.microsoft.com/fwlink/?LinkId=85238
+		//
+
+		if (obj == null || GetType() != obj.GetType())
+		{
+			return false;
+		}
+
+		AttackMove am = (AttackMove)obj;
+
+		// TODO: write your implementation of Equals() here
+		return Piece.Equals(am.Piece) &&
+			MoveType.Equals(am.MoveType) &&
+			AttackPosition.Equals(am.AttackPosition) &&
+			AttackHeight.Equals(am.AttackHeight);
+	}
+
+	// override object.GetHashCode
+	public override int GetHashCode()
+	{
+		// TODO: write your implementation of GetHashCode() here
+		return HashCode.Combine(Piece.GetHashCode(), MoveType, AttackPosition, AttackHeight);
+	}
 }

@@ -29,6 +29,28 @@ public class Match
 		Player2.Board = Board;
 	}
 
+	public Match(Player player1, Player player2, List<Piece> pieces)
+	{
+		Player1 = player1;
+		Player2 = player2;
+		_CurrentTurn = Color.White;
+		Board = new Board(pieces);
+
+		Player1.Board = Board;
+		Player2.Board = Board;
+	}
+
+	public Match(Player player1, Player player2, Board board)
+	{
+		Player1 = player1;
+		Player2 = player2;
+		_CurrentTurn = Color.White;
+		Board = board;
+
+		Player1.Board = Board;
+		Player2.Board = Board;
+	}
+
 	public void Start()
 	{
 		bool playingGame = true;
@@ -65,10 +87,8 @@ public class Match
 				catch (IllegalMoveException e)
 				{
 					// Not allowed to make move
-					Console.WriteLine(e.Message);
+					Console.WriteLine($"Illegal move: {e.Message}");
 					toMake = toMove.MakeMove();
-
-					// TODO handling by client
 				}
 			}
 
