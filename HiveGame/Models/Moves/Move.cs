@@ -139,9 +139,9 @@ public abstract class Move
 		{
 			toPlacePieceNext = matchResults[8] switch
 			{
-				@"\" => CubeVector.TopLeft,
-				@"-" => CubeVector.Left,
-				@"/" => CubeVector.BottomLeft,
+				@"\" => CubeVector.BottomRight,
+				@"-" => CubeVector.Right,
+				@"/" => CubeVector.TopRight,
 				_ => CubeVector.Zero,
 			};
 		}
