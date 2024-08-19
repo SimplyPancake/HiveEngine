@@ -39,6 +39,7 @@ public abstract class Bug : IEquatable<Bug>
 	/// <param name="piece">Piece in the board</param>
 	/// <param name="board">The game board</param>
 	/// <returns></returns>
+	/// // FIXME: PossibleMoves modifies board! Should not be allowed
 	public List<Move> PossibleMoves(Piece piece, Board board)
 	{
 		// if (!board.Pieces.Any(p => p.Equals(piece)))
@@ -71,23 +72,9 @@ public abstract class Bug : IEquatable<Bug>
 			// then check if cyclic
 			Board newBoard = board.SimulateMove(move);
 
-#if DEBUG
-			Debug.WriteLine($"{GetType().Name}: Showing possible move");
-			Debug.WriteLine(newBoard);
-#endif
-
 			if (newBoard.AllPiecesConnected())
 			{
-#if DEBUG
-				Debug.WriteLine($"{GetType().Name}: Possible moves is approved for placement");
-#endif
 				toReturn.Add(move);
-			}
-			else
-			{
-#if DEBUG
-				Debug.WriteLine($"{GetType().Name}: Possible moves is not approved for placement");
-#endif
 			}
 		}
 

@@ -52,15 +52,14 @@ public class PlaceMove(Piece piece) : Move(piece)
 			// nextToEndupPiece = simulatedBoard.First(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1);
 		}
 
-		if (highestPieces.Any(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1))
-		{
-			// 
-			nextToEndupPiece = highestPieces.First(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1);
-		}
-		else
-		{
+		nextToEndupPiece = highestPieces.First(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1);
+		// if (highestPieces.Any(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1))
+		// {
+		// }
+		// else
+		// {
 
-		}
+		// }
 
 
 		return MovedPieceString(gotMovedTo, nextToEndupPiece);

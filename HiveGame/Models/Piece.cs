@@ -75,4 +75,9 @@ public class Piece : IEquatable<Piece>
 	{
 		return $"{(Color == Color.Black ? 'b' : 'w')}{Bug.ShortRepresentation}{Height}";
 	}
+
+	public Piece Copy()
+	{
+		return new Piece(Color, Bug, Position, Height);
+	}
 }

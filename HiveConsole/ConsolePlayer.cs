@@ -44,7 +44,14 @@ public class ConsolePlayer : Player
 		System.Console.WriteLine(Board);
 
 		List<Move> possibleMoves = Board.PossibleMoves(this);
-		List<string> possibleMoveStrings = possibleMoves.Select(move => move.MoveString(Board.Pieces, true)).ToList();
+		List<string> possibleMoveStrings = [];
+		foreach (Move possibleMove in possibleMoves)
+		{
+			string moveString = possibleMove.MoveString(Board.Pieces, true);
+			possibleMoveStrings.Add(moveString);
+		}
+
+		// List<string> possibleMoveStrings = possibleMoves.Select(move => move.MoveString(Board.Pieces, true)).ToList();
 		System.Console.WriteLine($"Possible moves:\n {string.Join(", ", possibleMoveStrings)}");
 
 		while (true)

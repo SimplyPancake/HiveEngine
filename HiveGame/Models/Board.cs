@@ -42,7 +42,7 @@ public class Board
 
 	public static Board Copy(Board board)
 	{
-		List<Piece> copiesPieces = new(board.Pieces);
+		List<Piece> copiesPieces = board.Pieces.Select(p => p.Copy()).ToList();
 
 		return new Board(copiesPieces);
 	}
@@ -116,12 +116,6 @@ public class Board
 			throw new IllegalColorException($"Move color {move.Piece.Color} is not the same as the player's color {player.Color}");
 		}
 
-		// if space (including height) is already occupied, throw error
-		if (PositionOccupied(move.Piece.Position, move.Piece.Height))
-		{
-			throw new IllegalPlacementException("There already exists a piece at that location");
-		}
-
 		// Place moves
 		if (move.MoveType.Equals(MoveType.Place))
 		{
@@ -141,6 +135,11 @@ public class Board
 				}
 			}
 
+			if (PositionOccupied(move.Piece.Position, move.Piece.Height))
+			{
+				throw new IllegalPlacementException("There already exists a piece at that location");
+			}
+
 			// simulate and check if placed correctly
 			Board simulated = SimulateMove(move);
 			if (!simulated.AllPiecesConnected())
@@ -150,6 +149,12 @@ public class Board
 		}
 		else
 		{
+			AttackMove attackMove = (AttackMove)move;
+			if (PositionOccupied(attackMove.AttackPosition, attackMove.AttackHeight))
+			{
+				throw new IllegalPlacementException("There already exists a piece at that location");
+			}
+
 			// Move must be in allowedMoves
 			List<Move> allowedMoves = PossibleMoves(player);
 			bool isInAllowedMoves = false;
@@ -546,10 +551,9 @@ public class Board
 	/// <param name="playerColor"></param>
 	/// <param name="board">the board</param>
 	/// <returns></returns>\
-	// TODO: Incorporate place moves
+	// TODO: this function modifies Board.
 	public static List<Move> PossibleMoves(Player player, Board board, bool includePlaceMoves)
 	{
-		// In the first four moves, a Queen MUST be placed
 		List<Piece> pieces = board.Pieces;
 
 		List<Piece> playerPieces = pieces.Where(p => p.Color == player.Color).ToList();
@@ -575,6 +579,7 @@ public class Board
 			foreach (Piece piece in playerPieces)
 			{
 				List<Move> pieceMoves = piece.Bug.PossibleMoves(piece, board);
+
 				possibleAttacks.AddRange(pieceMoves);
 			}
 		}
