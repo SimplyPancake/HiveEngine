@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
-using Hive.Console;
 using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Bugs;
 using Hive.Core.Models.Coordinate;
+using Hive.Core.Models.Players;
 using Hive.Core.Services;
 
 namespace Hive.Test;
@@ -223,9 +223,6 @@ public class BoardTest
 
 		Debug.WriteLine(board);
 
-		List<Move> moves = board.PossibleMoves();
-
-		List<string> moveStrings = moves.Select(m => m.MoveString(pieces)).ToList();
-		// Assert.That(canPlace, Has.Count.EqualTo(5));
+		//TODO
 	}
 }

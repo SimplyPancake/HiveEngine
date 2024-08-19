@@ -1,9 +1,7 @@
-﻿using Hive.Core;
-using Hive.Core.Exceptions;
-using Hive.Core.Models;
+﻿using Hive.Core.Exceptions;
 using Hive.Core.Models.Bugs;
 
-namespace Hive.Console;
+namespace Hive.Core.Models.Players;
 
 public class ConsolePlayer : Player
 {

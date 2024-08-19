@@ -1,6 +1,6 @@
 ﻿using Hive.Core.Models.Bugs;
 
-namespace Hive.Core.Models;
+namespace Hive.Core.Models.Players;
 
 public abstract class Player
 {

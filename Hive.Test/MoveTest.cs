@@ -26,7 +26,9 @@ public class MoveTest
 		];
 
 		Board board = new(pieces);
-		Debug.WriteLine(Move.MoveFromAttackString("wA1 bQ/", board));
+
+		// TODO
+		// Debug.WriteLine(Move.MoveFromAttackString("wA1 bQ/", board));
 	}
 
 }

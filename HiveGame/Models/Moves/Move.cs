@@ -4,6 +4,7 @@ using Hive.Core.Exceptions;
 using Hive.Core.Models;
 using Hive.Core.Models.Bugs;
 using Hive.Core.Models.Coordinate;
+using Hive.Core.Models.Players;
 
 namespace Hive.Core;
 
@@ -30,11 +31,18 @@ public abstract class Move
 
 	public abstract override string ToString();
 
+	public string MoveString(List<GridPiece> pieces) => MoveString(pieces, true);
+
 	public abstract string MoveString(List<GridPiece> pieces, bool returnPlaceMoves);
 
 	public string MoveString(List<Piece> pieces, bool returnPlaceMoves)
 	{
 		return MoveString(GridPiece.GridPieces(pieces), returnPlaceMoves);
+	}
+
+	public string MoveString(List<Piece> pieces)
+	{
+		return MoveString(GridPiece.GridPieces(pieces), true);
 	}
 
 	private protected static string MovedPieceString(GridPiece gotMoved, GridPiece movedNextTo)

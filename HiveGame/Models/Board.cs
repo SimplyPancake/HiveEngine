@@ -1,5 +1,6 @@
 ﻿using Hive.Core.Models.Bugs;
 using Hive.Core.Models.Coordinate;
+using Hive.Core.Models.Players;
 using Hive.Core.Services;
 
 namespace Hive.Core.Models;

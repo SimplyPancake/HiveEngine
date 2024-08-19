@@ -1,4 +1,6 @@
-﻿namespace Hive.Core.Models;
+﻿using Hive.Core.Models.Players;
+
+namespace Hive.Core.Models;
 
 
 public class Match
