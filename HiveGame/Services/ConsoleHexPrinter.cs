@@ -173,7 +173,7 @@ public static class ConsoleHexPrinter
 			if (toDraw.Any(p => p.Position.Equals(new Axial(q, r))))
 			{
 				GridPiece pieceToDraw = toDraw.First(p => p.Position.Equals(new Axial(q, r)));
-				toReturn += pieceToDraw;
+				toReturn += pieceToDraw.ToBoardString();
 			}
 			else
 			{

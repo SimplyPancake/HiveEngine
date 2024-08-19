@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Hive.Core;
+﻿using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Players;
 

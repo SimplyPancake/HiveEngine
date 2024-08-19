@@ -167,7 +167,8 @@ public class Board
 					// both are placeMove
 					isInAllowedMoves = ((PlaceMove)m).Equals((PlaceMove)move);
 				}
-				else if (m.MoveType.Equals(MoveType.Activate) && move.MoveType.Equals(m.MoveType))
+				// activate or move
+				else if (move.MoveType.Equals(m.MoveType))
 				{
 					isInAllowedMoves = ((AttackMove)m).Equals((AttackMove)move);
 				}
@@ -182,14 +183,14 @@ public class Board
 		}
 
 
-		// // Simulate move being made
-		// Board simulatedMove = SimulateMove(move);
+		// Simulate move being made
+		Board simulatedMove = SimulateMove(move);
 
-		// // All pieces should be connected
-		// if (!simulatedMove.AllPiecesConnected())
-		// {
-		// 	throw new IllegalPieceConnectionException("All pieces must be connected");
-		// }
+		// All pieces should be connected
+		if (!simulatedMove.AllPiecesConnected())
+		{
+			throw new IllegalPieceConnectionException("All pieces must be connected");
+		}
 
 		return true;
 	}

@@ -33,13 +33,13 @@ public class ConsolePlayer : Player
 
 	private void PrintPlayer(string message)
 	{
-		System.Console.WriteLine($"{Playername}: {message}");
+		Console.WriteLine($"{Playername}: {message}");
 	}
 
 	public override Move MakeMove()
 	{
 		// ask the player to make a move, but now we return just this
-		System.Console.WriteLine(Board);
+		Console.WriteLine(Board);
 
 		List<Move> possibleMoves = Board.PossibleMoves(this);
 		List<string> possibleMoveStrings = [];
@@ -50,13 +50,13 @@ public class ConsolePlayer : Player
 		}
 
 		// List<string> possibleMoveStrings = possibleMoves.Select(move => move.MoveString(Board.Pieces, true)).ToList();
-		System.Console.WriteLine($"Possible moves:\n {string.Join(", ", possibleMoveStrings)}");
+		Console.WriteLine($"Possible moves:\n {string.Join(", ", possibleMoveStrings)}");
 
 		while (true)
 		{
 			PrintPlayer("Please make a move...");
 
-			string? madeMove = System.Console.ReadLine();
+			string? madeMove = Console.ReadLine();
 
 			if (madeMove == null || madeMove == "")
 			{
@@ -69,7 +69,7 @@ public class ConsolePlayer : Player
 			}
 			catch (MoveStringProcessingException e)
 			{
-				System.Console.WriteLine($"Move error: {e.Message}");
+				Console.WriteLine($"Move error: {e.Message}");
 			}
 		}
 	}

@@ -79,11 +79,10 @@ public abstract class Move
 		// easiest is to first generate all the possible attackStrings and choose on of them
 		// won't deal with placeMove, because there are too many
 		List<Move> possibleMoves = board.PossibleMoves(player); // TODO fix under this
-
-		// if (possibleMoves.Any(pm => pm.MoveString(gridPieces) == attackString))
-		// {
-		// 	return possibleMoves.First(pm => pm.MoveString(gridPieces) == attackString);
-		// }
+		if (possibleMoves.Any(pm => pm.MoveString(gridPieces) == attackString))
+		{
+			return possibleMoves.First(pm => pm.MoveString(gridPieces) == attackString);
+		}
 
 		// first piece played
 		if (board.Pieces.Count == 0)
