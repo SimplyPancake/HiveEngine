@@ -3,6 +3,8 @@
 My custom Hive engine
 
 Long-term todo:
+[ ] Redo move system to incorporate an Expression function that can modify the board
+[ ] Make game playable online, including a server and client
 
-- Redo move system to incorporate an Expression function that can modify the board
-- Make JumpFtmAllowedTest not take ~77ms, but close to 1 or 2.
+https://www.diva-portal.org/smash/get/diva2:668737/FULLTEXT01.pdf
+https://github.dev/janpfeifer/hiveGo

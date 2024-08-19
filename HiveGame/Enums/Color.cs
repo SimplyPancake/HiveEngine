@@ -6,7 +6,7 @@ public enum Color
 	White
 }
 
-static class ColorMethods
+public static class ColorMethods
 {
 
 	public static Color GetOtherColor(this Color c)

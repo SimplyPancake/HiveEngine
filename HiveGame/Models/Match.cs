@@ -75,6 +75,18 @@ public class Match
 			// assume move is not valid, then check if they CAN make the move.
 			bool validMove = false;
 			Player toMove = CurrentPlayerTurn();
+
+
+			if (Board.PossibleMoves(toMove).Count == 0)
+			{
+				Console.WriteLine(Board);
+				Console.WriteLine("No pieces to move or play. Skipping turn...");
+
+				// Next player's turn
+				switchTurns();
+				continue;
+			}
+
 			Move toMake = toMove.MakeMove();
 
 			while (!validMove)

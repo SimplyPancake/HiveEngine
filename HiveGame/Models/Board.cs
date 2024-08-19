@@ -388,7 +388,10 @@ public class Board
 
 	public bool HasWinCondition()
 	{
-		// Queen surrounded means wincondition
+		// Win when:
+		// - Queen surrounded
+		// - Stalemate
+		// - 
 		return _Pieces.Where(p => p.BugType == (int)BugType.Queen)
 			.Any(p => SurroundingPieces(p).Count == 6);
 	}
