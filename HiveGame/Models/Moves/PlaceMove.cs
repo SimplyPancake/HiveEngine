@@ -7,8 +7,13 @@ public class PlaceMove(Piece piece) : Move(piece)
 {
 	public override MoveType MoveType => MoveType.Place;
 
-	public override string MoveString(List<GridPiece> pieces)
+	public override string MoveString(List<GridPiece> pieces, bool returnPlaceMoves)
 	{
+		if (!returnPlaceMoves)
+		{
+			return "";
+		}
+
 		if (pieces.Count == 0)
 		{
 			return $"{(Piece.Color == Color.Black ? "b" : "w")}{Piece.Bug.ShortRepresentation}";
@@ -17,13 +22,46 @@ public class PlaceMove(Piece piece) : Move(piece)
 		// Only refer to top pieces
 		List<GridPiece> highestPieces = Board.HighestGridPieces(pieces);
 
-		GridPiece gotMovedTo = highestPieces.First(p =>
-			p.OriginalPosition.Equals(Piece.Position)
-		);
-		gotMovedTo.Height = 0;
+		// gotMovedTo is not in the board yet when placing
+		// So we simulate it being added to the board
+		GridPiece gotMovedTo;
+		GridPiece nextToEndupPiece;
 
-		// pick piece next to endUpPiece
-		GridPiece nextToEndupPiece = highestPieces.First(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1);
+		if (highestPieces.Any(p => p.OriginalPosition.Equals(Piece.Position)))
+		{
+			gotMovedTo = highestPieces.First(p =>
+				p.OriginalPosition.Equals(Piece.Position)
+			);
+			gotMovedTo.Height = 0;
+		}
+		else
+		{
+			// simulate move being made to the gridpieces
+			// use GridPieces(List<GridPiece> pieces)
+			GridPiece simulatedAddedPiece = new(Piece, 0);
+			List<GridPiece> addedPieces = pieces;
+			addedPieces.Add(simulatedAddedPiece);
+
+			List<GridPiece> simulatedBoard = GridPiece.GridPieces(addedPieces);
+			gotMovedTo = simulatedBoard.First(p =>
+				p.OriginalPosition.Equals(Piece.Position)
+			);
+			gotMovedTo.Height = 0;
+
+			// TODO; piece positions are altered! FIX!!
+			// nextToEndupPiece = simulatedBoard.First(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1);
+		}
+
+		if (highestPieces.Any(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1))
+		{
+			// 
+			nextToEndupPiece = highestPieces.First(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1);
+		}
+		else
+		{
+
+		}
+
 
 		return MovedPieceString(gotMovedTo, nextToEndupPiece);
 	}

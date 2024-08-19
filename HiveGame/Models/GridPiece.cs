@@ -27,6 +27,16 @@ public class GridPiece
 		PieceNum = pieceNum;
 	}
 
+	public GridPiece(GridPiece p, int pieceNum)
+	{
+		Color = p.Color;
+		Position = p.Position;
+		Height = p.Height;
+		Bug = p.Bug;
+		OriginalPosition = p.OriginalPosition;
+		PieceNum = pieceNum;
+	}
+
 	public GridPiece(GridPiece p)
 	{
 		Color = p.Color;
@@ -39,10 +49,15 @@ public class GridPiece
 
 	public static List<GridPiece> GridPieces(List<Piece> pieces)
 	{
+		return GridPieces(pieces.Select(p => new GridPiece(p, 0)).ToList());
+	}
+
+	public static List<GridPiece> GridPieces(List<GridPiece> pieces)
+	{
 		Dictionary<Bug, int> bugAmounts = [];
 		List<GridPiece> gridPieces = [];
 
-		foreach (Piece piece in pieces)
+		foreach (GridPiece piece in pieces)
 		{
 			int bugAmount = 1;
 

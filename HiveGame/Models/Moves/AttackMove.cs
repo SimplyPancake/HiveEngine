@@ -13,7 +13,7 @@ public class AttackMove(Piece attackingPiece, Cube attackPosition, int attackHei
 
 	public override MoveType MoveType { get; } = moveType;
 
-	public override string MoveString(List<GridPiece> pieces)
+	public override string MoveString(List<GridPiece> pieces, bool returnPlaceMoves)
 	{
 		// simulate the piece that got move not being in the board
 		// Only refer to top pieces

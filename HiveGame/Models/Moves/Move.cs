@@ -30,11 +30,11 @@ public abstract class Move
 
 	public abstract override string ToString();
 
-	public abstract string MoveString(List<GridPiece> pieces);
+	public abstract string MoveString(List<GridPiece> pieces, bool returnPlaceMoves);
 
-	public string MoveString(List<Piece> pieces)
+	public string MoveString(List<Piece> pieces, bool returnPlaceMoves)
 	{
-		return MoveString(GridPiece.GridPieces(pieces));
+		return MoveString(GridPiece.GridPieces(pieces), returnPlaceMoves);
 	}
 
 	private protected static string MovedPieceString(GridPiece gotMoved, GridPiece movedNextTo)
@@ -70,7 +70,8 @@ public abstract class Move
 
 		// easiest is to first generate all the possible attackStrings and choose on of them
 		// won't deal with placeMove, because there are too many
-		List<Move> possibleMoves = board.PossibleMoves(player);
+		List<Move> possibleMoves = board.PossibleMoves(player); // TODO fix under this
+
 		// if (possibleMoves.Any(pm => pm.MoveString(gridPieces) == attackString))
 		// {
 		// 	return possibleMoves.First(pm => pm.MoveString(gridPieces) == attackString);
@@ -109,6 +110,10 @@ public abstract class Move
 		}
 
 		// First we find the related piece
+		if (!matchResults.ContainsKey(5) || !matchResults.ContainsKey(6) || !matchResults.ContainsKey(7))
+		{
+			throw new MoveStringProcessingException("Must give piece to put next to");
+		}
 		string nextToPieceString = matchResults[5] + matchResults[6] + matchResults[7];
 
 		if (!gridPieces.Any(gp => gp.ToString() == nextToPieceString))

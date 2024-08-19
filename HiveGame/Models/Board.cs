@@ -140,31 +140,41 @@ public class Board
 					throw new IllegalPlacementException("Placed piece must not be placed near a piece of a different color");
 				}
 			}
-		}
 
-		// Move must be in allowedMoves
-		List<Move> allowedMoves = PossibleMoves(player);
-		bool isInAllowedMoves = false;
-
-		foreach (Move m in allowedMoves)
-		{
-			if (m.MoveType.Equals(MoveType.Place) && move.MoveType.Equals(m.MoveType))
+			// simulate and check if placed correctly
+			Board simulated = SimulateMove(move);
+			if (!simulated.AllPiecesConnected())
 			{
-				// both are placeMove
-				isInAllowedMoves = ((PlaceMove)m).Equals((PlaceMove)move);
+				throw new IllegalPlacementException("Placed piece must adhere to placed-next-to constraint");
 			}
-			else if (m.MoveType.Equals(MoveType.Activate) && move.MoveType.Equals(m.MoveType))
-			{
-				isInAllowedMoves = ((AttackMove)m).Equals((AttackMove)move);
-			}
-
-			if (isInAllowedMoves) break;
 		}
-
-		if (!isInAllowedMoves)
+		else
 		{
-			throw new IllegalMoveException("The move made is not in the list of allowed moves.");
+			// Move must be in allowedMoves
+			List<Move> allowedMoves = PossibleMoves(player);
+			bool isInAllowedMoves = false;
+
+			foreach (Move m in allowedMoves)
+			{
+				if (m.MoveType.Equals(MoveType.Place) && move.MoveType.Equals(m.MoveType))
+				{
+					// both are placeMove
+					isInAllowedMoves = ((PlaceMove)m).Equals((PlaceMove)move);
+				}
+				else if (m.MoveType.Equals(MoveType.Activate) && move.MoveType.Equals(m.MoveType))
+				{
+					isInAllowedMoves = ((AttackMove)m).Equals((AttackMove)move);
+				}
+
+				if (isInAllowedMoves) break;
+			}
+
+			if (!isInAllowedMoves)
+			{
+				throw new IllegalMoveException("The move made is not in the list of allowed moves.");
+			}
 		}
+
 
 		// // Simulate move being made
 		// Board simulatedMove = SimulateMove(move);
@@ -481,6 +491,13 @@ public class Board
 	/// <returns></returns>
 	public static List<Cube> PlacePositions(Color pieceToPlace, List<Piece> pieces)
 	{
+		bool mayPlaceNextToOtherColor = pieces.Count == 1;
+		if (mayPlaceNextToOtherColor)
+		{
+			// all positions around the first piece
+			return SurroundingPositions(pieces.First().Position);
+		}
+
 		List<Cube> positionsNextToPiece = [];
 
 		// only go past the pieces where we could place a piece
@@ -519,7 +536,9 @@ public class Board
 		return positionsNextToPiece.Distinct().ToList();
 	}
 
-	public List<Move> PossibleMoves(Player player) => PossibleMoves(player, this);
+	public List<Move> PossibleMoves(Player player) => PossibleMoves(player, this, true);
+
+	public List<Move> PossibleMoves(Player player, Board board) => PossibleMoves(player, board, true);
 
 	/// <summary>
 	/// Returns the possible moves that a given player can make
@@ -528,13 +547,13 @@ public class Board
 	/// <param name="board">the board</param>
 	/// <returns></returns>\
 	// TODO: Incorporate place moves
-	public static List<Move> PossibleMoves(Player player, Board board)
+	public static List<Move> PossibleMoves(Player player, Board board, bool includePlaceMoves)
 	{
 		// In the first four moves, a Queen MUST be placed
 		List<Piece> pieces = board.Pieces;
 
 		List<Piece> playerPieces = pieces.Where(p => p.Color == player.Color).ToList();
-		bool hasPlacedQueen = pieces.Any(p => p.Bug.GetType() == typeof(QueenBug));
+		bool hasPlacedQueen = playerPieces.Any(p => p.Bug.GetType() == typeof(QueenBug));
 		List<Cube> possiblePlaceLocations = PlacePositions(player.Color, pieces);
 
 		if (playerPieces.Count == 3 && !hasPlacedQueen)
@@ -544,15 +563,31 @@ public class Board
 				new PlaceMove(new Piece(player.Color, new QueenBug(), l))
 			).ToList();
 
-			return place.Select(move => (Move)move).ToList();
+			return includePlaceMoves ? place.Select(move => (Move)move).ToList() : [];
 		}
 
 		List<Move> possibleAttacks = [];
 
+		// Non-place moves can only be done when a player has placed their queen
+		if (hasPlacedQueen)
+		{
+			// foreach piece, generate possible moves
+			foreach (Piece piece in playerPieces)
+			{
+				List<Move> pieceMoves = piece.Bug.PossibleMoves(piece, board);
+				possibleAttacks.AddRange(pieceMoves);
+			}
+		}
+
+		if (!includePlaceMoves)
+		{
+			return possibleAttacks;
+		}
+
 		// Add all possible place moves
 		foreach (Bug playerBug in player.Pieces.Distinct())
 		{
-			if (pieces.Count < 2)
+			if (pieces.Count == 0)
 			{
 				PlaceMove bugPlaceMove = new(new Piece(player.Color, playerBug, new Cube(0, 0, 0)));
 
@@ -565,17 +600,6 @@ public class Board
 					).ToList();
 
 				possibleAttacks.AddRange(bugPlaceMoves);
-			}
-		}
-
-		// Non-place moves can only be done when a player has placed their queen
-		if (hasPlacedQueen)
-		{
-			// foreach piece, generate possible moves
-			foreach (Piece piece in playerPieces)
-			{
-				List<Move> pieceMoves = piece.Bug.PossibleMoves(piece, board);
-				possibleAttacks.AddRange(pieceMoves);
 			}
 		}
 

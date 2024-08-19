@@ -44,7 +44,8 @@ public class ConsolePlayer : Player
 		System.Console.WriteLine(Board);
 
 		List<Move> possibleMoves = Board.PossibleMoves(this);
-		System.Console.WriteLine($"Possible moves:\n {string.Join(", ", possibleMoves)}");
+		List<string> possibleMoveStrings = possibleMoves.Select(move => move.MoveString(Board.Pieces, true)).ToList();
+		System.Console.WriteLine($"Possible moves:\n {string.Join(", ", possibleMoveStrings)}");
 
 		while (true)
 		{
