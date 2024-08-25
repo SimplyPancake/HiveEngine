@@ -70,7 +70,6 @@ public class AttackMove(Piece attackingPiece, Cube attackPosition, int attackHei
 
 		AttackMove am = (AttackMove)obj;
 
-		// TODO: write your implementation of Equals() here
 		return Piece.Equals(am.Piece) &&
 			MoveType.Equals(am.MoveType) &&
 			AttackPosition.Equals(am.AttackPosition) &&
@@ -80,7 +79,6 @@ public class AttackMove(Piece attackingPiece, Cube attackPosition, int attackHei
 	// override object.GetHashCode
 	public override int GetHashCode()
 	{
-		// TODO: write your implementation of GetHashCode() here
 		return HashCode.Combine(Piece.GetHashCode(), MoveType, AttackPosition, AttackHeight);
 	}
 }

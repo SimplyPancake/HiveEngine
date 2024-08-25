@@ -30,12 +30,12 @@ public static class PieceCollectionMethods
 				new SpiderBug(),
 				new SpiderBug()
 			],
-			_ => [
+			_ => [ // defined according to int in BugType
 				new QueenBug(),
+				new SpiderBug(),
 				new AntBug(),
-				new BeetleBug(),
 				new GrasshopperBug(),
-				new SpiderBug()
+				new BeetleBug(),
 			],
 		};
 	}

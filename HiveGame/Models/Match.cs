@@ -1,4 +1,5 @@
-﻿using Hive.Core.Models.Players;
+﻿using Hive.Core.Models.Bugs;
+using Hive.Core.Models.Players;
 
 namespace Hive.Core.Models;
 
@@ -20,34 +21,25 @@ public class Match
 	}
 	private Color _CurrentTurn;
 
+	public Match()
+	{
+		Player1 = new ConsolePlayer("Hans", Color.White);
+		Player2 = new ConsolePlayer("Frans", Color.Black);
+		_CurrentTurn = Color.White;
+		Board = new Board();
+
+		Player1.Board = Board;
+		Player2.Board = Board;
+		Player1.Match = this;
+		Player2.Match = this;
+	}
+
 	public Match(Player player1, Player player2)
 	{
 		Player1 = player1;
 		Player2 = player2;
 		_CurrentTurn = Color.White;
 		Board = new Board();
-
-		Player1.Board = Board;
-		Player2.Board = Board;
-	}
-
-	public Match(Player player1, Player player2, List<Piece> pieces)
-	{
-		Player1 = player1;
-		Player2 = player2;
-		_CurrentTurn = Color.White;
-		Board = new Board(pieces);
-
-		Player1.Board = Board;
-		Player2.Board = Board;
-	}
-
-	public Match(Player player1, Player player2, Board board)
-	{
-		Player1 = player1;
-		Player2 = player2;
-		_CurrentTurn = Color.White;
-		Board = board;
 
 		Player1.Board = Board;
 		Player2.Board = Board;
@@ -75,7 +67,6 @@ public class Match
 			// assume move is not valid, then check if they CAN make the move.
 			bool validMove = false;
 			Player toMove = CurrentPlayerTurn();
-
 
 			if (Board.PossibleMoves(toMove).Count == 0)
 			{

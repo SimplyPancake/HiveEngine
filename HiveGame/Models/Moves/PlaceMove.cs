@@ -47,20 +47,9 @@ public class PlaceMove(Piece piece) : Move(piece)
 				p.OriginalPosition.Equals(Piece.Position)
 			);
 			gotMovedTo.Height = 0;
-
-			// TODO; piece positions are altered! FIX!!
-			// nextToEndupPiece = simulatedBoard.First(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1);
 		}
 
 		nextToEndupPiece = highestPieces.First(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1);
-		// if (highestPieces.Any(p => Cube.Distance(p.OriginalPosition, gotMovedTo.OriginalPosition) == 1))
-		// {
-		// }
-		// else
-		// {
-
-		// }
-
 
 		return MovedPieceString(gotMovedTo, nextToEndupPiece);
 	}

@@ -28,17 +28,17 @@ public enum FeatureType
 	MOVES_TO_DRAW = 8,
 
 	// Number of pieces that are "leaves" (only one neighbor)
-	// First number is for current player, the second is for the
-	// opponent.
 	NUM_SINGLE = 9,
+	OPP_NUM_SINGLE = 10,
 
-	// Whether there is an opponent BEETLE on top of QUEEN.
-	QUEEN_COVERED = 10,
+	// Whether our queen is covered by a piece, second=1 if the opponent is covering our queen
+	QUEEN_COVERED = 11,
+	OPP_QUEEN_COVERED = 12,
 
 	// Average manhattan distance to opposing queen for each of the piece types.
-	AVERAGE_DISTANCE_TO_QUEEN = 11,
-	OPP_AVERAGE_DISTANCE_TO_QUEEN = 12,
+	AVERAGE_DISTANCE_TO_QUEEN = 13,
+	OPP_AVERAGE_DISTANCE_TO_QUEEN = 14,
 
 	// Last entry.
-	NUM_FEATURES = 13
+	NUM_FEATURES = 15
 }

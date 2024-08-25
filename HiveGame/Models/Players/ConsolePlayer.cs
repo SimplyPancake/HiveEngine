@@ -13,12 +13,19 @@ public class ConsolePlayer : Player
 
 	public override Board Board { get; set; }
 
+	public override List<Bug> OriginalPieceSet { get; }
+
+	// public override Match Match { get; set; }
+
 	public ConsolePlayer(string playername, Color color, List<Bug> pieces)
 	{
 		Playername = playername;
 		Color = color;
 		Pieces = pieces;
 		Board = new();
+		OriginalPieceSet = new(pieces);
+
+		// Match = new();
 	}
 
 	public ConsolePlayer(string playername, Color color)
@@ -27,8 +34,11 @@ public class ConsolePlayer : Player
 		Color = color;
 		Board = new();
 
+		// Match = new();
+
 		// Initialise pieces collection
 		Pieces = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
+		OriginalPieceSet = new(Pieces);
 	}
 
 	private void PrintPlayer(string message)
@@ -74,8 +84,5 @@ public class ConsolePlayer : Player
 		}
 	}
 
-	public override Move MakeMove(IllegalMoveException illegalMoveException)
-	{
-		throw new NotImplementedException();
-	}
+	public override Move MakeMove(IllegalMoveException illegalMoveException) => MakeMove();
 }

@@ -10,6 +10,10 @@ public abstract class Player
 
 	public abstract List<Bug> Pieces { get; }
 
+	public abstract List<Bug> OriginalPieceSet { get; }
+
+	// public abstract Match Match { get; set; }
+
 	// TODO; find better way to set Board & Match(?)
 	// Match object should be able to set the Board.
 	public abstract Board Board { get; set; }
@@ -32,5 +36,4 @@ public abstract class Player
 	/// <param name="illegalMoveException"></param>
 	/// <returns></returns>
 	public abstract Move MakeMove(IllegalMoveException illegalMoveException);
-
 }

@@ -123,14 +123,12 @@ public class GridPiece
 			return false;
 		}
 
-		// TODO: write your implementation of Equals() here
 		return obj.GetHashCode() == GetHashCode();
 	}
 
 	// override object.GetHashCode
 	public override int GetHashCode()
 	{
-		// TODO: write your implementation of GetHashCode() here
 		return HashCode.Combine(Color, Position, Height, Bug, OriginalPosition);
 	}
 }
