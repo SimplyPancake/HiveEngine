@@ -71,6 +71,7 @@ public class ConsolePlayer : Player
 			if (madeMove == null || madeMove == "")
 			{
 				PrintPlayer("You must input a move");
+				continue;
 			}
 
 			try

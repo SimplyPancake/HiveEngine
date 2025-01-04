@@ -52,7 +52,7 @@ public class Cube : IEquatable<Cube>, IEquatable<Axial>, IEquatable<CubeVector>
 			Q + R + S == 0;
 	}
 
-	public static int Distance(Cube a, Cube b)
+	public static float Distance(Cube a, Cube b)
 	{
 		// (abs(a.q - b.q) + abs(a.r - b.r) + abs(a.s - b.s)) / 2
 		return (Math.Abs(a.Q - b.Q) + Math.Abs(a.R - b.R) + Math.Abs(a.S - b.S)) / 2;

@@ -225,4 +225,10 @@ public class BoardTest
 
 		//TODO
 	}
+
+	[Test]
+	public void BinsortTest()
+	{
+
+	}
 }

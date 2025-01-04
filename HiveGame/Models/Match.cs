@@ -30,8 +30,8 @@ public class Match
 
 		Player1.Board = Board;
 		Player2.Board = Board;
-		Player1.Match = this;
-		Player2.Match = this;
+		// Player1.Match = this;
+		// Player2.Match = this;
 	}
 
 	public Match(Player player1, Player player2)
@@ -40,6 +40,17 @@ public class Match
 		Player2 = player2;
 		_CurrentTurn = Color.White;
 		Board = new Board();
+
+		Player1.Board = Board;
+		Player2.Board = Board;
+	}
+
+	public Match(Player player1, Player player2, Board board)
+	{
+		Player1 = player1;
+		Player2 = player2;
+		_CurrentTurn = player1.Color;
+		Board = board;
 
 		Player1.Board = Board;
 		Player2.Board = Board;
@@ -110,9 +121,19 @@ public class Match
 		return Player1.Color == CurrentTurn ? Player1 : Player2;
 	}
 
+	public Player OtherPlayerTurn()
+	{
+		return Player1.Color == CurrentTurn ? Player2 : Player1;
+	}
 	private void switchTurns()
 	{
 		_CurrentTurn = CurrentTurn == Color.Black ? Color.White : Color.Black;
 	}
 
+
+	public Match Clone()
+	{
+		// currentplayer of match is;
+		return new Match(CurrentPlayerTurn(), OtherPlayerTurn(), Board.Copy());
+	}
 }

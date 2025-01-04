@@ -34,6 +34,11 @@ public class Board
 		return _Pieces.Where(p => p.Color.Equals(color)).ToList();
 	}
 
+	public List<Piece> PlayerPieces(Player player)
+	{
+		return ColorPieces(player.Color);
+	}
+
 	public void Reset()
 	{
 		_Pieces = [];

@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Bugs;
@@ -38,6 +39,9 @@ public static class FeatureExtractor
 			new("OppQueenCovered", FeatureType.OPP_QUEEN_COVERED, 2, true, QueenCovered),
 
 			new("AverageQueenDistance", FeatureType.AVERAGE_DISTANCE_TO_QUEEN, amountOfPieceTypes, false, AverageQueenDistance),
+			new("OppAverageQueenDistance", FeatureType.AVERAGE_DISTANCE_TO_QUEEN, amountOfPieceTypes, true, AverageQueenDistance),
+
+			new("NumFeatures", FeatureType.NUM_FEATURES, 1, false, (Board b, Player p) => [14f])
 		];
 	}
 
@@ -178,13 +182,11 @@ public static class FeatureExtractor
 
 	private static float[] QueenCovered(Board board, Player player)
 	{
-
 		// we have a queen?
 		if (!board.Pieces.Any(p => p.Bug.BugTypeId.Equals(BugType.Queen) && p.Color.Equals(player.Color)))
 		{
 			return [0, 0];
 		}
-
 
 		// we have a queen!
 		Piece ourQueen = board.Pieces.First(p => p.Bug.BugTypeId.Equals(BugType.Queen) && p.Color.Equals(player.Color));
@@ -198,50 +200,51 @@ public static class FeatureExtractor
 		return [0, 0];
 	}
 
+	/// <summary>
+	/// Average distance from each piece type to the opponent queen
+	/// If there is more than one piece type, the distance is averaged
+	/// </summary>
+	/// <param name="board"></param>
+	/// <param name="player"></param>
+	/// <returns></returns>
 	private static float[] AverageQueenDistance(Board board, Player player)
 	{
-		List<int> allPieceTypes = board.Pieces.Where(p => p.Color.Equals(player.Color)).Select(p => p.BugType).ToList();
-		allPieceTypes.AddRange(player.Pieces.Select(p => p.BugTypeId));
-
-		List<int> distinctPieceTypes = allPieceTypes.Distinct().ToList();
+		float maxDistance = 15f;
+		List<Bug> pieceTypes = PieceCollectionMethods.GetPieceBugs(PieceCollection.All).Distinct().ToList();
 
 		// opponent has a queen?
-		if (!board.Pieces.Any(p => p.Bug.BugTypeId.Equals(BugType.Queen) && p.Color.Equals(player.Color)))
+		if (!board.Pieces.Any(p => p.Bug.BugTypeId.Equals(BugType.Queen) && !p.Color.Equals(player.Color)))
 		{
 			// return arbitrary high number
-			return Enumerable.Repeat(15f, allPieceTypes.Count).ToArray();
+			return Enumerable.Repeat(maxDistance, pieceTypes.Count).ToArray();
 		}
 
-		Piece opponentQueen = board.Pieces.First(p => p.Bug.BugTypeId.Equals(BugType.Queen) && p.Color.Equals(player.Color));
+		Piece opponentQueen = board.Pieces.First(p => p.Bug.BugTypeId.Equals(BugType.Queen) && !p.Color.Equals(player.Color));
 
-		float maxDistance = 0;
-		Dictionary<BugType, float> distancePairs = [];
+		// Bugtypeid -> avg dist
+		List<float> distancePairs = [];
+		List<Piece> playerBugs = board.PlayerPieces(player);
 
-		foreach (int bugTypeId in distinctPieceTypes)
+		foreach (Bug bugType in pieceTypes)
 		{
-			int totalBugsOfThisKind = allPieceTypes.Where(p => p == bugTypeId).Count();
+			// Get all player bugs in board
+			List<Piece> piecesPlayerBugs = playerBugs.Where(p => p.BugType.Equals(bugType.BugTypeId)).ToList();
 
-			// get bugs in board
-			if (board.Pieces.Any(p => p.BugType == bugTypeId && p.Color.Equals(player.Color)))
+			// If there are no bugs of that type of my player in the board, the distance is very high
+			if (piecesPlayerBugs.Count == 0)
 			{
-				List<Piece> bugsInBoard = board.Pieces
-					.Where(
-						p => p.BugType == bugTypeId &&
-						p.Color.Equals(player.Color)
-					).ToList();
-
-				foreach (Piece pieceInBoard in bugsInBoard)
-				{
-					float distance = Cube.Distance(pieceInBoard.Position, opponentQueen.Position);
-
-					maxDistance = distance > maxDistance ? distance : maxDistance;
-				}
+				distancePairs.Add(maxDistance);
+				continue;
 			}
 
+			// If there are bugs of that type:
+			List<float> piecesPlayerBugDistances = playerBugs.Select(a => Cube.Distance(a.Position, opponentQueen.Position)).ToList();
+			// - Get all distances
+			float allDistances = piecesPlayerBugDistances.Sum(a => a);
+			// - divide by total amount of bugs of that type
+			distancePairs.Add(allDistances / piecesPlayerBugs.Count);
 		}
 
-		// get bugs in player hand
-
-		return [];
+		return [.. distancePairs];
 	}
 }
