@@ -136,4 +136,11 @@ public class Match
 		// currentplayer of match is;
 		return new Match(CurrentPlayerTurn(), OtherPlayerTurn(), Board.Copy());
 	}
+
+	public Match Result(Move action)
+	{
+		Board newBoard = Board.Copy();
+		newBoard.MakeMove(action, CurrentPlayerTurn());
+		return new Match(OtherPlayerTurn(), CurrentPlayerTurn(), newBoard);
+	}
 }

@@ -5,7 +5,7 @@ namespace Hive.AI.Scorers;
 
 public class FullScorer : IScorer
 {
-	public static int Score(Board board)
+	public static double Score(Match state)
 	{
 		throw new NotImplementedException();
 	}

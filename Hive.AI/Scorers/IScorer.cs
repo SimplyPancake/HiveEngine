@@ -4,5 +4,5 @@ namespace Hive.AI.Scorers;
 
 public interface IScorer
 {
-	public abstract static int Score(Board board);
+	public abstract static double Score(Match state);
 }

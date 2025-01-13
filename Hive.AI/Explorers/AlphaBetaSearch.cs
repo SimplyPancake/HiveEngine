@@ -1,28 +1,24 @@
-using System;
+using Hive.AI.Scorers;
 using Hive.Core;
 using Hive.Core.Models;
-using Hive.Core.Models.Players;
 
 namespace Hive.AI.Explorers;
-public class AlphaBetaSearch : IExplorer
+public class AlphaBetaSearch(int maxDepth, Match match) : IExplorer
 {
-	private int MaxDepth;
-
-	public AlphaBetaSearch(int maxDepth, Match match)
-	{
-		this.maxDepth = maxDepth;
-	}
+	private readonly int MaxDepth = maxDepth;
+	private readonly Match InitialMatch = match;
 
 	public Move FindBestMove()
 	{
+		Match match = InitialMatch;
 		double alpha = double.NegativeInfinity;
 		double beta = double.PositiveInfinity;
-		Move bestMove = null;
+		Move? bestMove = null;
 		double bestValue = double.NegativeInfinity;
 
-		foreach (var move in match.Board.PossibleMoves(player))
+		foreach (var move in match.Board.PossibleMoves(match.CurrentPlayerTurn()))
 		{
-			double value = EvaluateMove(match, move, player, maxDepth - 1, alpha, beta, false);
+			double value = MinValue(match.Result(move), MaxDepth - 1, alpha, beta);
 
 			if (value > bestValue)
 			{
@@ -33,71 +29,57 @@ public class AlphaBetaSearch : IExplorer
 			alpha = Math.Max(alpha, value);
 		}
 
+		if (bestMove == null)
+		{
+			throw new Exception("No move found");
+		}
+
 		return bestMove;
 	}
 
-	private double EvaluateMove(Match match, Move move, Player player, int depth, double alpha, double beta, bool isMaximizingPlayer)
+	private double MaxValue(Match state, int depth, double a, double b)
 	{
-		Match simulatedMatch = match.Clone();
-		simulatedMatch.Board.MakeMove(move, player);
-		Player nextPlayer = player.GetOpponent();
+		if (IsTerminal(state) || depth == 0) return Utility(state);
 
-		if (depth == 0 || simulatedMatch.Board.HasWinCondition())
+		double v = double.NegativeInfinity;
+
+		foreach (Move action in state.Board.PossibleMoves(state.CurrentPlayerTurn()))
 		{
-			return Evaluate(simulatedMatch, player);
+			v = Math.Max(v, MinValue(state.Result(action), depth - 1, a, b));
+
+			if (v >= b) return v;
+
+			a = Math.Max(a, v);
 		}
 
-		if (isMaximizingPlayer)
-		{
-			return MaxValue(simulatedMatch, depth, alpha, beta, nextPlayer);
-		}
-		else
-		{
-			return MinValue(simulatedMatch, depth, alpha, beta, nextPlayer);
-		}
+		return v;
 	}
 
-	private double MaxValue(Match match, int depth, double alpha, double beta, Player player)
+	private double MinValue(Match state, int depth, double a, double b)
 	{
-		double value = double.NegativeInfinity;
+		if (IsTerminal(state) || depth == 0) return Utility(state);
 
-		foreach (var move in match.Board.PossibleMoves(player))
+		double v = double.PositiveInfinity;
+
+		foreach (Move action in state.Board.PossibleMoves(state.CurrentPlayerTurn()))
 		{
-			value = Math.Max(value, EvaluateMove(match, move, player, depth - 1, alpha, beta, false));
+			v = Math.Min(v, MaxValue(state.Result(action), depth - 1, a, b));
 
-			if (value >= beta)
-			{
-				return value;
-			}
+			if (v <= a) return v;
 
-			alpha = Math.Max(alpha, value);
+			b = Math.Min(b, v);
 		}
 
-		return value;
+		return v;
 	}
 
-	private double MinValue(Match match, int depth, double alpha, double beta, Player player)
+	private static bool IsTerminal(Match state)
 	{
-		double value = double.PositiveInfinity;
-
-		foreach (var move in match.Board.PossibleMoves(player))
-		{
-			value = Math.Min(value, EvaluateMove(match, move, player, depth - 1, alpha, beta, true));
-
-			if (value <= alpha)
-			{
-				return value;
-			}
-
-			beta = Math.Min(beta, value);
-		}
-
-		return value;
+		return state.Board.HasWinCondition();
 	}
 
-	private double Evaluate(Match match, Player player)
+	private static double Utility(Match state)
 	{
-		// Implement your evaluation function here
-		return 0.0;
+		return SimpleScorer.Score(state);
 	}
 }
