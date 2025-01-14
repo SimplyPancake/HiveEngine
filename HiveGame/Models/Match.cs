@@ -140,7 +140,7 @@ public class Match
 	public Match Result(Move action)
 	{
 		Board newBoard = Board.Copy();
-		newBoard.MakeMove(action, CurrentPlayerTurn());
+		newBoard.MakeMoveNoCheck(action);
 		return new Match(OtherPlayerTurn(), CurrentPlayerTurn(), newBoard);
 	}
 }

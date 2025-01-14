@@ -103,12 +103,12 @@ public static class FeatureExtractor
 		List<float> queenAmounts = [];
 
 		Color otherColor = player.Color.GetOtherColor();
-		if (!board.Pieces.Any(p => p.Bug.BugTypeId.Equals(BugType.Queen) && p.Color.Equals(otherColor)))
+		if (!board.Pieces.Any(p => p.Bug.BugTypeId.Equals((int)BugType.Queen) && p.Color.Equals(otherColor)))
 		{
 			queenAmounts = Enumerable.Repeat(0f, pieceTypes.Count).ToList();
 		}
 
-		Piece opponentQueen = board.Pieces.First(p => p.Bug.Equals(BugType.Queen) && p.Color.Equals(otherColor));
+		Piece opponentQueen = board.Pieces.First(p => p.Bug.BugTypeId.Equals((int)BugType.Queen) && p.Color.Equals(otherColor));
 
 		List<Piece> piecesAroundOpponentQueen = board.Pieces.Where(p =>
 			p.Color.Equals(player.Color) &&

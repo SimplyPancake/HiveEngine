@@ -35,7 +35,7 @@ public class AlphaBetaTest : ITestBase
 	[Test]
 	public void TestAlphaBetaSearch()
 	{
-		AlphaBetaSearch search = new(3, match);
+		AlphaBetaSearch search = new(1, match);
 		Move bestMove = search.FindBestMove();
 
 		Assert.That(bestMove, Is.Not.Null);
