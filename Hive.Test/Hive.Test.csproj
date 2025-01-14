@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Hive.AI\Hive.AI.csproj" />
     <ProjectReference Include="..\HiveGame\Hive.Core.csproj" />
-    <ProjectReference Include="..\HiveConsole\Hive.Console.csproj" />
   </ItemGroup>
 
 </Project>

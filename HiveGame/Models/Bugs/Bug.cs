@@ -131,6 +131,12 @@ public abstract class Bug : IEquatable<Bug>
 		{
 			return false;
 		}
+
+		if (other.GetType() != GetType())
+		{
+			return false;
+		}
+
 		return Equals((Bug)other);
 	}
 }

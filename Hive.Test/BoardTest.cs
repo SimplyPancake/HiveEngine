@@ -8,10 +8,10 @@ using Hive.Core.Services;
 
 namespace Hive.Test;
 
-public class BoardTest
+public class BoardTest : ITestBase
 {
 	[SetUp]
-	public void Setup()
+	public void SetUp()
 	{
 	}
 
@@ -229,6 +229,6 @@ public class BoardTest
 	[Test]
 	public void BinsortTest()
 	{
-
+		//TOOD
 	}
 }
