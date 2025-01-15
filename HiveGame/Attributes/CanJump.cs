@@ -29,7 +29,7 @@ public class CanJump : BugAttribute
 		Cube jumpDirectionVector = neighborToJumpOver - from;
 
 		// we increase the jump length until we do not reach a piece anymore
-		for (int i = 1; i < pieces.Count + 1; i++)
+		for (int i = 1; i < pieces.Count + 2; i++)
 		{
 			// to jump, multiply the jump vector by jumpLength
 			Cube toCheck = from + (i * jumpDirectionVector);

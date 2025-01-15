@@ -4,23 +4,50 @@ namespace Hive.Core.Models.Players;
 
 public abstract class Player
 {
-	public abstract string Playername { get; }
+	public string Playername { get; }
 
-	public abstract Color Color { get; }
+	public Color Color { get; }
 
-	public abstract List<Bug> Pieces { get; }
+	public List<Bug> Pieces { get; }
 
-	public abstract List<Bug> OriginalPieceSet { get; }
+	public List<Bug> OriginalPieceSet { get; }
 
-	// public abstract Match Match { get; set; }
+	private Match _match { get; set; }
 
-	// TODO; find better way to set Board & Match(?)
-	// Match object should be able to set the Board.
-	public abstract Board Board { get; set; }
+	public Match Match => _match;
 
-	public void SetBoard(Board b)
+	public Board Board => Match.Board;
+
+	public Player(string playername, Color color, List<Bug> pieces)
 	{
-		Board = b;
+		Playername = playername;
+		Color = color;
+		Pieces = pieces;
+		OriginalPieceSet = [.. pieces];
+	}
+
+	public Player(string playername, Color color)
+	{
+		Playername = playername;
+		Color = color;
+
+		// Initialise pieces collection
+		Pieces = PieceCollectionMethods.GetPieceBugs(PieceCollection.Classic);
+		OriginalPieceSet = [.. Pieces];
+	}
+
+	public void SetMatch(Match match)
+	{
+		_match = match;
+		OnMatchSet(match);
+	}
+
+	/// <summary>
+	/// Hook method that is called when the match is set.
+	/// </summary>
+	protected virtual void OnMatchSet(Match match)
+	{
+		// Defualt implementation does nothing
 	}
 
 	/// <summary>

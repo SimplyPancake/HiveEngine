@@ -105,7 +105,10 @@ public static class FeatureExtractor
 		Color otherColor = player.Color.GetOtherColor();
 		if (!board.Pieces.Any(p => p.Bug.BugTypeId.Equals((int)BugType.Queen) && p.Color.Equals(otherColor)))
 		{
+			// No opponent queen yet
 			queenAmounts = Enumerable.Repeat(0f, pieceTypes.Count).ToList();
+			amounts.AddRange(queenAmounts);
+			return [.. amounts];
 		}
 
 		Piece opponentQueen = board.Pieces.First(p => p.Bug.BugTypeId.Equals((int)BugType.Queen) && p.Color.Equals(otherColor));

@@ -27,11 +27,6 @@ public class Match
 		Player2 = new ConsolePlayer("Frans", Color.Black);
 		_CurrentTurn = Color.White;
 		Board = new Board();
-
-		Player1.Board = Board;
-		Player2.Board = Board;
-		// Player1.Match = this;
-		// Player2.Match = this;
 	}
 
 	public Match(Player player1, Player player2)
@@ -40,9 +35,6 @@ public class Match
 		Player2 = player2;
 		_CurrentTurn = Color.White;
 		Board = new Board();
-
-		Player1.Board = Board;
-		Player2.Board = Board;
 	}
 
 	public Match(Player player1, Player player2, Board board)
@@ -51,9 +43,6 @@ public class Match
 		Player2 = player2;
 		_CurrentTurn = player1.Color;
 		Board = board;
-
-		Player1.Board = Board;
-		Player2.Board = Board;
 	}
 
 	public void Start()

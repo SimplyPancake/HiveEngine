@@ -17,8 +17,30 @@ public class AlphaBetaTest : ITestBase
 	[SetUp]
 	public void SetUp()
 	{
-		player1 = new ConsolePlayer("Hans", Color.White);
-		player2 = new ConsolePlayer("Frans", Color.Black);
+		player1 = new ConsolePlayer("Hans", Color.White, [
+				new AntBug(),
+				new AntBug(),
+				new AntBug(),
+				new BeetleBug(),
+				new BeetleBug(),
+				new GrasshopperBug(),
+				new GrasshopperBug(),
+				new GrasshopperBug(),
+				new SpiderBug(),
+				new SpiderBug()]);
+
+		player2 = new ConsolePlayer("Frans", Color.Black, [
+				new AntBug(),
+				new AntBug(),
+				new AntBug(),
+				new BeetleBug(),
+				new BeetleBug(),
+				new GrasshopperBug(),
+				new GrasshopperBug(),
+				new GrasshopperBug(),
+				new SpiderBug(),
+				new SpiderBug()
+		]);
 
 		List<Piece> pieces =
 		[
@@ -35,7 +57,7 @@ public class AlphaBetaTest : ITestBase
 	[Test]
 	public void TestAlphaBetaSearch()
 	{
-		AlphaBetaSearch search = new(1, match);
+		AlphaBetaSearch search = new(3, match);
 		Move bestMove = search.FindBestMove();
 
 		Assert.That(bestMove, Is.Not.Null);
