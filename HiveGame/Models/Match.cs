@@ -21,7 +21,7 @@ public class Match
 			return _CurrentTurn;
 		}
 	}
-	
+
 	private Color _CurrentTurn;
 
 	public Match()
@@ -50,15 +50,7 @@ public class Match
 
 	public void Start()
 	{
-		bool playingGame = true;
-		while (playingGame)
-		{
-			Play();
-			if (Board.HasWinCondition())
-			{
-				return;
-			}
-		}
+		Play();
 
 		Console.WriteLine($"Thanks for playing! The winning player is {CurrentPlayerTurn().Playername}");
 	}
@@ -67,8 +59,6 @@ public class Match
 	{
 		while (!Board.HasWinCondition())
 		{
-			Turn++;
-
 			// assume move is not valid, then check if they CAN make the move.
 			bool validMove = false;
 			Player toMove = CurrentPlayerTurn();
@@ -79,7 +69,7 @@ public class Match
 				Console.WriteLine("No pieces to move or play. Skipping turn...");
 
 				// Next player's turn
-				switchTurns();
+				SwitchTurns();
 				continue;
 			}
 
@@ -106,7 +96,7 @@ public class Match
 			Board.MakeMove(toMake, toMove);
 
 			// Next player's turn
-			switchTurns();
+			SwitchTurns();
 		}
 	}
 
@@ -119,9 +109,10 @@ public class Match
 	{
 		return Player1.Color == CurrentTurn ? Player2 : Player1;
 	}
-	private void switchTurns()
+	public void SwitchTurns()
 	{
 		_CurrentTurn = CurrentTurn == Color.Black ? Color.White : Color.Black;
+		Turn++;
 	}
 
 
@@ -131,9 +122,21 @@ public class Match
 		return new Match(CurrentPlayerTurn(), OtherPlayerTurn(), Board.Copy());
 	}
 
-	public Match Result(Move action)
+	/// <summary>
+	/// Returns a copy of the match with the given action applied.
+	/// Switches turns.
+	/// </summary>
+	/// <param name="action"></param>
+	/// <returns></returns>
+	public Match Result(Move action, bool switchTurns = true)
 	{
 		Board newBoard = Board.SimulateMove(action);
-		return new Match(OtherPlayerTurn(), CurrentPlayerTurn(), newBoard);
+		Match toReturn = new(CurrentPlayerTurn(), OtherPlayerTurn(), newBoard);
+		if (switchTurns)
+		{
+			toReturn.SwitchTurns();
+		}
+
+		return toReturn;
 	}
 }

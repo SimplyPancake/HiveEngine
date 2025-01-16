@@ -10,7 +10,7 @@ public static class ExplorerCreator
 	{
 		return type switch
 		{
-			ExplorerType.AlphaBeta => new AlphaBetaSearch(3, match),
+			ExplorerType.AlphaBeta => new AlphaBetaSearch(4, match),
 			_ => throw new ArgumentException("Invalid explorer type", nameof(type)),
 		};
 	}

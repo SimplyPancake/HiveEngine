@@ -18,6 +18,7 @@ public class AlphaBetaSearch(int maxDepth, Match match) : IExplorer
 
 		foreach (var move in match.Board.PossibleMoves(match.CurrentPlayerTurn()))
 		{
+
 			double value = MinValue(match.Result(move), MaxDepth - 1, alpha, beta);
 
 			if (value > bestValue)
@@ -80,6 +81,7 @@ public class AlphaBetaSearch(int maxDepth, Match match) : IExplorer
 
 	private static double Utility(Match state)
 	{
-		return SimpleScorer.Score(state);
+		// return SimpleScorer.Score(state);
+		return FeatureScorer.Score(state);
 	}
 }

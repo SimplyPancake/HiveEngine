@@ -12,7 +12,7 @@ public class AIPlayer : Player
 {
 	private IExplorer explorer;
 
-	private ExplorerType explorerType;
+	private readonly ExplorerType explorerType;
 
 	public AIPlayer(ExplorerType type, string playername, Color color) : base(playername, color)
 	{

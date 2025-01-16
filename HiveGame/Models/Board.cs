@@ -561,16 +561,16 @@ public class Board
 	/// <param name="playerColor"></param>
 	/// <param name="board">the board</param>
 	/// <returns></returns>\
-	// TODO: this function modifies Board.
-	public static List<Move> PossibleMoves(Player player, Board board, bool includePlaceMoves)
+	public static List<Move> PossibleMoves(Player player, Board givenBoard, bool includePlaceMoves)
 	{
+		Board board = givenBoard.Copy();
 		List<Piece> pieces = board.Pieces;
 
-		List<Piece> playerPieces = pieces.Where(p => p.Color == player.Color).ToList();
-		bool hasPlacedQueen = playerPieces.Any(p => p.Bug.GetType() == typeof(QueenBug));
+		List<Piece> placedPlayerPieces = pieces.Where(p => p.Color == player.Color).ToList();
+		bool hasPlacedQueen = placedPlayerPieces.Any(p => p.Bug.GetType() == typeof(QueenBug));
 		List<Cube> possiblePlaceLocations = PlacePositions(player.Color, pieces);
 
-		if (playerPieces.Count == 3 && !hasPlacedQueen)
+		if (placedPlayerPieces.Count == 3 && !hasPlacedQueen)
 		{
 			// The player MUST place a QueenBug.
 			List<PlaceMove> place = possiblePlaceLocations.Select(l =>
@@ -586,7 +586,7 @@ public class Board
 		if (hasPlacedQueen)
 		{
 			// foreach piece, generate possible moves
-			foreach (Piece piece in playerPieces)
+			foreach (Piece piece in placedPlayerPieces)
 			{
 				List<Move> pieceMoves = piece.Bug.PossibleMoves(piece, board);
 
