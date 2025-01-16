@@ -40,5 +40,6 @@ public enum FeatureType
 	OPP_AVERAGE_DISTANCE_TO_QUEEN = 14,
 
 	// Last entry.
-	NUM_FEATURES = 15
+	NUM_TURNS = 15,
+	NUM_FEATURES = 16,
 }

@@ -6,7 +6,7 @@ namespace Hive.AI.Scorers;
 // Should use delegate?
 // public delegate int ScoreCaulculationDelegate(Board board, Player player);
 
-public class Feature(string name, FeatureType featureType, int dims, bool calcOpponent, Func<Board, Player, float[]> scoreSetter)
+public class Feature(string name, FeatureType featureType, int dims, bool calcOpponent, Func<Match, Player, float[]> scoreSetter)
 {
 	public string Name { get; } = name;
 
@@ -19,5 +19,5 @@ public class Feature(string name, FeatureType featureType, int dims, bool calcOp
 
 	public FeatureType FeatureType { get; } = featureType;
 
-	public Func<Board, Player, float[]> Score { get; } = scoreSetter;
+	public Func<Match, Player, float[]> Score { get; } = scoreSetter;
 }

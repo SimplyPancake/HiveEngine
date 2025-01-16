@@ -38,6 +38,8 @@ public class Cube : IEquatable<Cube>, IEquatable<Axial>, IEquatable<CubeVector>
 		S = -a.Q - a.R;
 	}
 
+	public static Cube Origin => new(0, 0, 0);
+
 	public override string ToString()
 	{
 		return $"{Q},{R},{S}";
@@ -118,6 +120,11 @@ public class Cube : IEquatable<Cube>, IEquatable<Axial>, IEquatable<CubeVector>
 		Cube cube = CubeVectorExtensions.VectorToCube(other);
 
 		return cube.Q == Q && cube.R == R && S == cube.S;
+	}
+
+	public int DistanceTo(Cube other)
+	{
+		return (int)Distance(this, other);
 	}
 
 	public static Cube operator +(Cube a) => a;

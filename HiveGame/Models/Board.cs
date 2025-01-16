@@ -72,7 +72,7 @@ public class Board
 	/// Makes a move on the board without checking if the move is valid.
 	/// </summary>
 	/// <param name="move"></param>
-	public void MakeMoveNoCheck(Move move)
+	private void MakeMoveNoCheck(Move move)
 	{
 		if (move.MoveType == MoveType.Activate)
 		{

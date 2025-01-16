@@ -12,6 +12,8 @@ public class Match
 
 	public Player Player2 { get; }
 
+	public int Turn { get; private set; } = 0;
+
 	public Color CurrentTurn
 	{
 		get
@@ -19,6 +21,7 @@ public class Match
 			return _CurrentTurn;
 		}
 	}
+	
 	private Color _CurrentTurn;
 
 	public Match()
@@ -64,6 +67,8 @@ public class Match
 	{
 		while (!Board.HasWinCondition())
 		{
+			Turn++;
+
 			// assume move is not valid, then check if they CAN make the move.
 			bool validMove = false;
 			Player toMove = CurrentPlayerTurn();
@@ -128,8 +133,7 @@ public class Match
 
 	public Match Result(Move action)
 	{
-		Board newBoard = Board.Copy();
-		newBoard.MakeMoveNoCheck(action);
+		Board newBoard = Board.SimulateMove(action);
 		return new Match(OtherPlayerTurn(), CurrentPlayerTurn(), newBoard);
 	}
 }

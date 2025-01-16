@@ -11,7 +11,7 @@ namespace Hive.AI.Scorers;
 
 public static class FeatureExtractor
 {
-	public static List<Feature> AllFeatures(Board board)
+	public static List<Feature> AllFeatures(Match state)
 	{
 		// TODO; get board piece set
 		int amountOfPieceTypes = PieceCollectionMethods.GetPieceBugs(PieceCollection.All).Count;
@@ -41,12 +41,15 @@ public static class FeatureExtractor
 			new("AverageQueenDistance", FeatureType.AVERAGE_DISTANCE_TO_QUEEN, amountOfPieceTypes, false, AverageQueenDistance),
 			new("OppAverageQueenDistance", FeatureType.AVERAGE_DISTANCE_TO_QUEEN, amountOfPieceTypes, true, AverageQueenDistance),
 
-			new("NumFeatures", FeatureType.NUM_FEATURES, 1, false, (Board b, Player p) => [14f])
+			new("NumTurns", FeatureType.NUM_TURNS, 1, false, (Match _, Player _) => [state.Turn]),
+			new("NumFeatures", FeatureType.NUM_FEATURES, 1, false, (Match _, Player _) => [15f])
 		];
 	}
 
-	private static float[] NumOffBoard(Board board, Player player)
+	private static float[] NumOffBoard(Match state, Player player)
 	{
+		Board board = state.Board;
+
 		List<Bug> pieceTypes = PieceCollectionMethods.GetPieceBugs(PieceCollection.All).Distinct().ToList();
 		List<float> amounts = [];
 
@@ -65,8 +68,10 @@ public static class FeatureExtractor
 		return [.. amounts];
 	}
 
-	private static float[] NumSurroundQueen(Board board, Player player)
+	private static float[] NumSurroundQueen(Match state, Player player)
 	{
+		Board board = state.Board;
+
 		int num = 0;
 		if (board.Pieces.Any(piece => piece.Color == player.Color && piece.BugType.Equals(BugType.Queen)))
 		{
@@ -83,8 +88,10 @@ public static class FeatureExtractor
 	// How many pieces can move. Two numbers per insect: the first is considering any pieces,
 	// the second discards the pieces that are surrounding the opponent's queen (and presumably
 	// not to be moved)
-	private static float[] NumCanMove(Board board, Player player)
+	private static float[] NumCanMove(Match state, Player player)
 	{
+		Board board = state.Board;
+
 		List<Bug> pieceTypes = PieceCollectionMethods.GetPieceBugs(PieceCollection.All).Distinct().ToList();
 		List<float> amounts = [];
 
@@ -135,8 +142,10 @@ public static class FeatureExtractor
 		return [.. amounts];
 	}
 
-	private static float[] NumThreateningMove(Board board, Player player)
+	private static float[] NumThreateningMove(Match state, Player player)
 	{
+		Board board = state.Board;
+
 		int amountThreatening = 0;
 		int freeQueenPositions = 0;
 
@@ -175,16 +184,20 @@ public static class FeatureExtractor
 		return [amountThreatening, freeQueenPositions];
 	}
 
-	private static float[] NumSinglePieces(Board board, Player player)
+	private static float[] NumSinglePieces(Match state, Player player)
 	{
+		Board board = state.Board;
+
 		return [board.Pieces.Where(p =>
 			p.Color.Equals(player.Color) &&
 			board.AmountOfSurroundingPieces(p) == 1)
 		.Count()];
 	}
 
-	private static float[] QueenCovered(Board board, Player player)
+	private static float[] QueenCovered(Match state, Player player)
 	{
+		Board board = state.Board;
+
 		// we have a queen?
 		if (!board.Pieces.Any(p => p.Bug.BugTypeId.Equals(BugType.Queen) && p.Color.Equals(player.Color)))
 		{
@@ -210,8 +223,10 @@ public static class FeatureExtractor
 	/// <param name="board"></param>
 	/// <param name="player"></param>
 	/// <returns></returns>
-	private static float[] AverageQueenDistance(Board board, Player player)
+	private static float[] AverageQueenDistance(Match state, Player player)
 	{
+		Board board = state.Board;
+		
 		float maxDistance = 15f;
 		List<Bug> pieceTypes = PieceCollectionMethods.GetPieceBugs(PieceCollection.All).Distinct().ToList();
 

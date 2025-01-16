@@ -11,7 +11,6 @@ public enum PieceCollection
 
 public static class PieceCollectionMethods
 {
-
 	public static List<Bug> GetPieceBugs(this PieceCollection c)
 	{
 		return c switch
@@ -37,6 +36,29 @@ public static class PieceCollectionMethods
 				new GrasshopperBug(),
 				new BeetleBug(),
 			],
+		};
+	}
+
+	// Is defending?
+	public static bool IsDefending(int bugType)
+	{
+		return bugType switch
+		{
+			(int)BugType.Ant => true,
+			(int)BugType.Beetle => true,
+			(int)BugType.Queen => true,
+			_ => false
+		};
+	}
+
+	// Is attacking?
+	public static bool IsAttacking(int bugType)
+	{
+		return bugType switch
+		{
+			(int)BugType.Grasshopper => true,
+			(int)BugType.Spider => true,
+			_ => false
 		};
 	}
 }

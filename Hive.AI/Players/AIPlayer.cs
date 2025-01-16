@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Hive.AI.Enums;
 using Hive.AI.Explorers;
 using Hive.Core;
@@ -28,7 +29,9 @@ public class AIPlayer : Player
 	public override Move MakeMove()
 	{
 		Console.WriteLine($"AIPlayer {Playername} is making a move...");
+		Debug.WriteLine($"AIPlayer {Playername} is making a move...");
 		Console.WriteLine(Board);
+		Debug.WriteLine(Board);
 		return explorer.FindBestMove();
 	}
 
