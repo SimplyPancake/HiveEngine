@@ -14,6 +14,9 @@ public class Match
 
 	public int Turn { get; private set; } = 0;
 
+	public Move? LastMove { get; private set; } = null;
+	public Color LastMoveColor { get; private set; } = Color.White;
+
 	public Color CurrentTurn
 	{
 		get
@@ -94,6 +97,8 @@ public class Match
 
 			// Move is valid
 			Board.MakeMove(toMake, toMove);
+			LastMove = toMake;
+			LastMoveColor = CurrentPlayerTurn().Color;
 
 			// Next player's turn
 			SwitchTurns();
@@ -115,11 +120,18 @@ public class Match
 		Turn++;
 	}
 
+	public void SetLastMove(Move? move, Color color)
+	{
+		LastMove = move;
+		LastMoveColor = color;
+	}
 
 	public Match Clone()
 	{
 		// currentplayer of match is;
-		return new Match(CurrentPlayerTurn(), OtherPlayerTurn(), Board.Copy());
+		Match toReturn = new(CurrentPlayerTurn(), OtherPlayerTurn(), Board.Copy());
+		toReturn.SetLastMove(LastMove, LastMoveColor);
+		return toReturn;
 	}
 
 	/// <summary>
@@ -132,6 +144,7 @@ public class Match
 	{
 		Board newBoard = Board.SimulateMove(action);
 		Match toReturn = new(CurrentPlayerTurn(), OtherPlayerTurn(), newBoard);
+		toReturn.SetLastMove(action, LastMoveColor);
 		if (switchTurns)
 		{
 			toReturn.SwitchTurns();

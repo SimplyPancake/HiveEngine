@@ -1,4 +1,5 @@
 using System.Reflection.Metadata.Ecma335;
+using Hive.AI.Services;
 using Hive.Core;
 using Hive.Core.Models;
 using Hive.Core.Models.Bugs;
@@ -30,7 +31,7 @@ public static class FeatureExtractor
 			new("OppNumThreateningMoves", FeatureType.OPP_NUM_THREATENING_MOVES, 2, true, NumThreateningMove),
 
 			// TODO:
-			// new("NumMovesToDraw", FeatureType.MOVES_TO_DRAW, 2, false, NumMovesToDraw),
+			new("NumMovesToDraw", FeatureType.MOVES_TO_DRAW, 2, false, NumMovesToDraw),
 
 			new("NumSinglePieces", FeatureType.NUM_SINGLE, 1, false, NumSinglePieces),
 			new("OppNumSinglePieces", FeatureType.OPP_NUM_SINGLE, 1, true, NumSinglePieces),
@@ -39,7 +40,9 @@ public static class FeatureExtractor
 			new("OppQueenCovered", FeatureType.OPP_QUEEN_COVERED, 2, true, QueenCovered),
 
 			new("AverageQueenDistance", FeatureType.AVERAGE_DISTANCE_TO_QUEEN, amountOfPieceTypes, false, AverageQueenDistance),
-			new("OppAverageQueenDistance", FeatureType.AVERAGE_DISTANCE_TO_QUEEN, amountOfPieceTypes, true, AverageQueenDistance),
+			new("OppAverageQueenDistance", FeatureType.OPP_AVERAGE_DISTANCE_TO_QUEEN, amountOfPieceTypes, true, AverageQueenDistance),
+
+			new ("LastMoveEffective", FeatureType.LAST_MOVE_EFFECTIVE, 1, false, LastMoveEffective),
 
 			new("NumTurns", FeatureType.NUM_TURNS, 1, false, (Match _, Player _) => [state.Turn]),
 			new("NumFeatures", FeatureType.NUM_FEATURES, 1, false, (Match _, Player _) => [15f])
@@ -83,6 +86,12 @@ public static class FeatureExtractor
 		}
 
 		return [num];
+	}
+
+	private static float[] NumMovesToDraw(Match state, Player player)
+	{
+		// Placeholder implementation
+		return [0, 0];
 	}
 
 	// How many pieces can move. Two numbers per insect: the first is considering any pieces,
@@ -226,7 +235,7 @@ public static class FeatureExtractor
 	private static float[] AverageQueenDistance(Match state, Player player)
 	{
 		Board board = state.Board;
-		
+
 		float maxDistance = 15f;
 		List<Bug> pieceTypes = PieceCollectionMethods.GetPieceBugs(PieceCollection.All).Distinct().ToList();
 
@@ -264,5 +273,19 @@ public static class FeatureExtractor
 		}
 
 		return [.. distancePairs];
+	}
+
+	private static float[] LastMoveEffective(Match state, Player player)
+	{
+		Move? move = state.LastMove;
+		if (move == null)
+		{
+			return [0];
+		}
+
+		MoveEffectivenessService service = new(state, state.LastMoveColor);
+		bool effective = service.IsEffectiveMove(move);
+
+		return [effective ? 1 : 0];
 	}
 }

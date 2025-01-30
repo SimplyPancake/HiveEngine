@@ -63,4 +63,14 @@ public class AlphaBetaTest : ITestBase
 		Assert.That(bestMove, Is.Not.Null);
 		Console.WriteLine($"Best move found:\n {bestMove}");
 	}
+
+	[Test]
+	public void TestNogWat()
+	{
+		int[] code = [-1, -1, -1, -1, -1, 8];
+
+		// Generate all possibilities of the code, ranging from 0 to 9.
+		// No int in the code is the same as the other
+		var possibilities = new List<int[]>();
+	}
 }

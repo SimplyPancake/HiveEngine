@@ -42,4 +42,5 @@ public enum FeatureType
 	// Last entry.
 	NUM_TURNS = 15,
 	NUM_FEATURES = 16,
+	LAST_MOVE_EFFECTIVE = 17,
 }
